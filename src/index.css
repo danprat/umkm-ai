@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Anton&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 60 10% 95%;
+    --foreground: 0 0% 5%;
+
+    --card: 60 10% 92%;
+    --card-foreground: 0 0% 5%;
+
+    --popover: 60 10% 95%;
+    --popover-foreground: 0 0% 5%;
+
+    --primary: 0 0% 5%;
+    --primary-foreground: 60 10% 95%;
+
+    --secondary: 55 100% 50%;
+    --secondary-foreground: 0 0% 5%;
+
+    --muted: 60 5% 85%;
+    --muted-foreground: 0 0% 35%;
+
+    --accent: 55 100% 50%;
+    --accent-foreground: 0 0% 5%;
+
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 5%;
+    --input: 0 0% 5%;
+    --ring: 55 100% 50%;
+
+    --radius: 0px;
+
+    /* Brutalist custom tokens */
+    --brutal-shadow: 4px 4px 0px hsl(var(--foreground));
+    --brutal-shadow-lg: 8px 8px 0px hsl(var(--foreground));
+    --brutal-border: 3px solid hsl(var(--foreground));
+    --brutal-border-thick: 5px solid hsl(var(--foreground));
+
+    --font-mono: 'Space Mono', monospace;
+    --font-display: 'Anton', sans-serif;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 60 10% 95%;
+
+    --card: 0 0% 10%;
+    --card-foreground: 60 10% 95%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 60 10% 95%;
+
+    --primary: 60 10% 95%;
+    --primary-foreground: 0 0% 5%;
+
+    --secondary: 55 100% 50%;
+    --secondary-foreground: 0 0% 5%;
+
+    --muted: 0 0% 20%;
+    --muted-foreground: 60 5% 65%;
+
+    --accent: 55 100% 50%;
+    --accent-foreground: 0 0% 5%;
+
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 60 10% 95%;
+    --input: 60 10% 95%;
+    --ring: 55 100% 50%;
+
+    --brutal-shadow: 4px 4px 0px hsl(var(--foreground));
+    --brutal-shadow-lg: 8px 8px 0px hsl(var(--foreground));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    font-family: var(--font-mono);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+}
+
+@layer components {
+  .brutal-card {
+    @apply bg-card border-[3px] border-foreground p-6;
+    box-shadow: var(--brutal-shadow);
+    transition: all 0.1s ease;
+  }
+
+  .brutal-card:hover {
+    box-shadow: var(--brutal-shadow-lg);
+    transform: translate(-2px, -2px);
+  }
+
+  .brutal-btn {
+    @apply inline-flex items-center justify-center px-6 py-3 font-bold uppercase tracking-wider;
+    @apply bg-secondary text-secondary-foreground border-[3px] border-foreground;
+    box-shadow: var(--brutal-shadow);
+    transition: all 0.1s ease;
+  }
+
+  .brutal-btn:hover {
+    box-shadow: 6px 6px 0px hsl(var(--foreground));
+    transform: translate(-2px, -2px);
+  }
+
+  .brutal-btn:active {
+    box-shadow: 2px 2px 0px hsl(var(--foreground));
+    transform: translate(2px, 2px);
+  }
+
+  .brutal-btn-primary {
+    @apply brutal-btn bg-foreground text-background;
+  }
+
+  .brutal-btn-outline {
+    @apply brutal-btn bg-background text-foreground;
+  }
+
+  .brutal-input {
+    @apply w-full px-4 py-3 bg-background border-[3px] border-foreground font-mono;
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .brutal-input:focus {
+    @apply outline-none ring-2 ring-accent;
+    box-shadow: var(--brutal-shadow-lg);
+  }
+
+  .brutal-textarea {
+    @apply brutal-input resize-none min-h-[120px];
+  }
+
+  .brutal-tag {
+    @apply inline-block px-3 py-1 text-sm font-bold uppercase;
+    @apply bg-accent text-accent-foreground border-2 border-foreground;
+  }
+
+  .brutal-nav-link {
+    @apply px-4 py-2 font-bold uppercase text-sm tracking-wider;
+    @apply border-[3px] border-transparent hover:border-foreground hover:bg-accent;
+    transition: all 0.1s ease;
+  }
+
+  .brutal-nav-link.active {
+    @apply bg-foreground text-background;
+  }
+
+  .brutal-heading {
+    @apply text-4xl md:text-6xl font-bold uppercase tracking-tight;
+    text-shadow: 3px 3px 0px hsl(var(--accent));
+  }
+
+  .marquee {
+    @apply overflow-hidden whitespace-nowrap;
+  }
+
+  .marquee-content {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+
+  @keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+  }
+
+  /* Hide scrollbar for horizontal scrollers */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

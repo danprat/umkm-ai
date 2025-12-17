@@ -1,0 +1,6 @@
+# Supabase Edge Functions Configuration
+
+# Disable JWT verification for webhook endpoints
+# This allows external services (like Pakasir) to call the webhook without Supabase auth
+[functions.pakasir-webhook]
+verify_jwt = false
