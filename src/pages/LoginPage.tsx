@@ -10,13 +10,14 @@ export default function LoginPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (user && !isLoading) {
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     }
   }, [user, isLoading, navigate]);
 
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
+      // After Google OAuth redirects back, user will be set and useEffect will handle navigation
     } catch (error) {
       console.error('Login error:', error);
     }
