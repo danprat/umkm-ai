@@ -178,7 +178,7 @@ export default function LandingPage() {
                   {step.desc}
                 </p>
               </div>
-            )}))}
+            )})}
           </div>
         </div>
       </section>
@@ -214,7 +214,7 @@ export default function LandingPage() {
                   {feature.description}
                 </p>
               </div>
-            )}))}
+            )})}
           </div>
         </div>
       </section>
