@@ -11,9 +11,17 @@ const corsHeaders = {
 };
 
 const API_URL = 'https://cliproxy.monika.id/v1/chat/completions';
-const API_KEY = 'palsu';
 
 serve(async (req) => {
+  // Get API key from environment
+  const API_KEY = Deno.env.get('CLIPROXY_API_KEY');
+  if (!API_KEY) {
+    console.error('CLIPROXY_API_KEY not set in environment');
+    return new Response(
+      JSON.stringify({ error: 'Server configuration error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }

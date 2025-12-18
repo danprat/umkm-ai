@@ -11,9 +11,17 @@ const corsHeaders = {
 };
 
 const API_URL = 'https://cliproxy.monika.id/v1/chat/completions';
-const API_KEY = 'palsu';
 
 serve(async (req) => {
+  // Get API key from environment (set via: supabase secrets set CLIPROXY_API_KEY=your_key)
+  const API_KEY = Deno.env.get('CLIPROXY_API_KEY');
+  if (!API_KEY) {
+    console.error('CLIPROXY_API_KEY not set in environment');
+    return new Response(
+      JSON.stringify({ error: 'Server configuration error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -160,22 +168,9 @@ serve(async (req) => {
           status: 'failed',
           error: apiError.message || 'Processing failed'
         }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-  } catch (error) {
-    console.error('Error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  }
-});
-        status: 'pending',
-        message: 'Generation job created. Poll /functions/v1/check-generation?job_id=... for status.'
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
   } catch (error) {
     console.error('Error:', error);
     return new Response(
