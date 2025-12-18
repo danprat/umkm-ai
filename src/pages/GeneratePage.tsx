@@ -26,7 +26,6 @@ export default function GeneratePage() {
     rateLimitedUntil, 
     checkAndDeductCredit, 
     refundCredit, 
-    saveToHistory,
     clearRateLimit 
   } = useCredits({ pageType: 'generate' });
   
@@ -74,23 +73,16 @@ export default function GeneratePage() {
       
       let response;
       if (mode === "edit" && referenceImage) {
-        response = await generateImageWithReference(prompt + ratioPrompt, referenceImage);
+        response = await generateImageWithReference(prompt + ratioPrompt, referenceImage, 'generate', aspectRatio?.name);
       } else {
-        response = await generateImage(prompt + ratioPrompt);
+        response = await generateImage(prompt + ratioPrompt, 'generate', aspectRatio?.name);
       }
       
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       
       if (imageData) {
         setImageUrl(imageData);
-        
-        // Save to history
-        try {
-          await saveToHistory(imageData, "generate", prompt, aspectRatio?.name);
-        } catch (e) {
-          console.error('Failed to save to history:', e);
-        }
-        
+        // No need to save to history here - backend handles it automatically
         toast.success(mode === "edit" ? "Foto berhasil dirombak!" : "Gambar jadi nih! Kece parah");
       } else {
         throw new Error("Gak ada gambar yang balik nih");

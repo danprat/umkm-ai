@@ -43,7 +43,7 @@ const mascotTypes = [
 
 export default function MascotPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, saveToHistory, clearRateLimit } = useCredits({ pageType: 'mascot' });
+  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'mascot' });
   
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -120,9 +120,9 @@ export default function MascotPage() {
 
       let response;
       if (productImage) {
-        response = await generateImageWithReference(prompt, productImage);
+        response = await generateImageWithReference(prompt, productImage, 'mascot', aspectRatio?.name);
       } else {
-        response = await generateImage(prompt);
+        response = await generateImage(prompt, 'mascot', aspectRatio?.name);
       }
 
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
@@ -130,11 +130,7 @@ export default function MascotPage() {
       if (imageData) {
         setImageUrl(imageData);
         toast.success("Maskot berhasil dibuat!");
-        
-        // Save to history
-        await saveToHistory(imageData, "mascot", productName, selectedAspectRatio);
-        
-        // Clear rate limit after successful generation
+        // No need to save to history - backend handles it automatically
         clearRateLimit();
       } else {
         throw new Error("Tidak ada gambar dalam response");

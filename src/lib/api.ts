@@ -8,10 +8,17 @@ export interface GenerationJob {
   status: 'pending' | 'processing' | 'completed' | 'failed';
   result?: GenerateImageResponse;
   error?: string;
+  image_path?: string;
 }
 
+export type PageType = 'generate' | 'promo' | 'mascot' | 'food' | 'style';
+
 // Submit generation job to Edge Function
-async function submitGenerationJob(messages: unknown[]): Promise<GenerationJob> {
+async function submitGenerationJob(
+  messages: unknown[], 
+  pageType: PageType = 'generate',
+  aspectRatio?: string
+): Promise<GenerationJob> {
   const { data: { session } } = await supabase.auth.getSession();
   
   if (!session?.access_token) {
@@ -22,6 +29,8 @@ async function submitGenerationJob(messages: unknown[]): Promise<GenerationJob> 
     body: {
       messages,
       model: 'gemini-3-pro-image-preview',
+      page_type: pageType,
+      aspect_ratio: aspectRatio,
     },
   });
 
@@ -78,9 +87,13 @@ async function pollForCompletion(
 }
 
 // Main function to call generate API via Edge Function
-async function callGenerateAPI(messages: unknown[]): Promise<GenerateImageResponse> {
+async function callGenerateAPI(
+  messages: unknown[],
+  pageType: PageType = 'generate',
+  aspectRatio?: string
+): Promise<GenerateImageResponse> {
   // Submit job
-  const job = await submitGenerationJob(messages);
+  const job = await submitGenerationJob(messages, pageType, aspectRatio);
   
   // If already completed (fast response), return immediately
   if (job.status === 'completed' && job.result) {
@@ -125,72 +138,91 @@ export interface GenerateImageResponse {
   }[];
 }
 
-export async function generateImage(prompt: string): Promise<GenerateImageResponse> {
+export async function generateImage(
+  prompt: string,
+  pageType: PageType = 'generate',
+  aspectRatio?: string
+): Promise<GenerateImageResponse> {
   const fullPrompt = `buat gambar ${prompt}`;
   
-  return callGenerateAPI([
-    {
-      role: "user",
-      content: fullPrompt,
-    },
-  ]);
+  return callGenerateAPI(
+    [
+      {
+        role: "user",
+        content: fullPrompt,
+      },
+    ],
+    pageType,
+    aspectRatio
+  );
 }
 
 export async function generateImageWithReference(
   prompt: string, 
-  referenceImageBase64: string
+  referenceImageBase64: string,
+  pageType: PageType = 'generate',
+  aspectRatio?: string
 ): Promise<GenerateImageResponse> {
   const fullPrompt = `buat gambar ${prompt}`;
   
-  return callGenerateAPI([
-    {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: fullPrompt,
-        },
-        {
-          type: "image_url",
-          image_url: {
-            url: referenceImageBase64,
+  return callGenerateAPI(
+    [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: fullPrompt,
           },
-        },
-      ],
-    },
-  ]);
+          {
+            type: "image_url",
+            image_url: {
+              url: referenceImageBase64,
+            },
+          },
+        ],
+      },
+    ],
+    pageType,
+    aspectRatio
+  );
 }
 
 export async function copyStyleFromImages(
   originalImageBase64: string,
   styleImageBase64: string,
-  additionalPrompt?: string
+  additionalPrompt?: string,
+  aspectRatio?: string
 ): Promise<GenerateImageResponse> {
   const prompt = `buat gambar dengan mengcopy style dari gambar kedua dan terapkan ke gambar pertama. ${additionalPrompt || ''}`;
   
-  return callGenerateAPI([
-    {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: prompt,
-        },
-        {
-          type: "image_url",
-          image_url: {
-            url: originalImageBase64,
+  return callGenerateAPI(
+    [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: prompt,
           },
-        },
-        {
-          type: "image_url",
-          image_url: {
-            url: styleImageBase64,
+          {
+            type: "image_url",
+            image_url: {
+              url: originalImageBase64,
+            },
           },
-        },
-      ],
-    },
-  ]);
+          {
+            type: "image_url",
+            image_url: {
+              url: styleImageBase64,
+            },
+          },
+        ],
+      },
+    ],
+    'style',
+    aspectRatio
+  );
 }
 
 export async function enhanceFoodPhoto(
@@ -204,21 +236,25 @@ export async function enhanceFoodPhoto(
   const ratioText = aspectRatio ? ` Format: ${aspectRatio}` : "";
   const prompt = `buat gambar food photography profesional dengan style ${style}, angle ${angle}. ${ornamentsText} Buat foto ini terlihat lebih menarik dan profesional untuk promosi.${ratioText}`;
   
-  return callGenerateAPI([
-    {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: prompt,
-        },
-        {
-          type: "image_url",
-          image_url: {
-            url: imageBase64,
+  return callGenerateAPI(
+    [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: prompt,
           },
-        },
-      ],
-    },
-  ]);
+          {
+            type: "image_url",
+            image_url: {
+              url: imageBase64,
+            },
+          },
+        ],
+      },
+    ],
+    'food',
+    aspectRatio
+  );
 }

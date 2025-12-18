@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 export default function StylePage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, saveToHistory, clearRateLimit } = useCredits({ pageType: 'style' });
+  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'style' });
   
   const [originalImage, setOriginalImage] = useState("");
   const [styleImage, setStyleImage] = useState("");
@@ -57,17 +57,13 @@ export default function StylePage() {
       const ratioPrompt = aspectRatio ? ` Format output: ${aspectRatio.ratio}` : "";
       const fullPrompt = additionalPrompt ? additionalPrompt + ratioPrompt : ratioPrompt;
       
-      const response = await copyStyleFromImages(originalImage, styleImage, fullPrompt);
+      const response = await copyStyleFromImages(originalImage, styleImage, fullPrompt, aspectRatio?.name);
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       
       if (imageData) {
         setImageUrl(imageData);
         toast.success("Style berhasil di-copy!");
-        
-        // Save to history
-        await saveToHistory(imageData, "style", "Style Copy", selectedAspectRatio);
-        
-        // Clear rate limit after successful generation
+        // No need to save to history - backend handles it automatically
         clearRateLimit();
       } else {
         throw new Error("Tidak ada gambar dalam response");

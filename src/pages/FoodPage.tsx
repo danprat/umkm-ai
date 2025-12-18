@@ -92,7 +92,7 @@ const ornaments = [
 
 export default function FoodPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, saveToHistory, clearRateLimit } = useCredits({ pageType: 'food' });
+  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'food' });
   
   const [foodImage, setFoodImage] = useState("");
   const [mode, setMode] = useState<"easy" | "advanced">("easy");
@@ -164,12 +164,7 @@ export default function FoodPage() {
       if (imageData) {
         setImageUrl(imageData);
         toast.success("Foto makanan jadi lebih ngiler! 🤤");
-        
-        // Save to history
-        const promptText = mode === "easy" ? selectedPreset.name : selectedStyle;
-        await saveToHistory(imageData, "food", promptText, selectedAspectRatio);
-        
-        // Clear rate limit after successful generation
+        // No need to save to history - backend handles it automatically
         clearRateLimit();
       } else {
         throw new Error("Yah, fotonya gagal dimasak");

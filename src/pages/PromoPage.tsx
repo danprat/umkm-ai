@@ -84,7 +84,7 @@ const colorSchemes = [
 
 export default function PromoPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, saveToHistory, clearRateLimit } = useCredits({ pageType: 'promo' });
+  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'promo' });
   
   const [selectedTemplate, setSelectedTemplate] = useState(promoTemplates[0]);
   const [productName, setProductName] = useState("");
@@ -146,20 +146,16 @@ export default function PromoPage() {
 
       let response;
       if (productImage) {
-        response = await generateImageWithReference(prompt, productImage);
+        response = await generateImageWithReference(prompt, productImage, 'promo', aspectRatio?.name);
       } else {
-        response = await generateImage(prompt);
+        response = await generateImage(prompt, 'promo', aspectRatio?.name);
       }
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       
       if (imageData) {
         setImageUrl(imageData);
         toast.success("Poster promo jadi! Siap viral");
-        
-        // Save to history
-        await saveToHistory(imageData, "promo", productName, selectedAspectRatio);
-        
-        // Clear rate limit after successful generation
+        // No need to save to history - backend handles it automatically
         clearRateLimit();
       } else {
         throw new Error("Yah, gambarnya gak muncul");

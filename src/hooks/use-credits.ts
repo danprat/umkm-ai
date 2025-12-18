@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase, uploadGeneratedImage } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 interface UseCreditsOptions {
@@ -118,55 +118,6 @@ export function useCredits({ pageType }: UseCreditsOptions) {
     }
   }, [updateCredits, toast]);
 
-  // Save generated image to history
-  const saveToHistory = useCallback(async (
-    imageData: Blob | string,
-    pageTypeOverride: string,
-    prompt: string,
-    aspectRatio?: string
-  ): Promise<string | null> => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user?.id) return null;
-
-      // Convert data URL to Blob if needed
-      let imageBlob: Blob;
-      if (typeof imageData === 'string') {
-        // It's a data URL, convert to Blob
-        const response = await fetch(imageData);
-        imageBlob = await response.blob();
-      } else {
-        imageBlob = imageData;
-      }
-
-      // Upload to storage
-      const filename = `${pageTypeOverride || pageType}-${Date.now()}.png`;
-      const imagePath = await uploadGeneratedImage(session.user.id, imageBlob, filename);
-
-      // Save to generation_history
-      const { error } = await supabase
-        .from('generation_history')
-        .insert({
-          user_id: session.user.id,
-          prompt,
-          image_path: imagePath,
-          aspect_ratio: aspectRatio,
-          page_type: pageType,
-        });
-
-      if (error) {
-        console.error('Error saving to history:', error);
-        return null;
-      }
-
-      return imagePath;
-    } catch (error) {
-      console.error('Save to history error:', error);
-      return null;
-    }
-  }, [pageType]);
-
   // Clear rate limit when timer completes
   const clearRateLimit = useCallback(() => {
     setRateLimitedUntil(null);
@@ -178,7 +129,6 @@ export function useCredits({ pageType }: UseCreditsOptions) {
     rateLimitedUntil,
     checkAndDeductCredit,
     refundCredit,
-    saveToHistory,
     clearRateLimit,
     refreshProfile,
   };
