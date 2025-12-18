@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { Home, SearchX } from "lucide-react";
+import { Home, SearchX, MapPin } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
@@ -20,7 +20,9 @@ const NotFound = () => {
           <span className="text-5xl font-display text-white">404</span>
         </div>
         
-        <h1 className="mb-2 text-3xl font-display uppercase tracking-tight">Nyasar Bos? 🗺️</h1>
+        <h1 className="mb-2 text-3xl font-display uppercase tracking-tight flex items-center justify-center gap-2">
+          Nyasar Bos? <MapPin className="w-7 h-7 text-red-500" />
+        </h1>
         <p className="mb-8 text-gray-600 font-bold leading-relaxed">
           Halaman yang kamu cari gak ketemu nih. Mungkin udah pindah atau dihapus.
         </p>
@@ -30,7 +32,7 @@ const NotFound = () => {
           className="w-full py-4 bg-genz-lime text-black font-display text-xl uppercase border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all rounded-lg flex items-center justify-center gap-2 group"
         >
           <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          BALIK KE RUMAH 🏠
+          BALIK KE RUMAH
         </Link>
       </div>
     </div>

@@ -76,7 +76,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <footer className="border-t-[3px] border-foreground bg-foreground text-background py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="font-bold uppercase tracking-widest">
-            © 2025 UMKM.AI — Dibuat dengan ❤️ untuk UMKM Indonesia
+            © 2025 UMKM.AI — Dibuat untuk UMKM Indonesia
           </p>
         </div>
       </footer>

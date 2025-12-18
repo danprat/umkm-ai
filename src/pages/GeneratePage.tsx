@@ -40,12 +40,12 @@ export default function GeneratePage() {
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      toast.error("Waduh, tulis dulu mau gambar apa! 😅");
+      toast.error("Waduh, tulis dulu mau gambar apa!");
       return;
     }
 
     if (mode === "edit" && !referenceImage) {
-      toast.error("Upload dulu foto yang mau diedit bro! 📸");
+      toast.error("Upload dulu foto yang mau diedit bro!");
       return;
     }
 
@@ -53,13 +53,13 @@ export default function GeneratePage() {
     const creditCheck = await checkAndDeductCredit();
     if (!creditCheck.success) {
       if (creditCheck.code === 'RATE_LIMITED') {
-        toast.error(`Sabar ya! Tunggu ${creditCheck.waitSeconds} detik lagi 🙏`);
+        toast.error(`Sabar ya! Tunggu ${creditCheck.waitSeconds} detik lagi`);
       } else if (creditCheck.code === 'INSUFFICIENT_CREDITS') {
-        toast.error("Yah, kredit abis! Top up dulu yuk 💸");
+        toast.error("Yah, kredit abis! Top up dulu yuk");
       } else if (creditCheck.code === 'EMAIL_NOT_VERIFIED') {
-        toast.error("Verifikasi email dulu biar dapet kredit gratis! 📧");
+        toast.error("Verifikasi email dulu biar dapet kredit gratis!");
       } else {
-        toast.error(creditCheck.error || "Gagal memproses kredit 😢");
+        toast.error(creditCheck.error || "Gagal memproses kredit");
       }
       return;
     }
@@ -91,7 +91,7 @@ export default function GeneratePage() {
           console.error('Failed to save to history:', e);
         }
         
-        toast.success(mode === "edit" ? "Foto berhasil dirombak! 🔥" : "Gambar jadi nih! Kece parah ✨");
+        toast.success(mode === "edit" ? "Foto berhasil dirombak!" : "Gambar jadi nih! Kece parah");
       } else {
         throw new Error("Gak ada gambar yang balik nih");
       }
@@ -117,7 +117,7 @@ export default function GeneratePage() {
               <Wand2 className="w-6 h-6 stroke-[3px]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
-              Bikin Gambar AI 🎨
+              Bikin Gambar AI
             </h1>
           </div>
           <p className="text-lg text-gray-600 font-bold font-mono">
@@ -281,7 +281,7 @@ export default function GeneratePage() {
                   ) : (
                     <>
                       <Wand2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                      {mode === "edit" ? "Edit Sekarang ⚡" : "Gas Bikin! 🚀"}
+                      {mode === "edit" ? "Edit Sekarang" : "Gas Bikin!"}
                     </>
                   )}
                 </button>

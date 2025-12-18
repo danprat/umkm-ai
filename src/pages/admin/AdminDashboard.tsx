@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, CreditCard, Ticket, Image, TrendingUp, Coins } from 'lucide-react';
+import { Users, CreditCard, Ticket, Image, TrendingUp, Coins, Wrench, BarChart3, Zap, Activity } from 'lucide-react';
 
 interface Stats {
   totalUsers: number;
@@ -84,7 +84,6 @@ export default function AdminDashboard() {
       icon: Users,
       color: 'text-black',
       bg: 'bg-genz-lime',
-      emoji: '👥',
     },
     {
       title: 'Total Revenue',
@@ -92,7 +91,6 @@ export default function AdminDashboard() {
       icon: TrendingUp,
       color: 'text-black',
       bg: 'bg-genz-pink',
-      emoji: '💰',
     },
     {
       title: 'Transactions',
@@ -100,7 +98,6 @@ export default function AdminDashboard() {
       icon: CreditCard,
       color: 'text-black',
       bg: 'bg-genz-cyan',
-      emoji: '💳',
     },
     {
       title: 'Credits Issued',
@@ -108,7 +105,6 @@ export default function AdminDashboard() {
       icon: Coins,
       color: 'text-black',
       bg: 'bg-genz-coral',
-      emoji: '🪙',
     },
     {
       title: 'Generations',
@@ -116,7 +112,6 @@ export default function AdminDashboard() {
       icon: Image,
       color: 'text-black',
       bg: 'bg-genz-purple',
-      emoji: '🇿️',
     },
     {
       title: 'Active Coupons',
@@ -124,7 +119,6 @@ export default function AdminDashboard() {
       icon: Ticket,
       color: 'text-black',
       bg: 'bg-genz-blue',
-      emoji: '🎫',
     },
   ];
 
@@ -132,8 +126,12 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       <div className="border-4 border-black p-8 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-genz-lime rounded-full blur-3xl opacity-50"></div>
-        <h1 className="text-4xl font-display uppercase animate-slide-up relative z-10">Admin Dashboard 🔧</h1>
-        <p className="text-gray-600 font-bold mt-2 font-mono relative z-10">Overview of your UMKM AI platform 📊</p>
+        <h1 className="text-4xl font-display uppercase animate-slide-up relative z-10 flex items-center gap-3">
+          <Wrench className="w-8 h-8" /> Admin Dashboard
+        </h1>
+        <p className="text-gray-600 font-bold mt-2 font-mono relative z-10 flex items-center gap-2">
+          <BarChart3 className="w-5 h-5" /> Overview of your UMKM AI platform
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -150,11 +148,8 @@ export default function AdminDashboard() {
                   <div className="text-3xl font-display uppercase tracking-tight">{card.value}</div>
                 )}
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className={`p-3 border-4 border-black ${card.bg} group-hover:rotate-12 transition-transform shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-lg`}>
-                  <card.icon className={`w-6 h-6 ${card.color}`} />
-                </div>
-                <span className="text-2xl animate-float" style={{ animationDelay: `${index * 0.2}s` }}>{card.emoji}</span>
+              <div className={`p-3 border-4 border-black ${card.bg} group-hover:rotate-12 transition-transform shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-lg`}>
+                <card.icon className={`w-6 h-6 ${card.color}`} />
               </div>
             </div>
           </div>
@@ -166,7 +161,7 @@ export default function AdminDashboard() {
         <div className="border-4 border-black bg-genz-cyan p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <h3 className="text-2xl font-display uppercase mb-4 flex items-center gap-2">
                 <span className="bg-white px-2 border-2 border-black text-sm py-1 rounded">NEW</span>
-                Quick Actions ⚡
+                <Zap className="w-5 h-5" /> Quick Actions
             </h3>
             <p className="text-black font-medium mb-4">
                 Manage your platform efficiently. Check user reports, validate transactions, or update system settings.
@@ -177,7 +172,9 @@ export default function AdminDashboard() {
         </div>
 
         <div className="border-4 border-black bg-genz-pink p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-            <h3 className="text-2xl font-display uppercase mb-4">System Status 🟢</h3>
+            <h3 className="text-2xl font-display uppercase mb-4 flex items-center gap-2">
+              <Activity className="w-5 h-5" /> System Status
+            </h3>
             <div className="space-y-2 font-mono text-sm font-bold">
                 <div className="flex justify-between border-b-2 border-black pb-1">
                     <span>Database</span>

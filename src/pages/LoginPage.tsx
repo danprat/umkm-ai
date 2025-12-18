@@ -36,8 +36,12 @@ export default function LoginPage() {
       {/* Decorative Background Elements */}
       <div className="absolute top-10 right-10 w-24 h-24 bg-genz-pink border-4 border-black rounded-full opacity-50 animate-float"></div>
       <div className="absolute bottom-10 left-10 w-32 h-32 bg-genz-lime border-4 border-black rounded-full opacity-50 animate-float" style={{ animationDelay: '1s' }}></div>
-      <div className="absolute top-1/2 left-10 text-6xl animate-spin-slow opacity-20">❋</div>
-      <div className="absolute bottom-1/2 right-10 text-6xl animate-bounce opacity-20">⚡</div>
+      <div className="absolute top-1/2 left-10 animate-spin-slow opacity-20">
+        <Sparkles className="w-16 h-16 text-black fill-black" />
+      </div>
+      <div className="absolute bottom-1/2 right-10 animate-bounce opacity-20">
+        <Zap className="w-16 h-16 text-black fill-black" />
+      </div>
 
       <div className="w-full max-w-lg relative z-10">
         {/* Back Button */}
@@ -60,7 +64,7 @@ export default function LoginPage() {
               <Zap className="w-10 h-10 stroke-[3px]" />
             </div>
             <h1 className="text-4xl font-display uppercase mb-2 drop-shadow-sm">
-              Masuk Dulu Sob! 👋
+              Masuk Dulu Sob!
             </h1>
             <p className="text-gray-600 font-bold max-w-xs mx-auto">
               Bikin foto produk estetik cuman sejentik jari. Gratis buat UMKM!
@@ -118,13 +122,13 @@ export default function LoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Gas Login Google! 🚀
+            Gas Login Google!
           </button>
 
           {/* Terms */}
           <div className="mt-8 text-center">
             <p className="text-xs font-bold text-gray-500 mb-2">
-              Ssst... aman kok! Kita pake standar keamanan Google. 🔒
+              Ssst... aman kok! Kita pake standar keamanan Google.
             </p>
             <p className="text-[10px] text-gray-400 font-medium">
               Dengan masuk, kamu setuju sama{' '}

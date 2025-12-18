@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Zap, Sparkles, Heart, Flame, MousePointer2 } from "lucide-react";
+import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Zap, Sparkles, Heart, Flame, MousePointer2, Rocket, DollarSign, MessageCircle, Coffee, Glasses } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -67,7 +67,7 @@ const testimonials = [
   {
     name: "Kak Sisi",
     role: "Owner Seblak Huhah",
-    text: "Gila sih, foto seblak gue jadi estetik parah! Omzet naik 2x lipat sejak pake ini. Wajib coba guys! 🔥",
+    text: "Gila sih, foto seblak gue jadi estetik parah! Omzet naik 2x lipat sejak pake ini. Wajib coba guys!",
     handle: "@seblak_sisi"
   },
   {
@@ -79,7 +79,7 @@ const testimonials = [
   {
     name: "Mba Rara",
     role: "Cookies Homemade",
-    text: "Suka banget sama fiturnya! Gampang dipake, hasilnya nggak kaleng-kaleng. Love it! 💖",
+    text: "Suka banget sama fiturnya! Gampang dipake, hasilnya nggak kaleng-kaleng. Love it!",
     handle: "@rara.cookies"
   }
 ];
@@ -92,10 +92,10 @@ export default function LandingPage() {
       
       {/* Marquee Banner - TOP */}
       <div className="bg-black text-white py-2 overflow-hidden border-b-4 border-black rotate-1 scale-105 z-50 relative shadow-[0_10px_0_rgba(0,0,0,0.1)]">
-        <div className="marquee font-display tracking-wider text-xl">
-          <span className="marquee-content px-4">
-            🔥 GRATIS BUAT UMKM  •  GAK PERLU JAGO DESAIN  •  CUMA PAKAI HP  •  HASILNYA KECE BADAI  •  AUTO LARIS MANIS  •  COBAIN SEKARANG  •  
-            🔥 GRATIS BUAT UMKM  •  GAK PERLU JAGO DESAIN  •  CUMA PAKAI HP  •  HASILNYA KECE BADAI  •  AUTO LARIS MANIS  •  COBAIN SEKARANG  •
+        <div className="marquee font-display tracking-wider text-xl flex items-center">
+          <span className="marquee-content px-4 flex items-center gap-2">
+            <Flame className="w-5 h-5 inline-block fill-orange-500 text-orange-500" /> GRATIS BUAT UMKM  •  GAK PERLU JAGO DESAIN  •  CUMA PAKAI HP  •  HASILNYA KECE BADAI  •  AUTO LARIS MANIS  •  COBAIN SEKARANG  •  
+            <Flame className="w-5 h-5 inline-block fill-orange-500 text-orange-500" /> GRATIS BUAT UMKM  •  GAK PERLU JAGO DESAIN  •  CUMA PAKAI HP  •  HASILNYA KECE BADAI  •  AUTO LARIS MANIS  •  COBAIN SEKARANG  •
           </span>
         </div>
       </div>
@@ -148,14 +148,14 @@ export default function LandingPage() {
           <ScrollReveal animation="fade-up" delay={800}>
             <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed bg-white/50 backdrop-blur-sm p-4 rounded-xl border-2 border-black/10">
               Gak perlu sewa studio mahal atau jago desain. <br className="hidden md:block" />
-              Cuma modal HP, ketik-ketik dikit, foto produk auto <span className="bg-genz-pink px-1 border-2 border-black rounded text-white transform inline-block rotate-1">GLOWING! ✨</span>
+              Cuma modal HP, ketik-ketik dikit, foto produk auto <span className="bg-genz-pink px-1 border-2 border-black rounded text-white transform inline-block rotate-1 flex items-center gap-1">GLOWING! <Sparkles className="w-4 h-4 inline-block fill-white" /></span>
             </p>
           </ScrollReveal>
 
           <ScrollReveal animation="bounce-in" delay={1000} className="flex flex-col md:flex-row gap-6 justify-center items-center">
             <Link to="/dashboard" className="group relative px-8 py-4 bg-genz-cyan text-black font-display text-2xl uppercase tracking-wide border-4 border-black rounded-xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all">
               <span className="flex items-center gap-3">
-                {user ? 'BUKA DASHBOARD! 🚀' : 'GAS COBA GRATIS! 🚀'}
+                {user ? 'BUKA DASHBOARD!' : 'GAS COBA GRATIS!'} <Rocket className="w-6 h-6 fill-black" />
               </span>
             </Link>
             
@@ -188,8 +188,8 @@ export default function LandingPage() {
               </h2>
             </ScrollReveal>
             <ScrollReveal animation="fade-up" delay={200}>
-              <p className="text-xl md:text-2xl font-mono text-gray-300">
-                Fitur lengkap buat bikin daganganmu makin laku keras! 💸
+              <p className="text-xl md:text-2xl font-mono text-gray-300 flex items-center justify-center gap-2">
+                Fitur lengkap buat bikin daganganmu makin laku keras! <DollarSign className="w-7 h-7 text-green-400 inline-block" />
               </p>
             </ScrollReveal>
           </div>
@@ -216,8 +216,8 @@ export default function LandingPage() {
       <section className="py-24 bg-genz-purple border-b-4 border-black overflow-hidden">
         <div className="container mx-auto px-4">
           <ScrollReveal animation="zoom-in">
-            <h2 className="font-display text-5xl md:text-7xl text-center uppercase mb-16 text-white stroke-black" style={{ textShadow: '5px 5px 0 #000' }}>
-              Caranya Gampang Bet! ⚡
+            <h2 className="font-display text-5xl md:text-7xl text-center uppercase mb-16 text-white stroke-black flex items-center justify-center gap-3" style={{ textShadow: '5px 5px 0 #000' }}>
+              Caranya Gampang Bet! <Zap className="w-16 h-16 fill-yellow-400 text-yellow-400" />
             </h2>
           </ScrollReveal>
 
@@ -249,8 +249,8 @@ export default function LandingPage() {
               <span className="bg-black text-white px-4 py-1 font-bold rounded-full mb-4 animate-bounce inline-block">REAL TESTIMONI</span>
             </ScrollReveal>
             <ScrollReveal animation="fade-up" delay={200}>
-              <h2 className="font-display text-5xl md:text-7xl uppercase text-center">
-                Spill Kata Mereka 🗣️
+              <h2 className="font-display text-5xl md:text-7xl uppercase text-center flex items-center justify-center gap-3">
+                Spill Kata Mereka <MessageCircle className="w-16 h-16 fill-genz-cyan text-black" />
               </h2>
             </ScrollReveal>
           </div>
@@ -288,8 +288,12 @@ export default function LandingPage() {
       <section className="py-32 bg-genz-lime border-t-4 border-black relative overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-10 left-10 text-9xl opacity-20 animate-spin-slow">❋</div>
-          <div className="absolute bottom-10 right-10 text-9xl opacity-20 animate-bounce">⚡</div>
+          <div className="absolute top-10 left-10 opacity-20 animate-spin-slow">
+            <Sparkles className="w-32 h-32 text-black" />
+          </div>
+          <div className="absolute bottom-10 right-10 opacity-20 animate-bounce">
+            <Zap className="w-32 h-32 text-black fill-black" />
+          </div>
         </div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -301,9 +305,9 @@ export default function LandingPage() {
           </ScrollReveal>
           
           <ScrollReveal animation="fade-up" delay={200}>
-            <p className="text-2xl font-bold mb-12 max-w-2xl mx-auto">
+            <p className="text-2xl font-bold mb-12 max-w-2xl mx-auto flex items-center justify-center gap-2">
               Gabung sekarang biar daganganmu makin <span className="italic bg-black text-white px-2">next level</span>. 
-              Gratis kok, santuy aja! 😎
+              Gratis kok, santuy aja! <Glasses className="w-7 h-7 inline-block" />
             </p>
           </ScrollReveal>
           
@@ -339,8 +343,8 @@ export default function LandingPage() {
             <a href="#" className="hover:text-genz-lime hover:underline decoration-2">Syarat & Ketentuan</a>
             <a href="#" className="hover:text-genz-lime hover:underline decoration-2">Hubungi Kami</a>
           </div>
-          <p className="font-bold uppercase tracking-widest text-xs text-gray-500">
-            © 2025 UMKM.AI — Dibuat dengan ⚡ dan ☕ untuk Indonesia
+          <p className="font-bold uppercase tracking-widest text-xs text-gray-500 flex items-center justify-center gap-2">
+            © 2025 UMKM.AI — Dibuat dengan <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400" /> dan <Coffee className="w-4 h-4 text-amber-700" /> untuk Indonesia
           </p>
         </div>
       </footer>

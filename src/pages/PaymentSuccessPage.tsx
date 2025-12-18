@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { CheckCircle2, Loader2, Sparkles, LayoutDashboard, PartyPopper } from 'lucide-react';
+import { CheckCircle2, Loader2, Sparkles, LayoutDashboard, PartyPopper, Zap } from 'lucide-react';
 
 export default function PaymentSuccessPage() {
   const { refreshProfile } = useAuth();
@@ -50,14 +50,16 @@ export default function PaymentSuccessPage() {
           <PartyPopper className="w-12 h-12 text-black" />
         </div>
         
-        <h1 className="text-4xl font-display uppercase mb-2 text-black">MANTAP JIWAAA! 🎉</h1>
+        <h1 className="text-4xl font-display uppercase mb-2 text-black flex items-center justify-center gap-2">
+          MANTAP JIWAAA! <PartyPopper className="w-10 h-10 text-genz-pink fill-genz-pink" />
+        </h1>
         <p className="font-bold text-gray-600 mb-8 text-lg">
           Pembayaran berhasil! Kredit udah masuk ke akun kamu.
         </p>
         
         <div className="bg-genz-cyan/20 border-4 border-black p-4 text-center mb-8 rounded-lg border-dashed">
-          <p className="text-sm font-bold text-black mb-1">
-            ⚡ Kredit akan muncul otomatis
+          <p className="text-sm font-bold text-black mb-1 flex items-center justify-center gap-2">
+            <Zap className="w-5 h-5 text-yellow-500 fill-yellow-500" /> Kredit akan muncul otomatis
           </p>
           <p className="text-xs text-gray-600">
             Kalo belum muncul dalam 5 menit, kontak support ya!

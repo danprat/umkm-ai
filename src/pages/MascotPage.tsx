@@ -321,7 +321,7 @@ export default function MascotPage() {
                   ) : (
                     <>
                       <Wand2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                      Buat Maskot ⚡
+                      Buat Maskot
                     </>
                   )}
                 </button>

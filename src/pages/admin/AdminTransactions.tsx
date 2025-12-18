@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2 } from 'lucide-react';
+import { Loader2, DollarSign, Ticket, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react';
 
 interface TransactionWithUser extends Transaction {
   profiles?: { email: string };
@@ -76,15 +76,15 @@ export default function AdminTransactions() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-100 text-green-700">Completed</Badge>;
+        return <Badge className="bg-green-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Lunas</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-100 text-yellow-700">Pending</Badge>;
+        return <Badge className="bg-yellow-400 text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><Clock className="w-3 h-3" /> Pending</Badge>;
       case 'cancelled':
-        return <Badge className="bg-red-100 text-red-700">Cancelled</Badge>;
+        return <Badge className="bg-red-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><XCircle className="w-3 h-3" /> Batal</Badge>;
       case 'expired':
-        return <Badge className="bg-gray-100 text-gray-700">Expired</Badge>;
+        return <Badge className="bg-gray-400 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Expired</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>;
+        return <Badge className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase">{status}</Badge>;
     }
   };
 
@@ -100,112 +100,118 @@ export default function AdminTransactions() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Transactions</h1>
-        <p className="text-muted-foreground">View payment history</p>
+        <h1 className="text-4xl font-display uppercase font-bold bg-genz-purple inline-block px-4 py-2 border-4 border-black shadow-brutal transform -rotate-1 text-white">Transaksi</h1>
+        <p className="text-lg font-bold mt-3 flex items-center gap-2">
+          Pantau semua pembayaran yang masuk <DollarSign className="w-5 h-5" />
+        </p>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Revenue
+        <Card className="border-4 border-black shadow-brutal-lg bg-green-100">
+          <CardHeader className="pb-2 border-b-4 border-black">
+            <CardTitle className="text-sm font-display uppercase tracking-wide flex items-center gap-2">
+              <DollarSign className="w-4 h-4" /> Total Revenue
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+          <CardContent className="pt-4">
+            <div className="text-3xl font-display font-bold text-green-700">
               {formatCurrency(totalRevenue)}
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Credits Sold
+        <Card className="border-4 border-black shadow-brutal-lg bg-genz-cyan">
+          <CardHeader className="pb-2 border-b-4 border-black">
+            <CardTitle className="text-sm font-display uppercase tracking-wide flex items-center gap-2">
+              <Ticket className="w-4 h-4" /> Kredit Terjual
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalCredits}</div>
+          <CardContent className="pt-4">
+            <div className="text-3xl font-display font-bold">{totalCredits.toLocaleString()}</div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Completed Transactions
+        <Card className="border-4 border-black shadow-brutal-lg bg-genz-lime">
+          <CardHeader className="pb-2 border-b-4 border-black">
+            <CardTitle className="text-sm font-display uppercase tracking-wide flex items-center gap-2">
+              <CheckCircle className="w-4 h-4" /> Transaksi Selesai
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="pt-4">
+            <div className="text-3xl font-display font-bold">
               {transactions.filter(t => t.status === 'completed').length}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>All Transactions</CardTitle>
+      <Card className="border-4 border-black shadow-brutal-lg bg-white">
+        <CardHeader className="border-b-4 border-black bg-genz-pink/20">
+          <div className="flex items-center justify-between gap-4">
+            <CardTitle className="text-2xl font-display uppercase">Semua Transaksi</CardTitle>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-48 border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold">
                 <SelectValue placeholder="Filter status" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
-                <SelectItem value="expired">Expired</SelectItem>
+              <SelectContent className="border-4 border-black">
+                <SelectItem value="all" className="font-bold">Semua Status</SelectItem>
+                <SelectItem value="completed" className="font-bold flex items-center gap-1">Lunas</SelectItem>
+                <SelectItem value="pending" className="font-bold flex items-center gap-1">Pending</SelectItem>
+                <SelectItem value="cancelled" className="font-bold flex items-center gap-1">Batal</SelectItem>
+                <SelectItem value="expired" className="font-bold flex items-center gap-1">Expired</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin" />
+              <Loader2 className="w-8 h-8 animate-spin stroke-[3px]" />
             </div>
           ) : transactions.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No transactions found
+            <div className="text-center py-12 px-4 border-4 border-dashed border-black/20 rounded-lg">
+              <p className="text-xl font-bold">Belum ada transaksi</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Credits</TableHead>
-                  <TableHead>Method</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {transactions.map((tx) => (
-                  <TableRow key={tx.id}>
-                    <TableCell className="font-mono text-sm">
-                      {tx.order_id}
-                    </TableCell>
-                    <TableCell className="text-sm">
-                      {tx.profiles?.email || '-'}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(tx.amount)}
-                    </TableCell>
-                    <TableCell>{tx.credits}</TableCell>
-                    <TableCell className="uppercase text-xs">
-                      {tx.payment_method || '-'}
-                    </TableCell>
-                    <TableCell>{getStatusBadge(tx.status)}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {formatDate(tx.created_at)}
-                    </TableCell>
+            <div className="border-4 border-black rounded-lg overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-black hover:bg-black">
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Order ID</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">User</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Jumlah</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kredit</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Metode</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Status</TableHead>
+                    <TableHead className="text-white font-display uppercase">Tanggal</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {transactions.map((tx) => (
+                    <TableRow key={tx.id} className="border-b-2 border-black/10 hover:bg-genz-purple/10">
+                      <TableCell className="font-mono text-sm font-bold">
+                        {tx.order_id}
+                      </TableCell>
+                      <TableCell className="text-sm font-bold">
+                        {tx.profiles?.email || '-'}
+                      </TableCell>
+                      <TableCell className="font-bold text-green-700">
+                        {formatCurrency(tx.amount)}
+                      </TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold">{tx.credits}</span>
+                      </TableCell>
+                      <TableCell className="uppercase text-xs font-bold">
+                        {tx.payment_method || '-'}
+                      </TableCell>
+                      <TableCell>{getStatusBadge(tx.status)}</TableCell>
+                      <TableCell className="text-sm font-bold">
+                        {formatDate(tx.created_at)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>

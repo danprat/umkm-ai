@@ -43,7 +43,7 @@ function AdminLayoutContent() {
               </div>
               <div>
                 <span className="font-display text-xl uppercase text-black block leading-none">Admin</span>
-                <span className="font-display text-xl uppercase text-black block leading-none">Panel 🔒</span>
+                <span className="font-display text-xl uppercase text-black block leading-none">Panel</span>
               </div>
             </div>
           </div>

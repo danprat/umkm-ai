@@ -15,8 +15,7 @@ import { toast } from "sonner";
 const easyPresets = [
   { 
     id: "instagram-ready", 
-    name: "Instagram Ready", 
-    emoji: "📸",
+    name: "Instagram Ready",
     description: "Paling populer! Siap posting langsung",
     style: "clean-cafe",
     angle: "45-dining",
@@ -24,8 +23,7 @@ const easyPresets = [
   },
   { 
     id: "street-food-vibes", 
-    name: "Street Food Vibes", 
-    emoji: "🍜",
+    name: "Street Food Vibes",
     description: "Untuk makanan tradisional & jajanan",
     style: "street-food",
     angle: "eye-level",
@@ -34,7 +32,6 @@ const easyPresets = [
   { 
     id: "premium-look", 
     name: "Premium & Elegan", 
-    emoji: "✨",
     description: "Kesan mewah dan profesional",
     style: "luxury-dining",
     angle: "45-dining",
@@ -43,7 +40,6 @@ const easyPresets = [
   { 
     id: "fresh-healthy", 
     name: "Fresh & Sehat", 
-    emoji: "🥗",
     description: "Untuk salad, jus, makanan sehat",
     style: "healthy-fresh",
     angle: "flatlay",
@@ -52,7 +48,6 @@ const easyPresets = [
   { 
     id: "cozy-homemade", 
     name: "Homemade Cozy", 
-    emoji: "🏠",
     description: "Kesan hangat buatan rumah",
     style: "comfort-food",
     angle: "eye-level",
@@ -61,7 +56,6 @@ const easyPresets = [
   { 
     id: "korean-aesthetic", 
     name: "Korean Aesthetic", 
-    emoji: "🇰🇷",
     description: "Pastel, cantik ala Korea",
     style: "korean-pastel",
     angle: "flatlay",
@@ -88,12 +82,12 @@ const angles = [
 ];
 
 const ornaments = [
-  { id: "drinks", name: "Minuman", emoji: "🥤" },
-  { id: "natural", name: "Daun/Bunga", emoji: "🌿" },
-  { id: "side-dish", name: "Side Dish", emoji: "🍟" },
-  { id: "tableware", name: "Piring/Sendok", emoji: "🍽️" },
-  { id: "garnish", name: "Garnish", emoji: "🌶️" },
-  { id: "steam", name: "Steam/Uap", emoji: "♨️" },
+  { id: "drinks", name: "Minuman" },
+  { id: "natural", name: "Daun/Bunga" },
+  { id: "side-dish", name: "Side Dish" },
+  { id: "tableware", name: "Piring/Sendok" },
+  { id: "garnish", name: "Garnish" },
+  { id: "steam", name: "Steam/Uap" },
 ];
 
 export default function FoodPage() {
@@ -122,7 +116,7 @@ export default function FoodPage() {
 
   const handleGenerate = async () => {
     if (!foodImage) {
-      toast.error("Upload dulu foto makanannya! 📸");
+      toast.error("Upload dulu foto makanannya!");
       return;
     }
 
@@ -132,7 +126,7 @@ export default function FoodPage() {
       if (creditResult.retryAt) {
         setRateLimitEndTime(creditResult.retryAt);
       }
-      toast.error(creditResult.error || "Gagal memproses kredit, coba lagi ya! 😢");
+      toast.error(creditResult.error || "Gagal memproses kredit, coba lagi ya!");
       return;
     }
 
@@ -189,7 +183,7 @@ export default function FoodPage() {
       const refundResult = await refundCredit();
       if (refundResult.success && profile) {
         updateCredits(profile.credits); // Restore credit
-        toast.info("Kredit dibalikin, jangan sedih! 🙌");
+        toast.info("Kredit dibalikin, jangan sedih!");
       }
     } finally {
       setIsLoading(false);
@@ -206,7 +200,7 @@ export default function FoodPage() {
               <Camera className="w-6 h-6 stroke-[3px]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
-              Food Lens AI 🍔
+              Food Lens AI
             </h1>
           </div>
           <p className="text-lg text-gray-600 font-bold font-mono">
@@ -393,7 +387,7 @@ export default function FoodPage() {
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                      Buat Foto 📸
+                      Buat Foto
                     </>
                   )}
                 </button>

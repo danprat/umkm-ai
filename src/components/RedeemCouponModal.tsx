@@ -69,14 +69,14 @@ export default function RedeemCouponModal({ open, onOpenChange }: RedeemCouponMo
       await refreshProfile();
       
       toast({
-        title: 'Mantap Jiwa! 🎉',
+        title: 'Mantap Jiwa!',
         description: `Dapet ${data.credits_added} kredit gratis nih!`,
       });
     } catch (error) {
       console.error('Redeem error:', error);
       toast({
         variant: 'destructive',
-        title: 'Waduh Error 😅',
+        title: 'Waduh Error',
         description: error instanceof Error ? error.message : 'Gagal redeem kupon, coba lagi ya!',
       });
     } finally {
@@ -96,7 +96,7 @@ export default function RedeemCouponModal({ open, onOpenChange }: RedeemCouponMo
         <div className="bg-genz-pink p-6 border-b-4 border-black">
           <DialogTitle className="font-display text-3xl uppercase flex items-center gap-2">
             <Gift className="w-8 h-8 animate-bounce" />
-            Klaim Kupon 🎁
+            Klaim Kupon
           </DialogTitle>
           <DialogDescription className="text-black font-bold font-mono text-base mt-2">
             Punya kode rahasia? Masukin sini biar dapet kredit gratis!
@@ -109,7 +109,7 @@ export default function RedeemCouponModal({ open, onOpenChange }: RedeemCouponMo
               <div className="mx-auto w-20 h-20 bg-genz-lime border-4 border-black rounded-full flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-wiggle">
                 <CheckCircle2 className="w-10 h-10 text-black" />
               </div>
-              <h3 className="font-display text-3xl uppercase mb-2">Hore Berhasil! 🎉</h3>
+              <h3 className="font-display text-3xl uppercase mb-2">Hore Berhasil!</h3>
               <p className="text-lg mb-8 font-bold font-mono">
                 Selamat! Kamu dapet <span className="bg-black text-white px-2 py-1 rotate-2 inline-block mx-1">{success.credits} kredit</span> tambahan.
               </p>
@@ -117,7 +117,7 @@ export default function RedeemCouponModal({ open, onOpenChange }: RedeemCouponMo
                 onClick={handleClose}
                 className="w-full h-12 border-4 border-black bg-white text-black hover:bg-gray-100 font-display text-xl uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg"
               >
-                Mantap! 👍
+                Mantap!
               </Button>
             </div>
           ) : (
@@ -152,7 +152,7 @@ export default function RedeemCouponModal({ open, onOpenChange }: RedeemCouponMo
                     </>
                   ) : (
                     <>
-                      Tukarkan Sekarang 🚀
+                      Tukarkan Sekarang
                     </>
                   )}
                 </Button>

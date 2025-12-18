@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Sparkles } from "lucide-react";
+import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const features = [
@@ -10,7 +10,6 @@ const features = [
     title: "Generate Image",
     description: "Buat gambar dari teks apapun dengan AI",
     color: "bg-genz-lime",
-    emoji: "✨",
   },
   {
     path: "/dashboard/promo",
@@ -18,7 +17,6 @@ const features = [
     title: "Promo Produk",
     description: "Template siap pakai untuk iklan produk UMKM",
     color: "bg-genz-pink",
-    emoji: "📣",
   },
   {
     path: "/dashboard/style",
@@ -26,7 +24,6 @@ const features = [
     title: "Copy Style",
     description: "Salin gaya dari gambar lain ke produkmu",
     color: "bg-genz-cyan",
-    emoji: "🎨",
   },
   {
     path: "/dashboard/mascot",
@@ -34,7 +31,6 @@ const features = [
     title: "Buat Maskot",
     description: "Ciptakan maskot unik untuk brandmu",
     color: "bg-genz-coral",
-    emoji: "🦁",
   },
   {
     path: "/dashboard/food",
@@ -42,7 +38,6 @@ const features = [
     title: "Food Lens AI",
     description: "Upgrade foto makanan jadi profesional",
     color: "bg-genz-purple",
-    emoji: "🍔",
   },
 ];
 
@@ -60,11 +55,11 @@ export default function Dashboard() {
                 <Sparkles className="w-6 h-6" />
             </div>
             <h1 className="text-3xl md:text-5xl font-display uppercase tracking-tighter">
-              Halo, {displayName} 👋
+              Halo, {displayName}
             </h1>
           </div>
-          <p className="text-lg text-gray-600 font-bold font-mono">
-            Mau bikin apa hari ini? Pilih menu di bawah ya! 👇
+          <p className="text-lg text-gray-600 font-bold font-mono flex items-center gap-2">
+            Mau bikin apa hari ini? Pilih menu di bawah ya! <ChevronDown className="w-5 h-5 animate-bounce" />
           </p>
         </div>
       </section>
@@ -83,11 +78,10 @@ export default function Dashboard() {
                 <div className={`absolute -right-6 -top-6 w-24 h-24 ${feature.color} rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500`}></div>
                 
                 <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-6">
+                    <div className="flex justify-start items-start mb-6">
                         <div className={`${feature.color} w-16 h-16 flex items-center justify-center border-4 border-black rounded-xl group-hover:rotate-6 transition-transform`}>
                             <feature.icon className="w-8 h-8 text-black" />
                         </div>
-                        <div className="text-4xl animate-float group-hover:scale-125 transition-transform">{feature.emoji}</div>
                     </div>
                     
                     <h3 className="font-display text-3xl uppercase mb-2 leading-none">
@@ -98,7 +92,7 @@ export default function Dashboard() {
                     </p>
                     
                     <div className="inline-flex items-center gap-2 font-bold uppercase text-sm bg-black text-white px-4 py-2 rounded-lg group-hover:bg-genz-lime group-hover:text-black transition-colors border-2 border-black">
-                    Gas Bikin! ⚡
+                    Gas Bikin!
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                 </div>

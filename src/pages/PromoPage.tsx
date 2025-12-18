@@ -102,7 +102,7 @@ export default function PromoPage() {
 
   const handleGenerate = async () => {
     if (!productName.trim()) {
-      toast.error("Nama produknya mana nih? Diisi dulu ya! 😄");
+      toast.error("Nama produknya mana nih? Diisi dulu ya!");
       return;
     }
 
@@ -112,7 +112,7 @@ export default function PromoPage() {
       if (creditResult.retryAt) {
         setRateLimitEndTime(creditResult.retryAt);
       }
-      toast.error(creditResult.error || "Gagal memproses kredit, coba lagi nanti 😢");
+      toast.error(creditResult.error || "Gagal memproses kredit, coba lagi nanti");
       return;
     }
 
@@ -154,7 +154,7 @@ export default function PromoPage() {
       
       if (imageData) {
         setImageUrl(imageData);
-        toast.success("Poster promo jadi! Siap viral 🚀");
+        toast.success("Poster promo jadi! Siap viral");
         
         // Save to history
         await saveToHistory(imageData, "promo", productName, selectedAspectRatio);
@@ -173,7 +173,7 @@ export default function PromoPage() {
       const refundResult = await refundCredit();
       if (refundResult.success && profile) {
         updateCredits(profile.credits); // Restore credit
-        toast.info("Tenang, kredit udah dibalikin kok 👍");
+        toast.info("Tenang, kredit udah dibalikin kok");
       }
     } finally {
       setIsLoading(false);
@@ -190,7 +190,7 @@ export default function PromoPage() {
               <Megaphone className="w-6 h-6 stroke-[3px]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
-              Bikin Promo 📣
+              Bikin Promo
             </h1>
           </div>
           <p className="text-lg text-gray-600 font-bold font-mono">
@@ -381,7 +381,7 @@ export default function PromoPage() {
                   ) : (
                     <>
                       <Megaphone className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                      Buat Promo 🚀
+                      Buat Promo
                     </>
                   )}
                 </button>

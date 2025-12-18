@@ -25,7 +25,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Loader2, Copy, Check } from 'lucide-react';
+import { Plus, Loader2, Copy, Check, Ticket, Gift, Flame, XCircle, Clock } from 'lucide-react';
 
 // Generate random coupon code
 function generateCouponCode(): string {
@@ -166,163 +166,182 @@ export default function AdminCoupons() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Coupons</h1>
-          <p className="text-muted-foreground">Create and manage coupon codes</p>
+          <h1 className="text-4xl font-display uppercase font-bold bg-genz-coral inline-block px-4 py-2 border-4 border-black shadow-brutal transform -rotate-1">Kupon</h1>
+          <p className="text-lg font-bold mt-3 flex items-center gap-2">
+            Bikin dan atur kode kupon buat user <Ticket className="w-5 h-5" />
+          </p>
         </div>
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Coupon
+            <Button className="bg-genz-lime text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg">
+              <Plus className="w-5 h-5 mr-2 stroke-[3px]" />
+              Bikin Kupon
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="border-4 border-black shadow-brutal-lg">
             <DialogHeader>
-              <DialogTitle>Create New Coupon</DialogTitle>
-              <DialogDescription>
-                Generate a coupon code for users to redeem credits
+              <DialogTitle className="text-2xl font-display uppercase">Bikin Kupon Baru</DialogTitle>
+              <DialogDescription className="text-base font-bold flex items-center gap-2">
+                Buat kode kupon biar user bisa redeem kredit gratis <Gift className="w-4 h-4" />
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>Coupon Code</Label>
+                <Label className="font-bold uppercase">Kode Kupon</Label>
                 <div className="flex gap-2">
                   <Input
                     value={newCoupon.code}
                     onChange={(e) => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
-                    className="font-mono uppercase"
+                    className="font-mono uppercase border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                     placeholder="PROMO123"
                   />
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setNewCoupon({ ...newCoupon, code: generateCouponCode() })}
+                    className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                   >
-                    Generate
+                    Acak
                   </Button>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Credits</Label>
+                  <Label className="font-bold uppercase">Jumlah Kredit</Label>
                   <Input
                     type="number"
                     value={newCoupon.credits}
                     onChange={(e) => setNewCoupon({ ...newCoupon, credits: parseInt(e.target.value) || 0 })}
                     min="1"
+                    className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Max Users</Label>
+                  <Label className="font-bold uppercase">Max User</Label>
                   <Input
                     type="number"
                     value={newCoupon.max_users}
                     onChange={(e) => setNewCoupon({ ...newCoupon, max_users: parseInt(e.target.value) || 1 })}
                     min="1"
+                    className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Expiry Date (Optional)</Label>
+                <Label className="font-bold uppercase">Tanggal Kadaluarsa (Opsional)</Label>
                 <Input
                   type="datetime-local"
                   value={newCoupon.expires_at}
                   onChange={(e) => setNewCoupon({ ...newCoupon, expires_at: e.target.value })}
+                  className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                 />
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDialog(false)}>
-                Cancel
+            <DialogFooter className="gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowDialog(false)}
+                className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold"
+              >
+                Batal
               </Button>
-              <Button onClick={handleCreateCoupon} disabled={isCreating}>
-                {isCreating && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Create Coupon
+              <Button 
+                onClick={handleCreateCoupon} 
+                disabled={isCreating}
+                className="bg-genz-lime text-black border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold"
+              >
+                {isCreating ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+                Bikin Kupon
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Coupons</CardTitle>
+      <Card className="border-4 border-black shadow-brutal-lg bg-white">
+        <CardHeader className="border-b-4 border-black bg-genz-coral/20">
+          <CardTitle className="text-2xl font-display uppercase">Semua Kupon</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin" />
+              <Loader2 className="w-8 h-8 animate-spin stroke-[3px]" />
             </div>
           ) : coupons.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No coupons created yet
+            <div className="text-center py-12 px-4 border-4 border-dashed border-black/20 rounded-lg">
+              <p className="text-xl font-bold">Belum ada kupon dibuat</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Credits</TableHead>
-                  <TableHead>Usage</TableHead>
-                  <TableHead>Expires</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Active</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {coupons.map((coupon) => (
-                  <TableRow key={coupon.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <code className="px-2 py-1 bg-gray-100 rounded font-mono text-sm">
-                          {coupon.code}
-                        </code>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-6 w-6 p-0"
-                          onClick={() => handleCopyCode(coupon.code)}
-                        >
-                          {copiedCode === coupon.code ? (
-                            <Check className="w-3 h-3 text-green-500" />
-                          ) : (
-                            <Copy className="w-3 h-3" />
-                          )}
-                        </Button>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">{coupon.credits}</TableCell>
-                    <TableCell>
-                      {coupon.used_count} / {coupon.max_users}
-                    </TableCell>
-                    <TableCell>
-                      <span className={isExpired(coupon.expires_at) ? 'text-red-500' : ''}>
-                        {formatDate(coupon.expires_at)}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      {!coupon.is_active ? (
-                        <Badge variant="outline">Inactive</Badge>
-                      ) : isExpired(coupon.expires_at) ? (
-                        <Badge className="bg-red-100 text-red-700">Expired</Badge>
-                      ) : coupon.used_count >= coupon.max_users ? (
-                        <Badge className="bg-yellow-100 text-yellow-700">Fully Used</Badge>
-                      ) : (
-                        <Badge className="bg-green-100 text-green-700">Active</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Switch
-                        checked={coupon.is_active}
-                        onCheckedChange={() => handleToggleActive(coupon)}
-                      />
-                    </TableCell>
+            <div className="border-4 border-black rounded-lg overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-black hover:bg-black">
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kode</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kredit</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Pemakaian</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kadaluarsa</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Status</TableHead>
+                    <TableHead className="text-white font-display uppercase">Aktif</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {coupons.map((coupon) => (
+                    <TableRow key={coupon.id} className="border-b-2 border-black/10 hover:bg-genz-coral/10">
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <code className="px-3 py-1.5 bg-genz-lime border-2 border-black rounded-lg font-mono text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                            {coupon.code}
+                          </code>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0 hover:bg-genz-cyan hover:border-2 hover:border-black"
+                            onClick={() => handleCopyCode(coupon.code)}
+                          >
+                            {copiedCode === coupon.code ? (
+                              <Check className="w-4 h-4 text-green-600 stroke-[3px]" />
+                            ) : (
+                              <Copy className="w-4 h-4 stroke-[2.5px]" />
+                            )}
+                          </Button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold">{coupon.credits}</span>
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        {coupon.used_count} / {coupon.max_users}
+                      </TableCell>
+                      <TableCell>
+                        <span className={`font-bold ${isExpired(coupon.expires_at) ? 'text-red-600' : ''}`}>
+                          {formatDate(coupon.expires_at)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {!coupon.is_active ? (
+                          <Badge className="border-2 border-black/30 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] font-bold uppercase flex items-center gap-1"><XCircle className="w-3 h-3" /> Nonaktif</Badge>
+                        ) : isExpired(coupon.expires_at) ? (
+                          <Badge className="bg-red-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><Clock className="w-3 h-3" /> Expired</Badge>
+                        ) : coupon.used_count >= coupon.max_users ? (
+                          <Badge className="bg-yellow-400 text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><Check className="w-3 h-3" /> Habis</Badge>
+                        ) : (
+                          <Badge className="bg-green-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase flex items-center gap-1"><Flame className="w-3 h-3" /> Aktif</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Switch
+                          checked={coupon.is_active}
+                          onCheckedChange={() => handleToggleActive(coupon)}
+                          className="data-[state=checked]:bg-genz-lime"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>

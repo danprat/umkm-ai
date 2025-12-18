@@ -74,7 +74,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               <div className="bg-genz-lime p-1.5 border-[2px] border-foreground animate-float">
                 <Zap className="w-5 h-5 text-foreground" />
               </div>
-              <span className="font-display text-xl uppercase">UMKM.AI ⚡</span>
+              <span className="font-display text-xl uppercase">UMKM.AI</span>
             </Link>
           </div>
 

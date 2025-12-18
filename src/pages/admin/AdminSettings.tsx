@@ -23,7 +23,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Loader2, Pencil, Trash2, Settings as SettingsIcon, Mail, Clock, CreditCard, Save } from 'lucide-react';
 
 export default function AdminSettings() {
   const { toast } = useToast();
@@ -227,60 +227,68 @@ export default function AdminSettings() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">Configure app settings and credit packages</p>
+        <h1 className="text-4xl font-display uppercase font-bold bg-genz-blue inline-block px-4 py-2 border-4 border-black shadow-brutal transform -rotate-1 text-white">Settings</h1>
+        <p className="text-lg font-bold mt-3 flex items-center gap-2">
+          Atur konfigurasi aplikasi dan paket kredit <SettingsIcon className="w-5 h-5" />
+        </p>
       </div>
 
       {/* General Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>General Settings</CardTitle>
-          <CardDescription>
-            Configure default values for new users
+      <Card className="border-4 border-black shadow-brutal-lg bg-white">
+        <CardHeader className="border-b-4 border-black bg-genz-blue/20">
+          <CardTitle className="text-2xl font-display uppercase">Pengaturan Umum</CardTitle>
+          <CardDescription className="text-base font-bold">
+            Atur nilai default buat user baru
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Free Credits for New Users</Label>
+              <Label className="font-bold uppercase">Kredit Gratis Buat User Baru</Label>
               <Input
                 type="number"
                 value={freeCredits}
                 onChange={(e) => setFreeCredits(parseInt(e.target.value) || 0)}
                 min="0"
+                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
               />
-              <p className="text-sm text-muted-foreground">
-                Credits given to users after email verification
+              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Mail className="w-4 h-4" /> Kredit yang dikasih ke user setelah verifikasi email
               </p>
             </div>
             <div className="space-y-2">
-              <Label>Rate Limit (seconds)</Label>
+              <Label className="font-bold uppercase">Rate Limit (detik)</Label>
               <Input
                 type="number"
                 value={rateLimitSeconds}
                 onChange={(e) => setRateLimitSeconds(parseInt(e.target.value) || 60)}
                 min="1"
+                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
               />
-              <p className="text-sm text-muted-foreground">
-                Minimum time between generations
+              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Clock className="w-4 h-4" /> Jeda waktu minimum antara generate
               </p>
             </div>
           </div>
-          <Button onClick={handleSaveSettings} disabled={isSaving}>
-            {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Save Settings
+          <Button 
+            onClick={handleSaveSettings} 
+            disabled={isSaving}
+            className="bg-genz-lime text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg"
+          >
+            {isSaving ? <Loader2 className="w-5 h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-5 h-5 mr-2" />}
+            Simpan Pengaturan
           </Button>
         </CardContent>
       </Card>
 
       {/* Credit Packages */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      <Card className="border-4 border-black shadow-brutal-lg bg-white">
+        <CardHeader className="border-b-4 border-black bg-genz-purple/20">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <CardTitle>Credit Packages</CardTitle>
-              <CardDescription>
-                Manage purchasable credit packages
+              <CardTitle className="text-2xl font-display uppercase">Paket Kredit</CardTitle>
+              <CardDescription className="text-base font-bold flex items-center gap-2">
+                <CreditCard className="w-4 h-4" /> Atur paket kredit yang bisa dibeli user
               </CardDescription>
             </div>
             <Dialog open={showPackageDialog} onOpenChange={(open) => {
@@ -291,114 +299,129 @@ export default function AdminSettings() {
               }
             }}>
               <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Package
+                <Button className="bg-genz-purple text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg">
+                  <Plus className="w-5 h-5 mr-2 stroke-[3px]" />
+                  Tambah Paket
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="border-4 border-black shadow-brutal-lg">
                 <DialogHeader>
-                  <DialogTitle>
-                    {editingPackage ? 'Edit Package' : 'Create Package'}
+                  <DialogTitle className="text-2xl font-display uppercase flex items-center gap-2">
+                    {editingPackage ? <><Pencil className="w-5 h-5" /> Edit Paket</> : <><Plus className="w-5 h-5" /> Bikin Paket</>}
                   </DialogTitle>
-                  <DialogDescription>
-                    {editingPackage ? 'Update package details' : 'Add a new credit package'}
+                  <DialogDescription className="text-base font-bold">
+                    {editingPackage ? 'Update detail paket kredit' : 'Tambahin paket kredit baru'}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
-                    <Label>Package Name</Label>
+                    <Label className="font-bold uppercase">Nama Paket</Label>
                     <Input
                       value={packageForm.name}
                       onChange={(e) => setPackageForm({ ...packageForm, name: e.target.value })}
-                      placeholder="e.g. Starter, Pro, Enterprise"
+                      placeholder="Contoh: Starter, Pro, Enterprise"
+                      className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Credits</Label>
+                      <Label className="font-bold uppercase">Jumlah Kredit</Label>
                       <Input
                         type="number"
                         value={packageForm.credits}
                         onChange={(e) => setPackageForm({ ...packageForm, credits: parseInt(e.target.value) || 0 })}
                         min="1"
+                        className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Price (IDR)</Label>
+                      <Label className="font-bold uppercase">Harga (IDR)</Label>
                       <Input
                         type="number"
                         value={packageForm.price}
                         onChange={(e) => setPackageForm({ ...packageForm, price: parseInt(e.target.value) || 0 })}
                         min="1000"
                         step="1000"
+                        className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                       />
                     </div>
                   </div>
                 </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setShowPackageDialog(false)}>
-                    Cancel
+                <DialogFooter className="gap-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setShowPackageDialog(false)}
+                    className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold"
+                  >
+                    Batal
                   </Button>
-                  <Button onClick={handleSavePackage} disabled={isSaving}>
-                    {isSaving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                    {editingPackage ? 'Update' : 'Create'}
+                  <Button 
+                    onClick={handleSavePackage} 
+                    disabled={isSaving}
+                    className="bg-genz-purple text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold"
+                  >
+                    {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : (editingPackage ? <Pencil className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />)}
+                    {editingPackage ? 'Update' : 'Bikin'}
                   </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Credits</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Price/Credit</TableHead>
-                <TableHead>Active</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {packages.map((pkg) => (
-                <TableRow key={pkg.id}>
-                  <TableCell className="font-medium">{pkg.name}</TableCell>
-                  <TableCell>{pkg.credits}</TableCell>
-                  <TableCell>{formatCurrency(pkg.price)}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {formatCurrency(Math.round(pkg.price / pkg.credits))}
-                  </TableCell>
-                  <TableCell>
-                    <Switch
-                      checked={pkg.is_active}
-                      onCheckedChange={() => handleTogglePackage(pkg)}
-                    />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => openEditDialog(pkg)}
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-red-500 hover:text-red-600"
-                        onClick={() => handleDeletePackage(pkg)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+        <CardContent className="p-6">
+          <div className="border-4 border-black rounded-lg overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-black hover:bg-black">
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Nama</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kredit</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Harga</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Harga/Kredit</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Aktif</TableHead>
+                  <TableHead className="text-white font-display uppercase text-right">Aksi</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {packages.map((pkg) => (
+                  <TableRow key={pkg.id} className="border-b-2 border-black/10 hover:bg-genz-blue/10">
+                    <TableCell className="font-bold">{pkg.name}</TableCell>
+                    <TableCell>
+                      <span className="px-2 py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold">{pkg.credits}</span>
+                    </TableCell>
+                    <TableCell className="font-bold text-green-700">{formatCurrency(pkg.price)}</TableCell>
+                    <TableCell className="font-bold text-gray-600">
+                      {formatCurrency(Math.round(pkg.price / pkg.credits))}
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={pkg.is_active}
+                        onCheckedChange={() => handleTogglePackage(pkg)}
+                        className="data-[state=checked]:bg-genz-lime"
+                      />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          size="sm"
+                          className="bg-genz-cyan text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 font-bold"
+                          onClick={() => openEditDialog(pkg)}
+                        >
+                          <Pencil className="w-4 h-4 stroke-[3px]" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="bg-red-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 font-bold"
+                          onClick={() => handleDeletePackage(pkg)}
+                        >
+                          <Trash2 className="w-4 h-4 stroke-[3px]" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

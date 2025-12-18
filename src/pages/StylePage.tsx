@@ -98,7 +98,7 @@ export default function StylePage() {
               <Palette className="w-6 h-6 stroke-[3px]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
-              Tiru Gaya 🎨
+              Tiru Gaya
             </h1>
           </div>
           <p className="text-lg text-gray-600 font-bold font-mono">
@@ -213,7 +213,7 @@ export default function StylePage() {
                   ) : (
                     <>
                       <Palette className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                      Tiru Style ⚡
+                      Tiru Style
                     </>
                   )}
                 </button>

@@ -130,7 +130,7 @@ export default function PricingPage() {
               <div className="w-16 h-16 bg-genz-pink border-4 border-black flex items-center justify-center rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-wiggle">
                 <Coins className="w-8 h-8 text-black" />
               </div>
-              <h1 className="text-5xl md:text-6xl font-display uppercase tracking-tight">ISI KREDIT 💰</h1>
+              <h1 className="text-5xl md:text-6xl font-display uppercase tracking-tight">ISI KREDIT</h1>
             </div>
             <p className="text-gray-600 font-bold font-mono text-xl max-w-lg mx-auto leading-relaxed">
               Investasi kecil buat hasil foto produk yang <span className="bg-genz-lime px-2 border-2 border-black transform -rotate-2 inline-block">KECE PARAH!</span>
@@ -226,7 +226,7 @@ export default function PricingPage() {
                       </>
                     ) : (
                       <>
-                        Gas Beli 🚀
+                        Gas Beli
                         <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                       </>
                     )}
@@ -240,9 +240,9 @@ export default function PricingPage() {
           <div className="mt-16 text-center border-t-4 border-black pt-8">
             <p className="font-bold font-mono text-gray-500 mb-2">METODE PEMBAYARAN</p>
             <div className="flex justify-center gap-4 text-2xl grayscale opacity-50">
-                <span>💳 QRIS</span>
-                <span>🏦 Transfer Bank</span>
-                <span>🏪 Alfamart</span>
+                <span>QRIS</span>
+                <span>Transfer Bank</span>
+                <span>Alfamart</span>
             </div>
           </div>
         </div>

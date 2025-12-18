@@ -97,7 +97,7 @@ export default function HistoryPage() {
               <History className="w-6 h-6 stroke-[3px]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
-              Riwayat Gambar 📂
+              Riwayat Gambar
             </h1>
           </div>
           <p className="text-lg text-gray-600 font-bold font-mono">
@@ -134,7 +134,7 @@ export default function HistoryPage() {
             <div className="w-20 h-20 bg-gray-100 border-4 border-black flex items-center justify-center mb-6 rounded-full">
               <Image className="w-10 h-10 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-display uppercase mb-2">Belum ada karya nih! 🎨</h3>
+            <h3 className="text-2xl font-display uppercase mb-2">Belum ada karya nih!</h3>
             <p className="text-gray-500 font-bold font-mono mb-8 max-w-sm">
               Mulai bikin gambar pertamamu sekarang! Jangan malu-malu.
             </p>
@@ -143,7 +143,7 @@ export default function HistoryPage() {
               className="bg-genz-lime text-black font-bold border-4 border-black hover:bg-genz-lime/80 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-lg py-6 px-8 rounded-xl"
             >
               <Sparkles className="w-5 h-5 mr-2" />
-              Gas Bikin Gambar! 🚀
+              Gas Bikin Gambar!
             </Button>
           </div>
         ) : (
