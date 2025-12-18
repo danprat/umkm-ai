@@ -19,7 +19,7 @@ export default function CreditDisplay({
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full animate-pulse">
+      <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full animate-pulse border-2 border-transparent">
         <div className="w-4 h-4 bg-gray-300 rounded" />
         <div className="w-8 h-4 bg-gray-300 rounded" />
       </div>
@@ -33,14 +33,14 @@ export default function CreditDisplay({
     return (
       <div className="flex items-center gap-2">
         <div 
-          className={`flex items-center gap-1.5 px-2 py-1 border-2 border-foreground text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 border-2 border-black text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-md ${
             isLow 
               ? 'bg-red-100 text-red-700' 
-              : 'bg-white text-foreground'
+              : 'bg-white text-black'
           }`}
         >
-          <Coins className="w-3 h-3" />
-          <span>{credits}</span>
+          <Coins className="w-3.5 h-3.5" />
+          <span className="font-mono">{credits}</span>
         </div>
         {showBuyButton && (
           <Button
@@ -48,15 +48,14 @@ export default function CreditDisplay({
             variant="ghost"
             onClick={() => navigate('/pricing')}
             className={`
-              px-2 py-1 h-auto border-2 border-foreground 
+              px-2 py-1 h-auto border-2 border-black rounded-md
               font-bold uppercase text-xs
               shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
               hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-              transition-all
-              ${isLow ? 'bg-accent hover:bg-accent/90' : 'bg-secondary hover:bg-secondary/90'}
+              transition-all bg-genz-lime text-black hover:bg-genz-lime/80
             `}
           >
-            <ShoppingCart className="w-3 h-3" />
+            <ShoppingCart className="w-3.5 h-3.5" />
           </Button>
         )}
       </div>
@@ -64,17 +63,17 @@ export default function CreditDisplay({
   }
 
   return (
-    <div className={`flex ${isVertical ? 'flex-col items-stretch' : 'items-center'} gap-2`}>
+    <div className={`flex ${isVertical ? 'flex-col items-stretch' : 'items-center'} gap-3`}>
       <div 
-        className={`flex items-center justify-center gap-2 px-3 py-1.5 border-[2px] border-foreground font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] ${
+        className={`flex items-center justify-center gap-2 px-4 py-2 border-2 border-black font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-lg ${
           isLow 
             ? 'bg-red-100 text-red-700' 
-            : 'bg-white text-foreground'
+            : 'bg-white text-black'
         }`}
       >
-        <Coins className="w-4 h-4" />
-        <span className="text-base">{credits}</span>
-        <span className="text-xs uppercase tracking-wider">credits</span>
+        <Coins className="w-5 h-5" />
+        <span className="text-lg font-mono">{credits}</span>
+        <span className="text-xs uppercase tracking-wider font-display">Kredit</span>
       </div>
       
       {showBuyButton && (
@@ -83,17 +82,16 @@ export default function CreditDisplay({
           variant="ghost"
           onClick={() => navigate('/pricing')}
           className={`
-            px-3 py-1.5 border-[2px] border-foreground 
+            px-4 py-2 border-2 border-black rounded-lg
             font-bold uppercase text-sm tracking-wider
             shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
             hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-            transition-all
+            transition-all bg-genz-pink text-black hover:bg-genz-pink/90
             ${isVertical ? 'w-full' : 'h-full'}
-            ${isLow ? 'bg-accent hover:bg-accent/90' : 'bg-secondary hover:bg-secondary/90'}
           `}
         >
-          <ShoppingCart className="w-4 h-4 mr-1" />
-          Beli
+          <ShoppingCart className="w-4 h-4 mr-2" />
+          Isi Ulang
         </Button>
       )}
     </div>

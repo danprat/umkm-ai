@@ -137,6 +137,7 @@ export default {
         "bounce-in": "bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
         "slide-up": "slide-up 0.6s ease-out",
         "rainbow": "rainbow 3s linear infinite",
+        "spin-slow": "spin 8s linear infinite",
       },
     },
   },

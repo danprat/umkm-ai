@@ -82,7 +82,7 @@ export default function AdminDashboard() {
       title: 'Total Users',
       value: stats.totalUsers,
       icon: Users,
-      color: 'text-foreground',
+      color: 'text-black',
       bg: 'bg-genz-lime',
       emoji: '👥',
     },
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
       title: 'Total Revenue',
       value: formatCurrency(stats.totalRevenue),
       icon: TrendingUp,
-      color: 'text-foreground',
+      color: 'text-black',
       bg: 'bg-genz-pink',
       emoji: '💰',
     },
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
       title: 'Transactions',
       value: stats.totalTransactions,
       icon: CreditCard,
-      color: 'text-foreground',
+      color: 'text-black',
       bg: 'bg-genz-cyan',
       emoji: '💳',
     },
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
       title: 'Credits Issued',
       value: stats.creditsIssued,
       icon: Coins,
-      color: 'text-foreground',
+      color: 'text-black',
       bg: 'bg-genz-coral',
       emoji: '🪙',
     },
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
       title: 'Generations',
       value: stats.totalGenerations,
       icon: Image,
-      color: 'text-foreground',
+      color: 'text-black',
       bg: 'bg-genz-purple',
       emoji: '🇿️',
     },
@@ -122,50 +122,77 @@ export default function AdminDashboard() {
       title: 'Active Coupons',
       value: stats.activeCoupons,
       icon: Ticket,
-      color: 'text-foreground',
+      color: 'text-black',
       bg: 'bg-genz-blue',
       emoji: '🎫',
     },
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="border-[3px] border-foreground p-6 bg-gradient-to-r from-genz-lime/20 to-genz-pink/20 shadow-brutal">
-        <h1 className="text-3xl font-display uppercase animate-slide-up">Admin Dashboard 🔧</h1>
-        <p className="text-foreground font-bold mt-2">Overview of your UMKM AI platform 📊</p>
+    <div className="space-y-8">
+      <div className="border-4 border-black p-8 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-genz-lime rounded-full blur-3xl opacity-50"></div>
+        <h1 className="text-4xl font-display uppercase animate-slide-up relative z-10">Admin Dashboard 🔧</h1>
+        <p className="text-gray-600 font-bold mt-2 font-mono relative z-10">Overview of your UMKM AI platform 📊</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((card, index) => (
-          <div key={card.title} className="border-[3px] border-foreground bg-white p-6 shadow-brutal hover:shadow-brutal-lg hover:translate-y-[-4px] transition-all group" style={{ animationDelay: `${index * 0.1}s` }}>
+          <div key={card.title} className="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all group" style={{ animationDelay: `${index * 0.1}s` }}>
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <div className="text-sm font-bold uppercase text-muted-foreground mb-1">
+                <div className="text-xs font-bold uppercase text-gray-500 mb-1 tracking-widest">
                   {card.title}
                 </div>
                 {isLoading ? (
-                  <div className="h-8 w-24 bg-gray-200 animate-pulse border-[2px] border-foreground" />
+                  <div className="h-8 w-24 bg-gray-200 animate-pulse rounded" />
                 ) : (
-                  <div className="text-3xl font-display uppercase">{card.value}</div>
+                  <div className="text-3xl font-display uppercase tracking-tight">{card.value}</div>
                 )}
               </div>
               <div className="flex flex-col items-center gap-2">
-                <div className={`p-3 border-[3px] border-foreground ${card.bg} group-hover:animate-float`}>
+                <div className={`p-3 border-4 border-black ${card.bg} group-hover:rotate-12 transition-transform shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-lg`}>
                   <card.icon className={`w-6 h-6 ${card.color}`} />
                 </div>
-                <span className="text-2xl">{card.emoji}</span>
+                <span className="text-2xl animate-float" style={{ animationDelay: `${index * 0.2}s` }}>{card.emoji}</span>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Recent Activity could go here */}
-      <div className="border-[3px] border-foreground bg-gradient-to-br from-genz-cyan/30 to-genz-purple/30 p-6 shadow-brutal">
-        <h3 className="text-xl font-display uppercase mb-3">Quick Actions ⚡</h3>
-        <p className="text-foreground font-medium">
-          Use the sidebar to manage users, view transactions, create coupons, and configure settings. 🛠️
-        </p>
+      {/* Quick Actions / Summary */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="border-4 border-black bg-genz-cyan p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <h3 className="text-2xl font-display uppercase mb-4 flex items-center gap-2">
+                <span className="bg-white px-2 border-2 border-black text-sm py-1 rounded">NEW</span>
+                Quick Actions ⚡
+            </h3>
+            <p className="text-black font-medium mb-4">
+                Manage your platform efficiently. Check user reports, validate transactions, or update system settings.
+            </p>
+            <button className="bg-black text-white px-4 py-2 font-bold uppercase text-sm hover:bg-white hover:text-black border-2 border-transparent hover:border-black transition-colors">
+                View All Actions
+            </button>
+        </div>
+
+        <div className="border-4 border-black bg-genz-pink p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <h3 className="text-2xl font-display uppercase mb-4">System Status 🟢</h3>
+            <div className="space-y-2 font-mono text-sm font-bold">
+                <div className="flex justify-between border-b-2 border-black pb-1">
+                    <span>Database</span>
+                    <span className="bg-green-400 px-2 border border-black text-xs flex items-center">OPERATIONAL</span>
+                </div>
+                <div className="flex justify-between border-b-2 border-black pb-1">
+                    <span>Storage</span>
+                    <span className="bg-green-400 px-2 border border-black text-xs flex items-center">OPERATIONAL</span>
+                </div>
+                <div className="flex justify-between border-b-2 border-black pb-1">
+                    <span>AI Engine</span>
+                    <span className="bg-green-400 px-2 border border-black text-xs flex items-center">OPERATIONAL</span>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
   );

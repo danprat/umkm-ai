@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, CreditPackage } from '@/lib/supabase';
-import { Check, Loader2, Coins } from 'lucide-react';
+import { Check, Loader2, Coins, ArrowRight, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
@@ -113,8 +113,8 @@ export default function PricingPage() {
   if (isLoading || authLoading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin" />
+        <div className="flex items-center justify-center py-20 min-h-[500px]">
+          <Loader2 className="w-12 h-12 animate-spin text-black" />
         </div>
       </DashboardLayout>
     );
@@ -122,32 +122,30 @@ export default function PricingPage() {
 
   return (
     <DashboardLayout>
-      <div className="py-8 px-4">
-        <div className="max-w-5xl mx-auto">
+      <div className="py-12 px-4 bg-[#f3f3f3]">
+        <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-accent border-[3px] border-foreground flex items-center justify-center">
-                <Coins className="w-6 h-6" />
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-16 h-16 bg-genz-pink border-4 border-black flex items-center justify-center rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-wiggle">
+                <Coins className="w-8 h-8 text-black" />
               </div>
-              <h1 className="text-4xl font-display uppercase">BELI KREDIT</h1>
+              <h1 className="text-5xl md:text-6xl font-display uppercase tracking-tight">ISI KREDIT 💰</h1>
             </div>
-            <p className="text-muted-foreground font-mono text-lg max-w-md mx-auto">
-              Beli kredit untuk generate gambar AI untuk bisnis Anda
+            <p className="text-gray-600 font-bold font-mono text-xl max-w-lg mx-auto leading-relaxed">
+              Investasi kecil buat hasil foto produk yang <span className="bg-genz-lime px-2 border-2 border-black transform -rotate-2 inline-block">KECE PARAH!</span>
             </p>
             
             {profile && (
-              <p className="mt-4 font-mono">
-                Saldo saat ini:{' '}
-                <span className="font-bold bg-accent px-2 py-1 border-2 border-foreground">
-                  {profile.credits} kredit
-                </span>
-              </p>
+              <div className="mt-8 inline-flex items-center gap-3 bg-white px-6 py-3 border-4 border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <span className="font-bold uppercase tracking-wider text-sm">Saldo Kamu:</span>
+                <span className="font-display text-2xl text-genz-purple">{profile.credits} KREDIT</span>
+              </div>
             )}
           </div>
 
           {/* Packages Grid */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 items-start">
             {packages.map((pkg, index) => {
               const isPopular = index === getPopularIndex();
               const pricePerCredit = pkg.price / pkg.credits;
@@ -155,74 +153,97 @@ export default function PricingPage() {
               return (
                 <div
                   key={pkg.id}
-                  className={`brutal-card relative ${
-                    isPopular ? 'border-[4px] scale-105' : ''
+                  className={`bg-white border-4 border-black p-6 rounded-2xl relative transition-all duration-300 ${
+                    isPopular 
+                      ? 'scale-105 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] z-10' 
+                      : 'shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2'
                   }`}
                 >
                   {isPopular && (
-                    <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent border-[3px] border-foreground px-4 py-1 font-bold uppercase text-sm">
-                      Terpopuler
-                    </span>
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-genz-lime border-4 border-black px-6 py-2 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2 transform -rotate-2">
+                      <Star className="w-5 h-5 fill-black" />
+                      <span className="font-display uppercase text-lg tracking-wide">Paling Laris</span>
+                    </div>
                   )}
                   
-                  <div className="text-center pb-2 pt-2">
-                    <h3 className="text-xl font-display uppercase">{pkg.name}</h3>
-                    <p className="text-muted-foreground font-mono text-sm">
+                  <div className="text-center border-b-4 border-black pb-6 mb-6">
+                    <h3 className="text-3xl font-display uppercase mb-2">{pkg.name}</h3>
+                    <p className="text-gray-500 font-mono font-bold text-sm bg-gray-100 inline-block px-3 py-1 rounded-lg">
                       {formatPrice(Math.round(pricePerCredit))}/kredit
                     </p>
                   </div>
                   
-                  <div className="text-center py-4">
-                    <div className="mb-4">
-                      <span className="text-5xl font-display">{pkg.credits}</span>
-                      <span className="text-muted-foreground font-mono ml-2">kredit</span>
+                  <div className="text-center mb-8">
+                    <div className="mb-4 flex items-center justify-center gap-2">
+                      <span className="text-6xl font-display tracking-tighter">{pkg.credits}</span>
+                      <div className="text-left leading-none">
+                        <span className="block font-bold text-xs uppercase">Total</span>
+                        <span className="block font-bold text-sm uppercase">Kredit</span>
+                      </div>
                     </div>
                     
-                    <div className="text-2xl font-bold bg-accent inline-block px-4 py-2 border-[3px] border-foreground mb-6">
+                    <div className={`text-3xl font-display px-6 py-3 border-4 border-black rounded-xl mb-6 transform rotate-1 ${
+                        isPopular ? 'bg-genz-cyan text-black' : 'bg-black text-white'
+                    }`}>
                       {formatPrice(pkg.price)}
                     </div>
                     
-                    <ul className="space-y-2 text-sm text-left font-mono px-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-4 h-4" />
-                        <span>{pkg.credits} gambar</span>
+                    <ul className="space-y-3 text-left font-bold font-mono text-sm px-2">
+                      <li className="flex items-center gap-3">
+                        <div className="w-6 h-6 bg-green-400 border-2 border-black rounded-full flex items-center justify-center shrink-0">
+                            <Check className="w-4 h-4 text-black" />
+                        </div>
+                        <span>Bisa buat {pkg.credits} gambar</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-4 h-4" />
-                        <span>Tidak kadaluarsa</span>
+                      <li className="flex items-center gap-3">
+                        <div className="w-6 h-6 bg-green-400 border-2 border-black rounded-full flex items-center justify-center shrink-0">
+                            <Check className="w-4 h-4 text-black" />
+                        </div>
+                        <span>Aktif selamanya (No Expired)</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-4 h-4" />
-                        <span>Semua fitur</span>
+                      <li className="flex items-center gap-3">
+                        <div className="w-6 h-6 bg-green-400 border-2 border-black rounded-full flex items-center justify-center shrink-0">
+                            <Check className="w-4 h-4 text-black" />
+                        </div>
+                        <span>Akses semua fitur premium</span>
                       </li>
                     </ul>
                   </div>
                   
-                  <div className="pt-4">
-                    <button
-                      className={`w-full ${isPopular ? 'brutal-btn-primary' : 'brutal-btn'} justify-center`}
-                      onClick={() => handlePurchase(pkg)}
-                      disabled={processingId !== null}
-                    >
-                      {processingId === pkg.id ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Memproses...
-                        </>
-                      ) : (
-                        'BELI SEKARANG'
-                      )}
-                    </button>
-                  </div>
+                  <button
+                    className={`w-full py-4 font-display text-xl uppercase border-4 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center gap-2 group ${
+                        isPopular 
+                        ? 'bg-genz-pink hover:bg-genz-pink/90' 
+                        : 'bg-white hover:bg-gray-100'
+                    }`}
+                    onClick={() => handlePurchase(pkg)}
+                    disabled={processingId !== null}
+                  >
+                    {processingId === pkg.id ? (
+                      <>
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                        Lagi Proses...
+                      </>
+                    ) : (
+                      <>
+                        Gas Beli 🚀
+                        <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </button>
                 </div>
               );
             })}
           </div>
 
           {/* Info */}
-          <div className="mt-12 text-center font-mono text-sm text-muted-foreground">
-            <p>Pembayaran aman dengan Pakasir</p>
-            <p className="mt-1">Mendukung QRIS, Transfer Bank (VA), dan PayPal</p>
+          <div className="mt-16 text-center border-t-4 border-black pt-8">
+            <p className="font-bold font-mono text-gray-500 mb-2">METODE PEMBAYARAN</p>
+            <div className="flex justify-center gap-4 text-2xl grayscale opacity-50">
+                <span>💳 QRIS</span>
+                <span>🏦 Transfer Bank</span>
+                <span>🏪 Alfamart</span>
+            </div>
           </div>
         </div>
       </div>

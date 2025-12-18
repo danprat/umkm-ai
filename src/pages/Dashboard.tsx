@@ -53,43 +53,54 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       {/* Welcome Section */}
-      <section className="py-6 border-b-[3px] border-foreground bg-gradient-to-r from-genz-lime/10 via-genz-pink/10 to-genz-cyan/10">
+      <section className="py-8 border-b-4 border-black bg-[#f3f3f3]">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="w-5 h-5 animate-float text-genz-pink" />
-            <h1 className="text-xl md:text-2xl font-display uppercase">
-              Selamat Datang, {displayName} 👋
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-black text-white p-2 rounded-lg animate-bounce">
+                <Sparkles className="w-6 h-6" />
+            </div>
+            <h1 className="text-3xl md:text-5xl font-display uppercase tracking-tighter">
+              Halo, {displayName} 👋
             </h1>
           </div>
-          <p className="text-sm text-foreground font-bold">
-            Pilih fitur AI untuk membuat gambar profesional ⚡
+          <p className="text-lg text-gray-600 font-bold font-mono">
+            Mau bikin apa hari ini? Pilih menu di bawah ya! 👇
           </p>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="py-12">
+      <section className="py-12 bg-white min-h-[calc(100vh-200px)]">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
+            {features.map((feature, index) => (
               <Link
                 key={feature.path}
                 to={feature.path}
-                className="brutal-card group hover:animate-wiggle relative overflow-hidden"
+                className="group relative bg-white border-4 border-black p-6 rounded-xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 transition-all duration-300 overflow-hidden"
               >
-                <div className="absolute top-2 right-2 text-3xl animate-float">{feature.emoji}</div>
-                <div className={`${feature.color} w-16 h-16 flex items-center justify-center border-[3px] border-foreground mb-4 group-hover:animate-float rounded-lg`}>
-                  <feature.icon className="w-8 h-8 text-foreground" />
-                </div>
-                <h3 className="font-display text-2xl uppercase mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-foreground font-medium">
-                  {feature.description}
-                </p>
-                <div className="mt-4 flex items-center font-bold uppercase text-sm">
-                  Mulai ⚡
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
+                {/* Decorative background circle */}
+                <div className={`absolute -right-6 -top-6 w-24 h-24 ${feature.color} rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500`}></div>
+                
+                <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-6">
+                        <div className={`${feature.color} w-16 h-16 flex items-center justify-center border-4 border-black rounded-xl group-hover:rotate-6 transition-transform`}>
+                            <feature.icon className="w-8 h-8 text-black" />
+                        </div>
+                        <div className="text-4xl animate-float group-hover:scale-125 transition-transform">{feature.emoji}</div>
+                    </div>
+                    
+                    <h3 className="font-display text-3xl uppercase mb-2 leading-none">
+                    {feature.title}
+                    </h3>
+                    <p className="text-gray-600 font-medium font-mono mb-6 line-clamp-2">
+                    {feature.description}
+                    </p>
+                    
+                    <div className="inline-flex items-center gap-2 font-bold uppercase text-sm bg-black text-white px-4 py-2 rounded-lg group-hover:bg-genz-lime group-hover:text-black transition-colors border-2 border-black">
+                    Gas Bikin! ⚡
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
                 </div>
               </Link>
             ))}

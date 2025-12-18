@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { useCredits } from "@/hooks/use-credits";
 import { useAuth } from "@/contexts/AuthContext";
 import CountdownTimer from "@/components/CountdownTimer";
-import CreditDisplay from "@/components/CreditDisplay";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const examplePrompts = [
@@ -41,12 +40,12 @@ export default function GeneratePage() {
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      toast.error("Masukkan deskripsi gambar terlebih dahulu!");
+      toast.error("Waduh, tulis dulu mau gambar apa! 😅");
       return;
     }
 
     if (mode === "edit" && !referenceImage) {
-      toast.error("Upload foto yang ingin diedit!");
+      toast.error("Upload dulu foto yang mau diedit bro! 📸");
       return;
     }
 
@@ -54,13 +53,13 @@ export default function GeneratePage() {
     const creditCheck = await checkAndDeductCredit();
     if (!creditCheck.success) {
       if (creditCheck.code === 'RATE_LIMITED') {
-        toast.error(`Tunggu ${creditCheck.waitSeconds} detik sebelum generate lagi`);
+        toast.error(`Sabar ya! Tunggu ${creditCheck.waitSeconds} detik lagi 🙏`);
       } else if (creditCheck.code === 'INSUFFICIENT_CREDITS') {
-        toast.error("Kredit tidak cukup. Silakan beli kredit terlebih dahulu.");
+        toast.error("Yah, kredit abis! Top up dulu yuk 💸");
       } else if (creditCheck.code === 'EMAIL_NOT_VERIFIED') {
-        toast.error("Verifikasi email Anda terlebih dahulu untuk mendapatkan kredit gratis.");
+        toast.error("Verifikasi email dulu biar dapet kredit gratis! 📧");
       } else {
-        toast.error(creditCheck.error || "Gagal memproses kredit");
+        toast.error(creditCheck.error || "Gagal memproses kredit 😢");
       }
       return;
     }
@@ -92,9 +91,9 @@ export default function GeneratePage() {
           console.error('Failed to save to history:', e);
         }
         
-        toast.success(mode === "edit" ? "Gambar berhasil diedit!" : "Gambar berhasil dibuat!");
+        toast.success(mode === "edit" ? "Foto berhasil dirombak! 🔥" : "Gambar jadi nih! Kece parah ✨");
       } else {
-        throw new Error("Tidak ada gambar dalam response");
+        throw new Error("Gak ada gambar yang balik nih");
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Gagal membuat gambar";
@@ -110,68 +109,77 @@ export default function GeneratePage() {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="bg-accent p-2 border-[3px] border-foreground">
-              <Wand2 className="w-5 h-5" />
+        <div className="mb-8 border-b-4 border-black pb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-genz-lime p-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg animate-wiggle">
+              <Wand2 className="w-6 h-6 stroke-[3px]" />
             </div>
-            <h1 className="text-xl md:text-2xl font-display uppercase">
-              Generate Image
+            <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
+              Bikin Gambar AI 🎨
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Buat gambar baru atau edit gambar yang sudah ada.
+          <p className="text-lg text-gray-600 font-bold font-mono">
+            Tulis aja maunya apa, biar AI yang kerjain sisanya!
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Input Section */}
-          <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+          {/* Input Section - Main Content */}
+          <div className="flex-1 space-y-6">
             {/* Mode Toggle */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                Mode
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">1</span>
+                Pilih Mode
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => setMode("create")}
-                  className={`p-4 border-[3px] border-foreground text-center transition-all ${
+                  className={`p-4 border-4 border-black text-center transition-all rounded-lg ${
                     mode === "create"
-                      ? "bg-accent"
-                      : "bg-background hover:bg-muted"
+                      ? "bg-genz-cyan shadow-brutal -translate-x-0.5 -translate-y-0.5"
+                      : "bg-white hover:bg-gray-100"
                   }`}
                 >
-                  <Image className="w-6 h-6 mx-auto mb-2" />
-                  <div className="font-bold uppercase">Buat Baru</div>
-                  <div className="text-xs text-muted-foreground">Buat gambar dari teks</div>
+                  <Image className="w-8 h-8 mx-auto mb-2 stroke-[2px]" />
+                  <div className="font-display uppercase text-base">Buat Baru</div>
+                  <div className="text-xs font-bold font-mono text-gray-600">Bikin dari nol</div>
                 </button>
                 <button
                   onClick={() => setMode("edit")}
-                  className={`p-4 border-[3px] border-foreground text-center transition-all ${
+                  className={`p-4 border-4 border-black text-center transition-all rounded-lg ${
                     mode === "edit"
-                      ? "bg-accent"
-                      : "bg-background hover:bg-muted"
+                      ? "bg-genz-pink shadow-brutal -translate-x-0.5 -translate-y-0.5"
+                      : "bg-white hover:bg-gray-100"
                   }`}
                 >
-                  <Edit className="w-6 h-6 mx-auto mb-2" />
-                  <div className="font-bold uppercase">Edit Foto</div>
-                  <div className="text-xs text-muted-foreground">Edit gambar yang ada</div>
+                  <Edit className="w-8 h-8 mx-auto mb-2 stroke-[2px]" />
+                  <div className="font-display uppercase text-base">Edit Foto</div>
+                  <div className="text-xs font-bold font-mono text-gray-600">Ubah foto yang ada</div>
                 </button>
               </div>
             </div>
 
             {/* Image Upload for Edit Mode */}
             {mode === "edit" && (
-              <ImageUploader
-                label="Upload Foto yang Ingin Diedit"
-                onImageSelect={setReferenceImage}
-              />
+              <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+                <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                  <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">2</span>
+                  Upload Foto
+                </label>
+                <ImageUploader
+                  label="Upload Foto yang Ingin Diedit"
+                  onImageSelect={setReferenceImage}
+                />
+              </div>
             )}
 
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
+            {/* Prompt Input */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">{mode === "edit" ? "3" : "2"}</span>
                 {mode === "edit" ? "Instruksi Edit" : "Deskripsi Gambar"}
               </label>
               <textarea
@@ -181,14 +189,35 @@ export default function GeneratePage() {
                   ? "Contoh: Ubah background menjadi pantai sunset, tambahkan efek vintage..."
                   : "Contoh: Logo toko kue dengan nuansa pink dan coklat, gaya modern minimalis..."
                 }
-                className="brutal-textarea h-32"
+                className="w-full p-4 border-4 border-black font-mono text-sm min-h-[120px] focus:outline-none focus:ring-4 focus:ring-genz-lime/50 rounded-lg"
               />
+              
+              {/* Example Prompts - inline under textarea */}
+              {mode === "create" && (
+                <div className="mt-4 pt-4 border-t-2 border-dashed border-gray-300">
+                  <span className="text-xs font-bold font-mono uppercase text-gray-500 flex items-center gap-1 mb-2">
+                    <Sparkles className="w-3 h-3" /> Contoh ide:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {examplePrompts.map((example) => (
+                      <button
+                        key={example}
+                        onClick={() => setPrompt(example)}
+                        className="px-3 py-1.5 bg-gray-100 border-2 border-black rounded-full text-xs font-bold font-mono hover:bg-genz-lime transition-colors"
+                      >
+                        {example.slice(0, 35)}...
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Aspect Ratio */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                Rasio Gambar
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">{mode === "edit" ? "4" : "3"}</span>
+                Ukuran Gambar
               </label>
               <AspectRatioSelector
                 selectedId={selectedAspectRatio}
@@ -196,44 +225,23 @@ export default function GeneratePage() {
               />
             </div>
 
-            {/* Example Prompts - only show in create mode */}
-            {mode === "create" && (
-              <div>
-                <span className="block font-bold uppercase text-sm tracking-wider mb-3">
-                  <Sparkles className="w-4 h-4 inline mr-1" />
-                  Contoh Prompt
+            {/* Credit Warning */}
+            {credits <= 3 && credits > 0 && (
+              <div className="border-4 border-black bg-yellow-100 p-4 rounded-xl flex items-center gap-3">
+                <AlertCircle className="h-5 w-5" />
+                <span className="font-bold font-mono text-sm">
+                  Kredit sisa {credits}. <a href="/pricing" className="underline decoration-2">Isi ulang yuk!</a>
                 </span>
-                <div className="flex flex-wrap gap-2">
-                  {examplePrompts.map((example) => (
-                    <button
-                      key={example}
-                      onClick={() => setPrompt(example)}
-                      className="brutal-tag hover:bg-foreground hover:text-background transition-colors cursor-pointer text-left"
-                    >
-                      {example.slice(0, 40)}...
-                    </button>
-                  ))}
-                </div>
               </div>
             )}
 
-            {/* Credit Warning */}
-            {credits <= 3 && credits > 0 && (
-              <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  Kredit Anda tinggal {credits}. <a href="/pricing" className="underline font-medium">Beli kredit</a> untuk lanjut generate.
-                </AlertDescription>
-              </Alert>
-            )}
-
             {credits === 0 && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  Kredit Anda habis. <a href="/pricing" className="underline font-medium">Beli kredit</a> untuk lanjut generate.
-                </AlertDescription>
-              </Alert>
+              <div className="border-4 border-black bg-red-100 p-4 rounded-xl flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600" />
+                <span className="font-bold font-mono text-sm text-red-600">
+                  Yah, kredit habis! <a href="/pricing" className="underline decoration-2">Beli lagi dong!</a>
+                </span>
+              </div>
             )}
 
             {/* Rate Limit Timer */}
@@ -243,33 +251,42 @@ export default function GeneratePage() {
                 onComplete={clearRateLimit}
               />
             )}
-
-            <button
-              onClick={handleGenerate}
-              disabled={isLoading || isChecking || credits === 0 || !!rateLimitedUntil}
-              className="brutal-btn w-full text-lg disabled:opacity-50"
-            >
-              {isLoading ? (
-                <>Sedang Memproses...</>
-              ) : (
-                <>
-                  <Wand2 className="w-5 h-5 mr-2" />
-                  {mode === "edit" ? "Edit Gambar" : "Buat Gambar"}
-                </>
-              )}
-            </button>
           </div>
 
-          {/* Result Section */}
-          <div>
-            <span className="block font-bold uppercase text-sm tracking-wider mb-2">
-              Hasil
-            </span>
-            <GeneratedImage 
-              imageUrl={imageUrl} 
-              isLoading={isLoading} 
-              error={error} 
-            />
+          {/* Result Section - Sticky Sidebar */}
+          <div className="lg:w-[380px] lg:flex-shrink-0">
+            <div className="lg:sticky lg:top-24 space-y-4">
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <span className="block font-display uppercase text-lg mb-4 tracking-wider flex items-center gap-2">
+                  <Image className="w-5 h-5" />
+                  Hasil
+                </span>
+                <GeneratedImage 
+                  imageUrl={imageUrl} 
+                  isLoading={isLoading} 
+                  error={error} 
+                />
+
+                {/* Generate Button */}
+                <button
+                  onClick={handleGenerate}
+                  disabled={isLoading || isChecking || credits === 0 || !!rateLimitedUntil}
+                  className="w-full mt-5 py-4 bg-black text-white font-display text-lg uppercase border-4 border-transparent hover:bg-genz-lime hover:text-black hover:border-black transition-all shadow-brutal hover:-translate-y-0.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Lagi Bikin...
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      {mode === "edit" ? "Edit Sekarang ⚡" : "Gas Bikin! 🚀"}
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

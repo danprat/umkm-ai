@@ -8,7 +8,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 import { generateImage, generateImageWithReference } from "@/lib/api";
 import { useCredits } from "@/hooks/use-credits";
 import { useAuth } from "@/contexts/AuthContext";
-import { Cat, Sparkles, AlertCircle } from "lucide-react";
+import { Cat, Sparkles, AlertCircle, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 
 const mascotStyles = [
@@ -157,55 +157,76 @@ export default function MascotPage() {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="bg-secondary p-2 border-[3px] border-foreground">
-              <Cat className="w-5 h-5" />
+        <div className="mb-8 border-b-4 border-black pb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-genz-coral p-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg animate-wiggle">
+              <Cat className="w-6 h-6 stroke-[3px]" />
             </div>
-            <h1 className="text-xl md:text-2xl font-display uppercase">
-              Buat Maskot
+            <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
+              Buat Maskot 🦁
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Ciptakan maskot unik untuk brand UMKM-mu.
+          <p className="text-lg text-gray-600 font-bold font-mono">
+            Bikin karakter unik biar brand kamu makin dikenal!
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
-          {/* Input Section */}
-          <div className="space-y-6">
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                1. Nama Produk/Brand *
+        <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+          {/* Input Section - Main Content */}
+          <div className="flex-1 space-y-6">
+            {/* Product Info */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl space-y-4">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">1</span>
+                Info Produk
               </label>
-              <input
-                type="text"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-                placeholder="Contoh: Aneka Dimsum Mentai by Ini Mentaiku"
-                className="brutal-input"
-              />
+              
+              <div>
+                <label className="block font-bold uppercase text-xs tracking-wider mb-2">
+                  Nama Produk/Brand *
+                </label>
+                <input
+                  type="text"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  placeholder="Contoh: Aneka Dimsum Mentai by Ini Mentaiku"
+                  className="w-full p-3 border-4 border-black font-mono text-sm focus:outline-none focus:ring-4 focus:ring-genz-coral/50 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold uppercase text-xs tracking-wider mb-2">
+                  Deskripsi Produk (Opsional)
+                </label>
+                <textarea
+                  value={productDescription}
+                  onChange={(e) => setProductDescription(e.target.value)}
+                  placeholder="Contoh: Dimsum dengan saus mentai yang creamy dan gurih..."
+                  className="w-full p-3 border-4 border-black font-mono text-sm min-h-[80px] focus:outline-none focus:ring-4 focus:ring-genz-coral/50 rounded-lg"
+                  rows={2}
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                2. Deskripsi Produk (Opsional)
+            {/* Upload */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">2</span>
+                Upload Produk (Opsional)
               </label>
-              <textarea
-                value={productDescription}
-                onChange={(e) => setProductDescription(e.target.value)}
-                placeholder="Contoh: Dimsum dengan saus mentai yang creamy dan gurih..."
-                className="brutal-textarea"
-                rows={2}
+              <ImageUploader
+                label=""
+                onImageSelect={setProductImage}
               />
             </div>
 
             {/* Mascot Type */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-3">
-                3. Tipe Maskot
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">3</span>
+                Tipe Maskot
               </label>
               <OptionGrid
                 options={mascotTypes}
@@ -214,36 +235,40 @@ export default function MascotPage() {
               />
             </div>
 
-            {/* Style Selection */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-3">
-                <Sparkles className="w-4 h-4 inline mr-1" />
-                4. Pilih Gaya Maskot
-              </label>
-              <OptionGrid
-                options={mascotStyles}
-                selectedId={selectedStyle}
-                onSelect={setSelectedStyle}
-                columns={3}
-              />
-            </div>
+            {/* Style & Output in grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <label className="block font-display uppercase text-lg mb-3 flex items-center gap-2">
+                  <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">4</span>
+                  Gaya Visual
+                </label>
+                <OptionGrid
+                  options={mascotStyles}
+                  selectedId={selectedStyle}
+                  onSelect={setSelectedStyle}
+                  columns={2}
+                />
+              </div>
 
-            {/* Output Type */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-3">
-                5. Jenis Output
-              </label>
-              <OptionGrid
-                options={outputTypes}
-                selectedId={selectedOutput}
-                onSelect={setSelectedOutput}
-              />
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <label className="block font-display uppercase text-lg mb-3 flex items-center gap-2">
+                  <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">5</span>
+                  Output
+                </label>
+                <OptionGrid
+                  options={outputTypes}
+                  selectedId={selectedOutput}
+                  onSelect={setSelectedOutput}
+                  columns={2}
+                />
+              </div>
             </div>
 
             {/* Aspect Ratio */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-3">
-                6. Rasio Gambar
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">6</span>
+                Ukuran Gambar
               </label>
               <AspectRatioSelector
                 selectedId={selectedAspectRatio}
@@ -251,54 +276,57 @@ export default function MascotPage() {
               />
             </div>
 
-            <ImageUploader
-              label="Upload Foto Produk (Opsional)"
-              onImageSelect={setProductImage}
-            />
-
             {/* Rate Limit Warning */}
             {rateLimitEndTime && (
-              <div className="brutal-card bg-yellow-100 border-yellow-500">
-                <div className="flex items-center gap-2 text-yellow-800">
-                  <AlertCircle className="w-5 h-5" />
-                  <span className="font-bold">Rate Limit</span>
+              <div className="border-4 border-black bg-yellow-100 p-4 rounded-xl flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-yellow-800" />
+                <div>
+                  <span className="font-bold font-mono text-sm text-yellow-800">
+                    Sabar ya! Tunggu bentar sebelum generate lagi.
+                  </span>
+                  <CountdownTimer 
+                    targetTime={rateLimitEndTime} 
+                    onComplete={() => setRateLimitEndTime(null)} 
+                  />
                 </div>
-                <p className="text-sm text-yellow-700 mt-1">
-                  Tunggu sebelum generate lagi:
-                </p>
-                <CountdownTimer 
-                  targetTime={rateLimitEndTime} 
-                  onComplete={() => setRateLimitEndTime(null)} 
-                />
               </div>
             )}
-
-            <button
-              onClick={handleGenerate}
-              disabled={isLoading || !!rateLimitEndTime}
-              className="brutal-btn w-full text-lg disabled:opacity-50"
-            >
-              {isLoading ? (
-                <>Sedang Membuat Maskot...</>
-              ) : (
-                <>
-                  <Cat className="w-5 h-5 mr-2" />
-                  Buat Maskot
-                </>
-              )}
-            </button>
           </div>
 
-          {/* Result Section */}
-          <div>
-            <span className="block font-bold uppercase text-sm tracking-wider mb-2">
-              Hasil Maskot
-            </span>
-            <GeneratedImage 
-              imageUrl={imageUrl} 
-              isLoading={isLoading} 
-              error={error} 
-            />
+          {/* Result Section - Sticky Sidebar */}
+          <div className="lg:w-[380px] lg:flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <span className="block font-display uppercase text-lg mb-4 tracking-wider flex items-center gap-2">
+                  <Cat className="w-5 h-5" />
+                  Hasil Maskot
+                </span>
+                <GeneratedImage 
+                  imageUrl={imageUrl} 
+                  isLoading={isLoading} 
+                  error={error} 
+                />
+
+                {/* Generate Button */}
+                <button
+                  onClick={handleGenerate}
+                  disabled={isLoading || !!rateLimitEndTime}
+                  className="w-full mt-5 py-4 bg-black text-white font-display text-lg uppercase border-4 border-transparent hover:bg-genz-coral hover:text-black hover:border-black transition-all shadow-brutal hover:-translate-y-0.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Lagi Bikin...
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      Buat Maskot ⚡
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
