@@ -54,10 +54,10 @@ export default function StylePage() {
 
     try {
       const aspectRatio = aspectRatios.find(r => r.id === selectedAspectRatio);
-      const ratioPrompt = aspectRatio ? ` Format output: ${aspectRatio.ratio}` : "";
+      const ratioPrompt = aspectRatio ? ` ${aspectRatio.ratio}` : "";
       const fullPrompt = additionalPrompt ? additionalPrompt + ratioPrompt : ratioPrompt;
       
-      const response = await copyStyleFromImages(originalImage, styleImage, fullPrompt, aspectRatio?.name);
+      const response = await copyStyleFromImages(originalImage, styleImage, fullPrompt, aspectRatio?.ratio);
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       
       if (imageData) {

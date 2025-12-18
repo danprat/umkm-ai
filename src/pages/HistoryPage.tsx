@@ -288,7 +288,7 @@ export default function HistoryPage() {
                     )}
                   </div>
                   <p className="text-xs font-mono font-bold line-clamp-2 text-gray-600 mb-3 leading-relaxed">
-                    {item.prompt}
+                    {item.prompt.split(' ').slice(0, 5).join(' ')}{item.prompt.split(' ').length > 5 ? '...' : ''}
                   </p>
                   <div className="flex items-center gap-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                     <Calendar className="w-3 h-3" />

@@ -69,13 +69,13 @@ export default function GeneratePage() {
 
     try {
       const aspectRatio = aspectRatios.find(r => r.id === selectedAspectRatio);
-      const ratioPrompt = aspectRatio ? ` Format: ${aspectRatio.ratio} (${aspectRatio.name})` : "";
+      const ratioPrompt = aspectRatio ? ` ${aspectRatio.ratio}` : "";
       
       let response;
       if (mode === "edit" && referenceImage) {
-        response = await generateImageWithReference(prompt + ratioPrompt, referenceImage, 'generate', aspectRatio?.name);
+        response = await generateImageWithReference(prompt + ratioPrompt, referenceImage, 'generate', aspectRatio?.ratio);
       } else {
-        response = await generateImage(prompt + ratioPrompt, 'generate', aspectRatio?.name);
+        response = await generateImage(prompt + ratioPrompt, 'generate', aspectRatio?.ratio);
       }
       
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;

@@ -141,14 +141,16 @@ export default function PromoPage() {
       if (productDescription) {
         prompt += ` Product details: ${productDescription}.`;
       }
-      
-      prompt += ratioPrompt;
+
+      if (aspectRatio) {
+        prompt += ` ${aspectRatio.ratio}`;
+      }
 
       let response;
       if (productImage) {
-        response = await generateImageWithReference(prompt, productImage, 'promo', aspectRatio?.name);
+        response = await generateImageWithReference(prompt, productImage, 'promo', aspectRatio?.ratio);
       } else {
-        response = await generateImage(prompt, 'promo', aspectRatio?.name);
+        response = await generateImage(prompt, 'promo', aspectRatio?.ratio);
       }
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       

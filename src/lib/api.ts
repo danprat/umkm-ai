@@ -233,8 +233,8 @@ export async function enhanceFoodPhoto(
   aspectRatio?: string
 ): Promise<GenerateImageResponse> {
   const ornamentsText = ornaments.length > 0 ? `Tambahkan ornamen: ${ornaments.join(", ")}.` : "";
-  const ratioText = aspectRatio ? ` Format: ${aspectRatio}` : "";
-  const prompt = `buat gambar food photography profesional dengan style ${style}, angle ${angle}. ${ornamentsText} Buat foto ini terlihat lebih menarik dan profesional untuk promosi.${ratioText}`;
+  const ratioPrompt = aspectRatio ? ` ${aspectRatio}` : "";
+  const prompt = `buat gambar food photography profesional dengan style ${style}, angle ${angle}. ${ornamentsText} Buat foto ini terlihat lebih menarik dan profesional untuk promosi.${ratioPrompt}`;
   
   return callGenerateAPI(
     [

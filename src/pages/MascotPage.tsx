@@ -114,15 +114,15 @@ export default function MascotPage() {
       };
 
       const aspectRatio = aspectRatios.find(r => r.id === selectedAspectRatio);
-      const ratioPrompt = aspectRatio ? ` Format: ${aspectRatio.ratio} (${aspectRatio.name})` : "";
+      const ratioPrompt = aspectRatio ? ` ${aspectRatio.ratio}` : "";
 
       const prompt = `Analyze and create a cute mascot character for the product "${productName}". ${productDescription ? `Product description: ${productDescription}.` : ""} ${mascotTypeDescriptions[selectedMascotType]}. Style: ${styleDescriptions[selectedStyle]}. ${outputDescriptions[selectedOutput]}.${ratioPrompt}`;
 
       let response;
       if (productImage) {
-        response = await generateImageWithReference(prompt, productImage, 'mascot', aspectRatio?.name);
+        response = await generateImageWithReference(prompt, productImage, 'mascot', aspectRatio?.ratio);
       } else {
-        response = await generateImage(prompt, 'mascot', aspectRatio?.name);
+        response = await generateImage(prompt, 'mascot', aspectRatio?.ratio);
       }
 
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
