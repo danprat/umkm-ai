@@ -1,35 +1,99 @@
 import { supabase } from './supabase';
 
-// Direct API call to cliproxy from frontend - no edge function timeout issues
-const API_URL = 'https://cliproxy.monika.id/v1/chat/completions';
-const API_KEY = 'palsu';
+// Async job pattern - API calls go through Edge Functions (API_KEY is secure on server)
+// This allows generation to continue even if user closes the page
 
-async function callGenerateAPI(messages: unknown[]): Promise<GenerateImageResponse> {
+export interface GenerationJob {
+  job_id: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  result?: GenerateImageResponse;
+  error?: string;
+}
+
+// Submit generation job to Edge Function
+async function submitGenerationJob(messages: unknown[]): Promise<GenerationJob> {
   const { data: { session } } = await supabase.auth.getSession();
   
   if (!session?.access_token) {
     throw new Error('Please login first');
   }
 
-  // Call cliproxy directly from frontend
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gemini-3-pro-image-preview',
+  const { data, error } = await supabase.functions.invoke('submit-generation', {
+    body: {
       messages,
-    }),
+      model: 'gemini-3-pro-image-preview',
+    },
   });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`API Error: ${response.status} - ${errorText}`);
+  if (error) {
+    throw new Error(error.message || 'Failed to submit generation');
   }
 
-  return response.json();
+  return data as GenerationJob;
+}
+
+// Check generation job status (for polling)
+export async function checkGenerationStatus(jobId: string): Promise<GenerationJob> {
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session?.access_token) {
+    throw new Error('Please login first');
+  }
+
+  const { data, error } = await supabase.functions.invoke('check-generation', {
+    body: { job_id: jobId },
+  });
+
+  if (error) {
+    throw new Error(error.message || 'Failed to check generation status');
+  }
+
+  return data as GenerationJob;
+}
+
+// Poll for completion with timeout
+async function pollForCompletion(
+  jobId: string, 
+  maxWaitMs: number = 300000, // 5 minutes max
+  pollIntervalMs: number = 2000 // check every 2 seconds
+): Promise<GenerateImageResponse> {
+  const startTime = Date.now();
+  
+  while (Date.now() - startTime < maxWaitMs) {
+    const status = await checkGenerationStatus(jobId);
+    
+    if (status.status === 'completed' && status.result) {
+      return status.result;
+    }
+    
+    if (status.status === 'failed') {
+      throw new Error(status.error || 'Generation failed');
+    }
+    
+    // Wait before next poll
+    await new Promise(resolve => setTimeout(resolve, pollIntervalMs));
+  }
+  
+  throw new Error('Generation timed out. Check history page for results.');
+}
+
+// Main function to call generate API via Edge Function
+async function callGenerateAPI(messages: unknown[]): Promise<GenerateImageResponse> {
+  // Submit job
+  const job = await submitGenerationJob(messages);
+  
+  // If already completed (fast response), return immediately
+  if (job.status === 'completed' && job.result) {
+    return job.result;
+  }
+  
+  // If failed immediately
+  if (job.status === 'failed') {
+    throw new Error(job.error || 'Generation failed');
+  }
+  
+  // Poll for completion
+  return pollForCompletion(job.job_id);
 }
 
 export interface ChatMessage {
