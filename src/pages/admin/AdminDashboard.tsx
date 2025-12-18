@@ -82,84 +82,91 @@ export default function AdminDashboard() {
       title: 'Total Users',
       value: stats.totalUsers,
       icon: Users,
-      color: 'text-blue-600',
-      bg: 'bg-blue-100',
+      color: 'text-foreground',
+      bg: 'bg-genz-lime',
+      emoji: '👥',
     },
     {
       title: 'Total Revenue',
       value: formatCurrency(stats.totalRevenue),
       icon: TrendingUp,
-      color: 'text-green-600',
-      bg: 'bg-green-100',
+      color: 'text-foreground',
+      bg: 'bg-genz-pink',
+      emoji: '💰',
     },
     {
       title: 'Transactions',
       value: stats.totalTransactions,
       icon: CreditCard,
-      color: 'text-purple-600',
-      bg: 'bg-purple-100',
+      color: 'text-foreground',
+      bg: 'bg-genz-cyan',
+      emoji: '💳',
     },
     {
       title: 'Credits Issued',
       value: stats.creditsIssued,
       icon: Coins,
-      color: 'text-orange-600',
-      bg: 'bg-orange-100',
+      color: 'text-foreground',
+      bg: 'bg-genz-coral',
+      emoji: '🪙',
     },
     {
       title: 'Generations',
       value: stats.totalGenerations,
       icon: Image,
-      color: 'text-pink-600',
-      bg: 'bg-pink-100',
+      color: 'text-foreground',
+      bg: 'bg-genz-purple',
+      emoji: '🇿️',
     },
     {
       title: 'Active Coupons',
       value: stats.activeCoupons,
       icon: Ticket,
-      color: 'text-cyan-600',
-      bg: 'bg-cyan-100',
+      color: 'text-foreground',
+      bg: 'bg-genz-blue',
+      emoji: '🎫',
     },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Overview of your UMKM AI platform</p>
+      <div className="border-[3px] border-foreground p-6 bg-gradient-to-r from-genz-lime/20 to-genz-pink/20 shadow-brutal">
+        <h1 className="text-3xl font-display uppercase animate-slide-up">Admin Dashboard 🔧</h1>
+        <p className="text-foreground font-bold mt-2">Overview of your UMKM AI platform 📊</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {statCards.map((card) => (
-          <Card key={card.title}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {card.title}
-              </CardTitle>
-              <div className={`p-2 rounded-lg ${card.bg}`}>
-                <card.icon className={`w-4 h-4 ${card.color}`} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {statCards.map((card, index) => (
+          <div key={card.title} className="border-[3px] border-foreground bg-white p-6 shadow-brutal hover:shadow-brutal-lg hover:translate-y-[-4px] transition-all group" style={{ animationDelay: `${index * 0.1}s` }}>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <div className="text-sm font-bold uppercase text-muted-foreground mb-1">
+                  {card.title}
+                </div>
+                {isLoading ? (
+                  <div className="h-8 w-24 bg-gray-200 animate-pulse border-[2px] border-foreground" />
+                ) : (
+                  <div className="text-3xl font-display uppercase">{card.value}</div>
+                )}
               </div>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="h-8 w-24 bg-gray-200 animate-pulse rounded" />
-              ) : (
-                <div className="text-2xl font-bold">{card.value}</div>
-              )}
-            </CardContent>
-          </Card>
+              <div className="flex flex-col items-center gap-2">
+                <div className={`p-3 border-[3px] border-foreground ${card.bg} group-hover:animate-float`}>
+                  <card.icon className={`w-6 h-6 ${card.color}`} />
+                </div>
+                <span className="text-2xl">{card.emoji}</span>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
 
       {/* Recent Activity could go here */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="text-muted-foreground">
-          <p>Use the sidebar to manage users, view transactions, create coupons, and configure settings.</p>
-        </CardContent>
-      </Card>
+      <div className="border-[3px] border-foreground bg-gradient-to-br from-genz-cyan/30 to-genz-purple/30 p-6 shadow-brutal">
+        <h3 className="text-xl font-display uppercase mb-3">Quick Actions ⚡</h3>
+        <p className="text-foreground font-medium">
+          Use the sidebar to manage users, view transactions, create coupons, and configure settings. 🛠️
+        </p>
+      </div>
     </div>
   );
 }

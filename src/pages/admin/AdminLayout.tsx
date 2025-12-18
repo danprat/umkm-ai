@@ -32,30 +32,30 @@ function AdminLayoutContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 w-64 bg-gray-900 text-white">
+      <aside className="fixed inset-y-0 left-0 w-64 bg-foreground text-background border-r-[3px] border-foreground">
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-4 border-b border-gray-800">
+          <div className="p-4 border-b-[3px] border-background bg-genz-pink">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5" />
+              <div className="w-8 h-8 bg-genz-lime border-[2px] border-foreground flex items-center justify-center animate-float">
+                <Shield className="w-5 h-5 text-foreground" />
               </div>
-              <span className="font-bold text-lg">Admin Panel</span>
+              <span className="font-display text-lg uppercase text-foreground">Admin Panel 🔒</span>
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-4 space-y-2">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  `flex items-center gap-3 px-3 py-2.5 border-[2px] border-background font-bold uppercase text-sm transition-all ${
                     isActive
-                      ? 'bg-purple-600 text-white'
-                      : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                      ? 'bg-genz-lime text-foreground shadow-[4px_4px_0px_rgba(255,255,255,0.3)]'
+                      : 'text-background hover:bg-genz-cyan/50 hover:text-foreground hover:shadow-[2px_2px_0px_rgba(255,255,255,0.2)] hover:translate-y-[-2px]'
                   }`
                 }
               >
@@ -66,28 +66,24 @@ function AdminLayoutContent() {
           </nav>
 
           {/* User & Actions */}
-          <div className="p-4 border-t border-gray-800 space-y-2">
-            <div className="text-sm text-gray-400 truncate">
+          <div className="p-4 border-t-[3px] border-background space-y-2 bg-genz-cyan/20">
+            <div className="text-sm font-bold text-background truncate border-[2px] border-background px-2 py-1">
               {user?.email}
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-800"
+            <button
+              className="w-full flex items-center justify-start gap-2 px-3 py-2 border-[2px] border-background bg-transparent hover:bg-genz-pink/50 text-background font-bold uppercase text-sm transition-all"
               onClick={() => navigate('/dashboard')}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-4 h-4" />
               Back to App
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-800"
+            </button>
+            <button
+              className="w-full flex items-center justify-start gap-2 px-3 py-2 border-[2px] border-background bg-transparent hover:bg-destructive text-background font-bold uppercase text-sm transition-all"
               onClick={handleSignOut}
             >
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogOut className="w-4 h-4" />
               Sign Out
-            </Button>
+            </button>
           </div>
         </div>
       </aside>

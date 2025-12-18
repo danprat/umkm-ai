@@ -69,12 +69,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           `}
         >
           {/* Logo - Desktop */}
-          <div className="hidden md:flex items-center gap-2 p-4 border-b-[2px] border-foreground shrink-0">
+          <div className="hidden md:flex items-center gap-2 p-4 border-b-[2px] border-foreground shrink-0 bg-gradient-to-r from-genz-lime/20 to-genz-pink/20">
             <Link to="/" className="flex items-center gap-2">
-              <div className="bg-accent p-1.5 border-[2px] border-foreground">
-                <Zap className="w-5 h-5" />
+              <div className="bg-genz-lime p-1.5 border-[2px] border-foreground animate-float">
+                <Zap className="w-5 h-5 text-foreground" />
               </div>
-              <span className="font-display text-xl uppercase">UMKM.AI</span>
+              <span className="font-display text-xl uppercase">UMKM.AI ⚡</span>
             </Link>
           </div>
 
@@ -97,8 +97,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                       font-bold uppercase text-sm
                       transition-all duration-150
                       ${isActive(item.path, item.exact)
-                        ? "bg-accent shadow-brutal"
-                        : "bg-background hover:bg-secondary hover:shadow-brutal hover:-translate-y-0.5"
+                        ? "bg-genz-lime shadow-brutal"
+                        : "bg-background hover:bg-genz-cyan/30 hover:shadow-brutal hover:-translate-y-0.5 hover:animate-wiggle"
                       }
                     `}
                   >

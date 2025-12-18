@@ -34,6 +34,14 @@
     --input: 0 0% 5%;
     --ring: 55 100% 50%;
 
+    /* Gen Z Color Palette */
+    --genz-lime: 84 81% 44%;
+    --genz-pink: 330 81% 60%;
+    --genz-cyan: 186 94% 60%;
+    --genz-coral: 12 89% 64%;
+    --genz-purple: 271 91% 65%;
+    --genz-blue: 212 95% 54%;
+
     --radius: 0px;
 
     /* Brutalist custom tokens */
@@ -201,6 +209,54 @@
     40% { content: '.'; }
     60% { content: '..'; }
     80%, 100% { content: '...'; }
+  }
+
+  /* Gen Z Micro-interactions */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+
+  @keyframes glow {
+    0%, 100% { box-shadow: 4px 4px 0px hsl(var(--foreground)); }
+    50% { box-shadow: 4px 4px 0px hsl(var(--genz-lime)), 8px 8px 0px hsl(var(--genz-pink)); }
+  }
+
+  @keyframes bounce-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
   }
 
   /* Hide scrollbar for horizontal scrollers */
