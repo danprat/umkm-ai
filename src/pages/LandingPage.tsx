@@ -148,7 +148,7 @@ export default function LandingPage() {
           <ScrollReveal animation="fade-up" delay={800}>
             <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed bg-white/50 backdrop-blur-sm p-4 rounded-xl border-2 border-black/10">
               Gak perlu sewa studio mahal atau jago desain. <br className="hidden md:block" />
-              Cuma modal HP, ketik-ketik dikit, foto produk auto <span className="bg-genz-pink px-1 border-2 border-black rounded text-white transform inline-block rotate-1 flex items-center gap-1">GLOWING! <Sparkles className="w-4 h-4 inline-block fill-white" /></span>
+              Cuma modal HP, ketik-ketik dikit, foto produk auto <span className="inline-flex items-center justify-center gap-2 bg-genz-pink text-white px-4 py-1 border-4 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-3 hover:rotate-0 hover:scale-105 transition-all font-display tracking-wider mx-2 align-middle text-lg md:text-xl">GLOWING! <Sparkles className="w-5 h-5 fill-white animate-pulse" /></span>
             </p>
           </ScrollReveal>
 
