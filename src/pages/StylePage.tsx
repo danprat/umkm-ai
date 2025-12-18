@@ -7,12 +7,12 @@ import CountdownTimer from "@/components/CountdownTimer";
 import { copyStyleFromImages } from "@/lib/api";
 import { useCredits } from "@/hooks/use-credits";
 import { useAuth } from "@/contexts/AuthContext";
-import { Palette, ArrowRight, AlertCircle } from "lucide-react";
+import { Palette, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
 export default function StylePage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, saveToHistory, clearRateLimit } = useCredits({ pageType: 'style' });
+  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'style' });
   
   const [originalImage, setOriginalImage] = useState("");
   const [styleImage, setStyleImage] = useState("");
@@ -54,20 +54,16 @@ export default function StylePage() {
 
     try {
       const aspectRatio = aspectRatios.find(r => r.id === selectedAspectRatio);
-      const ratioPrompt = aspectRatio ? ` Format output: ${aspectRatio.ratio}` : "";
+      const ratioPrompt = aspectRatio ? ` ${aspectRatio.ratio}` : "";
       const fullPrompt = additionalPrompt ? additionalPrompt + ratioPrompt : ratioPrompt;
       
-      const response = await copyStyleFromImages(originalImage, styleImage, fullPrompt);
+      const response = await copyStyleFromImages(originalImage, styleImage, fullPrompt, aspectRatio?.ratio);
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       
       if (imageData) {
         setImageUrl(imageData);
         toast.success("Style berhasil di-copy!");
-        
-        // Save to history
-        await saveToHistory(imageData, "style", "Style Copy", selectedAspectRatio);
-        
-        // Clear rate limit after successful generation
+        // No need to save to history - backend handles it automatically
         clearRateLimit();
       } else {
         throw new Error("Tidak ada gambar dalam response");
@@ -90,118 +86,135 @@ export default function StylePage() {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="bg-accent p-2 border-[3px] border-foreground">
-              <Palette className="w-5 h-5" />
+        <div className="mb-8 border-b-4 border-black pb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-genz-cyan p-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg animate-wiggle">
+              <Palette className="w-6 h-6 stroke-[3px]" />
             </div>
-            <h1 className="text-xl md:text-2xl font-display uppercase">
-              Copy Style
+            <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
+              Tiru Gaya
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Upload gambar asli dan referensi style untuk digabungkan.
+          <p className="text-lg text-gray-600 font-bold font-mono">
+            Punya foto inspirasi? Upload disini, kita copas style-nya ke fotomu!
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          {/* Upload Section */}
-          <div className="grid md:grid-cols-3 gap-6 mb-8 items-end">
-            <div>
-              <ImageUploader
-                label="1. Gambar Asli"
-                onImageSelect={setOriginalImage}
-              />
-              <p className="text-sm text-muted-foreground mt-2">
-                Gambar produk atau konten yang ingin diubah
-              </p>
-            </div>
+        <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+          {/* Input Section - Main Content */}
+          <div className="flex-1 space-y-6">
+            {/* Upload Section */}
+            <div className="bg-white border-4 border-black p-6 rounded-xl shadow-brutal">
+              <div className="grid md:grid-cols-2 gap-6 items-start">
+                <div className="bg-gray-50 p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                  <label className="block font-display uppercase text-base mb-2 flex items-center gap-2">
+                    <span className="bg-black text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">1</span>
+                    Gambar Asli
+                  </label>
+                  <ImageUploader
+                    label="Upload Foto Produkmu"
+                    onImageSelect={setOriginalImage}
+                  />
+                  <p className="text-xs font-mono font-bold mt-2 text-gray-500">
+                    Foto yang mau diubah style-nya
+                  </p>
+                </div>
 
-            <div className="hidden md:flex items-center justify-center">
-              <div className="bg-foreground text-background p-3 border-[3px] border-foreground">
-                <ArrowRight className="w-8 h-8" />
+                <div className="bg-gray-50 p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                  <label className="block font-display uppercase text-base mb-2 flex items-center gap-2">
+                    <span className="bg-black text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">2</span>
+                    Gambar Referensi
+                  </label>
+                  <ImageUploader
+                    label="Upload Foto Contoh Style"
+                    onImageSelect={setStyleImage}
+                  />
+                  <p className="text-xs font-mono font-bold mt-2 text-gray-500">
+                    Foto yang style-nya mau ditiru
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div>
-              <ImageUploader
-                label="2. Gambar Style"
-                onImageSelect={setStyleImage}
+            {/* Additional Options */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-3 flex items-center gap-2">
+                <span className="bg-black text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">3</span>
+                Instruksi Tambahan (Opsional)
+              </label>
+              <textarea
+                value={additionalPrompt}
+                onChange={(e) => setAdditionalPrompt(e.target.value)}
+                placeholder="Contoh: Pertahankan produk asli tapi ubah background dan pencahayaan sesuai style..."
+                className="w-full p-4 border-4 border-black font-mono text-sm min-h-[100px] focus:outline-none focus:ring-4 focus:ring-genz-cyan/50 rounded-lg"
               />
-              <p className="text-sm text-muted-foreground mt-2">
-                Style yang ingin dicopy (warna, mood, estetika)
-              </p>
             </div>
-          </div>
 
-          {/* Additional Options */}
-          <div className="brutal-card mb-6">
-            <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-              Instruksi Tambahan (Opsional)
-            </label>
-            <textarea
-              value={additionalPrompt}
-              onChange={(e) => setAdditionalPrompt(e.target.value)}
-              placeholder="Contoh: Pertahankan produk asli tapi ubah background dan pencahayaan sesuai style..."
-              className="brutal-textarea"
-            />
-          </div>
+            {/* Aspect Ratio */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-3 flex items-center gap-2">
+                <span className="bg-black text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">4</span>
+                Ukuran Gambar
+              </label>
+              <AspectRatioSelector
+                selectedId={selectedAspectRatio}
+                onSelect={setSelectedAspectRatio}
+              />
+            </div>
 
-          {/* Aspect Ratio */}
-          <div className="brutal-card mb-6">
-            <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-              Rasio Gambar
-            </label>
-            <AspectRatioSelector
-              selectedId={selectedAspectRatio}
-              onSelect={setSelectedAspectRatio}
-            />
-          </div>
-
-          {/* Rate Limit Warning */}
-          {rateLimitEndTime && (
-            <div className="brutal-card bg-yellow-100 border-yellow-500 mb-6">
-              <div className="flex items-center gap-2 text-yellow-800">
-                <AlertCircle className="w-5 h-5" />
-                <span className="font-bold">Rate Limit</span>
+            {/* Rate Limit Warning */}
+            {rateLimitEndTime && (
+              <div className="border-4 border-black bg-yellow-100 p-4 rounded-xl flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-yellow-800" />
+                <div>
+                  <span className="font-bold font-mono text-sm text-yellow-800">
+                    Sabar ya! Tunggu bentar sebelum generate lagi.
+                  </span>
+                  <CountdownTimer 
+                    targetTime={rateLimitEndTime} 
+                    onComplete={() => setRateLimitEndTime(null)} 
+                  />
+                </div>
               </div>
-              <p className="text-sm text-yellow-700 mt-1">
-                Tunggu sebelum generate lagi:
-              </p>
-              <CountdownTimer 
-                targetTime={rateLimitEndTime} 
-                onComplete={() => setRateLimitEndTime(null)} 
-              />
-            </div>
-          )}
-
-          <button
-            onClick={handleGenerate}
-            disabled={isLoading || !originalImage || !styleImage || !!rateLimitEndTime}
-            className="brutal-btn w-full text-lg disabled:opacity-50 mb-8"
-          >
-            {isLoading ? (
-              <>Sedang Memproses...</>
-            ) : (
-              <>
-                <Palette className="w-5 h-5 mr-2" />
-                Copy Style Sekarang
-              </>
             )}
-          </button>
+          </div>
 
-          {/* Result */}
-          <div>
-            <span className="block font-bold uppercase text-sm tracking-wider mb-2">
-              Hasil
-            </span>
-            <GeneratedImage 
-              imageUrl={imageUrl} 
-              isLoading={isLoading} 
-              error={error} 
-            />
+          {/* Result Section - Sticky Sidebar */}
+          <div className="lg:w-[380px] lg:flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <span className="block font-display uppercase text-lg mb-4 tracking-wider flex items-center gap-2">
+                  <Palette className="w-5 h-5" />
+                  Hasil
+                </span>
+                <GeneratedImage 
+                  imageUrl={imageUrl} 
+                  isLoading={isLoading} 
+                  error={error} 
+                />
+
+                {/* Generate Button */}
+                <button
+                  onClick={handleGenerate}
+                  disabled={isLoading || !originalImage || !styleImage || !!rateLimitEndTime}
+                  className="w-full mt-5 py-4 bg-black text-white font-display text-lg uppercase border-4 border-transparent hover:bg-genz-cyan hover:text-black hover:border-black transition-all shadow-brutal hover:-translate-y-0.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Lagi Mikir...
+                    </>
+                  ) : (
+                    <>
+                      <Palette className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      Tiru Style
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

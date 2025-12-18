@@ -8,7 +8,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 import { generateImage, generateImageWithReference } from "@/lib/api";
 import { useCredits } from "@/hooks/use-credits";
 import { useAuth } from "@/contexts/AuthContext";
-import { Megaphone, AlertCircle } from "lucide-react";
+import { Megaphone, AlertCircle, Sparkles, Box } from "lucide-react";
 import { toast } from "sonner";
 
 const promoTemplates = [
@@ -84,7 +84,7 @@ const colorSchemes = [
 
 export default function PromoPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, saveToHistory, clearRateLimit } = useCredits({ pageType: 'promo' });
+  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'promo' });
   
   const [selectedTemplate, setSelectedTemplate] = useState(promoTemplates[0]);
   const [productName, setProductName] = useState("");
@@ -102,7 +102,7 @@ export default function PromoPage() {
 
   const handleGenerate = async () => {
     if (!productName.trim()) {
-      toast.error("Masukkan nama produk terlebih dahulu!");
+      toast.error("Nama produknya mana nih? Diisi dulu ya!");
       return;
     }
 
@@ -112,7 +112,7 @@ export default function PromoPage() {
       if (creditResult.retryAt) {
         setRateLimitEndTime(creditResult.retryAt);
       }
-      toast.error(creditResult.error || "Gagal memproses kredit");
+      toast.error(creditResult.error || "Gagal memproses kredit, coba lagi nanti");
       return;
     }
 
@@ -141,28 +141,26 @@ export default function PromoPage() {
       if (productDescription) {
         prompt += ` Product details: ${productDescription}.`;
       }
-      
-      prompt += ratioPrompt;
+
+      if (aspectRatio) {
+        prompt += ` ${aspectRatio.ratio}`;
+      }
 
       let response;
       if (productImage) {
-        response = await generateImageWithReference(prompt, productImage);
+        response = await generateImageWithReference(prompt, productImage, 'promo', aspectRatio?.ratio);
       } else {
-        response = await generateImage(prompt);
+        response = await generateImage(prompt, 'promo', aspectRatio?.ratio);
       }
       const imageData = response.choices?.[0]?.message?.images?.[0]?.image_url?.url;
       
       if (imageData) {
         setImageUrl(imageData);
-        toast.success("Gambar promo berhasil dibuat!");
-        
-        // Save to history
-        await saveToHistory(imageData, "promo", productName, selectedAspectRatio);
-        
-        // Clear rate limit after successful generation
+        toast.success("Poster promo jadi! Siap viral");
+        // No need to save to history - backend handles it automatically
         clearRateLimit();
       } else {
-        throw new Error("Tidak ada gambar dalam response");
+        throw new Error("Yah, gambarnya gak muncul");
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Gagal membuat gambar";
@@ -173,7 +171,7 @@ export default function PromoPage() {
       const refundResult = await refundCredit();
       if (refundResult.success && profile) {
         updateCredits(profile.credits); // Restore credit
-        toast.info("Kredit dikembalikan karena gagal generate");
+        toast.info("Tenang, kredit udah dibalikin kok");
       }
     } finally {
       setIsLoading(false);
@@ -182,29 +180,30 @@ export default function PromoPage() {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="bg-secondary p-2 border-[3px] border-foreground">
-              <Megaphone className="w-5 h-5" />
+        <div className="mb-8 border-b-4 border-black pb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-genz-pink p-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg animate-wiggle">
+              <Megaphone className="w-6 h-6 stroke-[3px]" />
             </div>
-            <h1 className="text-xl md:text-2xl font-display uppercase">
-              Promo Produk
+            <h1 className="text-3xl md:text-4xl font-display uppercase tracking-tight">
+              Bikin Promo
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Pilih template dan buat gambar promo profesional.
+          <p className="text-lg text-gray-600 font-bold font-mono">
+            Pilih template, upload produk, jadi deh poster iklan!
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
-          {/* Input Section */}
-          <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+          {/* Input Section - Main Content */}
+          <div className="flex-1 space-y-6">
             {/* Template Selection */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-3">
-                1. Pilih Style Template
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">1</span>
+                Pilih Gaya Promo
               </label>
               <OptionGrid
                 options={promoTemplates.map(t => ({ id: t.id, name: t.name, description: t.description }))}
@@ -213,76 +212,89 @@ export default function PromoPage() {
               />
             </div>
 
-            {/* Product Details */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                2. Upload Foto Produk (Opsional)
+            {/* Product Image */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">2</span>
+                Upload Produk (Opsional)
               </label>
               <ImageUploader
                 label=""
                 onImageSelect={setProductImage}
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                Upload foto produk asli untuk hasil yang lebih akurat
+              <p className="text-xs font-bold font-mono mt-2 text-gray-500">
+                *Upload foto produk asli biar hasilnya lebih mirip
               </p>
             </div>
 
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                3. Nama Produk *
-              </label>
-              <input
-                type="text"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-                placeholder="Contoh: Keripik Tempe, Bakso Urat, Es Kopi Susu..."
-                className="brutal-input"
-              />
+            {/* Product Details */}
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm font-display">3</span>
+                <span className="font-display uppercase text-lg">Detail Produk</span>
+              </div>
+              
+              <div>
+                <label className="block font-bold uppercase text-xs tracking-wider mb-2">
+                  Nama Produk *
+                </label>
+                <input
+                  type="text"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  placeholder="Contoh: Keripik Tempe, Bakso Urat..."
+                  className="w-full p-3 border-4 border-black font-mono text-sm focus:outline-none focus:ring-4 focus:ring-genz-pink/50 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold uppercase text-xs tracking-wider mb-2">
+                  Deskripsi (Opsional)
+                </label>
+                <textarea
+                  value={productDescription}
+                  onChange={(e) => setProductDescription(e.target.value)}
+                  placeholder="Jelaskan produk Anda: bahan, rasa, keunikan..."
+                  className="w-full p-3 border-4 border-black font-mono text-sm min-h-[80px] focus:outline-none focus:ring-4 focus:ring-genz-pink/50 rounded-lg"
+                  rows={2}
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                4. Deskripsi Produk (Opsional)
-              </label>
-              <textarea
-                value={productDescription}
-                onChange={(e) => setProductDescription(e.target.value)}
-                placeholder="Jelaskan produk Anda: bahan, rasa, keunikan..."
-                className="brutal-textarea"
-                rows={2}
-              />
-            </div>
+            {/* Package & Color in grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <label className="block font-display uppercase text-lg mb-3 flex items-center gap-2">
+                  <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">4</span>
+                  Kemasan
+                </label>
+                <OptionGrid
+                  options={packageTypes}
+                  selectedId={selectedPackage}
+                  onSelect={setSelectedPackage}
+                  columns={2}
+                />
+              </div>
 
-            {/* Package Type */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                5. Jenis Kemasan
-              </label>
-              <OptionGrid
-                options={packageTypes}
-                selectedId={selectedPackage}
-                onSelect={setSelectedPackage}
-                columns={3}
-              />
-            </div>
-
-            {/* Color Scheme */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                6. Skema Warna
-              </label>
-              <OptionGrid
-                options={colorSchemes}
-                selectedId={selectedColor}
-                onSelect={setSelectedColor}
-                columns={3}
-              />
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <label className="block font-display uppercase text-lg mb-3 flex items-center gap-2">
+                  <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">5</span>
+                  Warna
+                </label>
+                <OptionGrid
+                  options={colorSchemes}
+                  selectedId={selectedColor}
+                  onSelect={setSelectedColor}
+                  columns={2}
+                />
+              </div>
             </div>
 
             {/* Aspect Ratio */}
-            <div>
-              <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                7. Rasio Gambar
+            <div className="bg-white border-4 border-black p-6 shadow-brutal rounded-xl">
+              <label className="block font-display uppercase text-lg mb-4 flex items-center gap-2">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm">6</span>
+                Ukuran Gambar
               </label>
               <AspectRatioSelector
                 selectedId={selectedAspectRatio}
@@ -291,76 +303,88 @@ export default function PromoPage() {
             </div>
 
             {/* Optional Fields */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                  Tagline (Opsional)
-                </label>
-                <input
-                  type="text"
-                  value={tagline}
-                  onChange={(e) => setTagline(e.target.value)}
-                  placeholder="Contoh: Renyah & Gurih!"
-                  className="brutal-input"
-                />
+            <div className="bg-genz-cyan/20 border-4 border-black p-5 rounded-xl border-dashed">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="bg-black text-white w-7 h-7 flex items-center justify-center rounded-full text-sm font-display">7</span>
+                <span className="font-display uppercase text-lg">Info Tambahan (Opsional)</span>
               </div>
-              <div>
-                <label className="block font-bold uppercase text-sm tracking-wider mb-2">
-                  Kontak (Opsional)
-                </label>
-                <input
-                  type="text"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  placeholder="0812-XXXX-XXXX"
-                  className="brutal-input"
-                />
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold uppercase text-xs tracking-wider mb-2">
+                    Tagline
+                  </label>
+                  <input
+                    type="text"
+                    value={tagline}
+                    onChange={(e) => setTagline(e.target.value)}
+                    placeholder="Contoh: Renyah & Gurih!"
+                    className="w-full p-3 border-2 border-black font-mono text-sm focus:outline-none focus:ring-2 focus:ring-black rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold uppercase text-xs tracking-wider mb-2">
+                    Kontak
+                  </label>
+                  <input
+                    type="text"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    placeholder="0812-XXXX-XXXX"
+                    className="w-full p-3 border-2 border-black font-mono text-sm focus:outline-none focus:ring-2 focus:ring-black rounded-lg"
+                  />
+                </div>
               </div>
             </div>
 
             {/* Rate Limit Warning */}
             {rateLimitEndTime && (
-              <div className="brutal-card bg-yellow-100 border-yellow-500">
-                <div className="flex items-center gap-2 text-yellow-800">
+              <div className="border-4 border-black bg-yellow-100 p-4 rounded-xl">
+                <div className="flex items-center gap-2 text-yellow-800 font-bold mb-2">
                   <AlertCircle className="w-5 h-5" />
-                  <span className="font-bold">Rate Limit</span>
+                  <span>Sabar Dulu Gan! ⏳</span>
                 </div>
-                <p className="text-sm text-yellow-700 mt-1">
-                  Tunggu sebelum generate lagi:
-                </p>
                 <CountdownTimer 
                   targetTime={rateLimitEndTime} 
                   onComplete={() => setRateLimitEndTime(null)} 
                 />
               </div>
             )}
-
-            <button
-              onClick={handleGenerate}
-              disabled={isLoading || !!rateLimitEndTime}
-              className="brutal-btn w-full text-lg disabled:opacity-50"
-            >
-              {isLoading ? (
-                <>Sedang Membuat...</>
-              ) : (
-                <>
-                  <Megaphone className="w-5 h-5 mr-2" />
-                  Buat Gambar Promo
-                </>
-              )}
-            </button>
           </div>
 
-          {/* Result Section */}
-          <div>
-            <span className="block font-bold uppercase text-sm tracking-wider mb-2">
-              Hasil
-            </span>
-            <GeneratedImage 
-              imageUrl={imageUrl} 
-              isLoading={isLoading} 
-              error={error} 
-            />
+          {/* Result Section - Sticky Sidebar */}
+          <div className="lg:w-[380px] lg:flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <div className="bg-white border-4 border-black p-5 shadow-brutal rounded-xl">
+                <span className="block font-display uppercase text-lg mb-4 tracking-wider flex items-center gap-2">
+                  <Box className="w-5 h-5" />
+                  Hasil Promo
+                </span>
+                <GeneratedImage 
+                  imageUrl={imageUrl} 
+                  isLoading={isLoading} 
+                  error={error} 
+                />
+                
+                {/* Generate Button */}
+                <button
+                  onClick={handleGenerate}
+                  disabled={isLoading || !!rateLimitEndTime}
+                  className="w-full mt-5 py-4 bg-black text-white font-display text-lg uppercase border-4 border-transparent hover:bg-genz-pink hover:text-black hover:border-black transition-all shadow-brutal hover:-translate-y-0.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Lagi Bikin...
+                    </>
+                  ) : (
+                    <>
+                      <Megaphone className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      Buat Promo
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
