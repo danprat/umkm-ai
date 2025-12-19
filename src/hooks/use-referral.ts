@@ -49,13 +49,7 @@ export function useReferral() {
   // Fetch referral stats
   const fetchStats = useCallback(async () => {
     if (!user) {
-      setStats({
-        totalReferrals: 0,
-        completedReferrals: 0,
-        totalSignupBonus: 0,
-        totalCommission: 0,
-      });
-      return;null);
+      setStats(null);
       return;
     }
 
