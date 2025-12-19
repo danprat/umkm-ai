@@ -154,7 +154,7 @@ export default function AdminGallery() {
       <div className="p-8">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
-            <ImageIcon className="w-12 h-12 mx-auto mb-4 animate-pulse text-genz-lime" />
+            <ImageIcon className="w-12 h-12 mx-auto mb-4 animate-pulse text-yellow-400" />
             <p className="font-bold text-gray-600">Loading gallery...</p>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function AdminGallery() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-genz-purple border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg">
+          <div className="w-10 h-10 bg-purple-600 border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg">
             <ImageIcon className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-4xl font-display uppercase">Galeri User</h1>
@@ -244,7 +244,7 @@ export default function AdminGallery() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
                   <div className="absolute top-2 right-2">
-                    <span className="bg-genz-lime text-black text-xs font-bold px-2 py-1 border-2 border-black rounded">
+                    <span className="bg-yellow-400 text-black text-xs font-bold px-2 py-1 border-2 border-black rounded">
                       {pageTypeLabels[item.page_type]}
                     </span>
                   </div>

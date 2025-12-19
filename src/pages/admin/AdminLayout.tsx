@@ -37,10 +37,10 @@ function AdminLayoutContent() {
       <aside className="fixed inset-y-0 left-0 w-64 bg-black text-white border-r-4 border-black">
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-4 border-b-4 border-white/20 bg-genz-pink relative overflow-hidden">
+          <div className="p-4 border-b-4 border-white/20 bg-pink-500 relative overflow-hidden">
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
             <div className="flex items-center gap-3 relative z-10">
-              <div className="w-10 h-10 bg-genz-lime border-4 border-black flex items-center justify-center animate-bounce shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg">
+              <div className="w-10 h-10 bg-yellow-400 border-4 border-black flex items-center justify-center animate-bounce shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-lg">
                 <Shield className="w-6 h-6 text-black fill-black" />
               </div>
               <div>
@@ -60,7 +60,7 @@ function AdminLayoutContent() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 font-bold uppercase text-sm transition-all border-2 rounded-lg ${
                     isActive
-                      ? 'bg-genz-lime text-black border-black shadow-[4px_4px_0px_0px_#fff] translate-x-1'
+                      ? 'bg-yellow-400 text-black border-black shadow-[4px_4px_0px_0px_#fff] translate-x-1'
                       : 'bg-black text-gray-400 border-transparent hover:bg-white/10 hover:text-white hover:border-white/20'
                   }`
                 }
@@ -75,10 +75,10 @@ function AdminLayoutContent() {
           <div className="p-4 border-t-4 border-white/20 space-y-3 bg-gray-900">
             <div className="text-xs font-bold text-gray-400 font-mono break-all px-2">
               LOGGED AS:<br/>
-              <span className="text-genz-cyan">{user?.email}</span>
+              <span className="text-cyan-400">{user?.email}</span>
             </div>
             <button
-              className="w-full flex items-center justify-start gap-2 px-3 py-2 bg-white text-black font-bold uppercase text-sm border-2 border-transparent hover:bg-genz-cyan hover:border-black transition-colors rounded"
+              className="w-full flex items-center justify-start gap-2 px-3 py-2 bg-white text-black font-bold uppercase text-sm border-2 border-transparent hover:bg-cyan-400 hover:border-black transition-colors rounded"
               onClick={() => navigate('/dashboard')}
             >
               <ArrowLeft className="w-4 h-4" />
