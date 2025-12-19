@@ -11,9 +11,17 @@ const corsHeaders = {
 };
 
 const API_URL = 'https://cliproxy.monika.id/v1/chat/completions';
-const API_KEY = 'palsu';
 
 serve(async (req) => {
+  // Get API key from environment (set via: supabase secrets set CLIPROXY_API_KEY=your_key)
+  const API_KEY = Deno.env.get('CLIPROXY_API_KEY');
+  if (!API_KEY) {
+    console.error('CLIPROXY_API_KEY not set in environment');
+    return new Response(
+      JSON.stringify({ error: 'Server configuration error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -140,6 +148,47 @@ serve(async (req) => {
       const result = await response.json();
       console.log(`[submit-generation] Job ${job.id} completed successfully`);
 
+      // Extract image from result
+      const imageUrl = result.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+      
+      if (imageUrl) {
+        try {
+          // Upload to Supabase Storage
+          const imageData = imageUrl.split(',')[1]; // Remove data:image/...;base64, prefix
+          const buffer = Uint8Array.from(atob(imageData), c => c.charCodeAt(0));
+          const fileName = `${user.id}/${Date.now()}.png`;
+          
+          const { error: uploadError } = await supabaseAdmin.storage
+            .from('generated-images')
+            .upload(fileName, buffer, {
+              contentType: 'image/png',
+              upsert: false
+            });
+
+          if (uploadError) {
+            console.error('[submit-generation] Upload error:', uploadError);
+          } else {
+            // Save to generation_history (store only the path, not full URL)
+            const { error: historyError } = await supabaseAdmin
+              .from('generation_history')
+              .insert({
+                user_id: user.id,
+                prompt: prompt.substring(0, 500),
+                image_path: fileName,
+                page_type: 'generate'
+              });
+
+            if (historyError) {
+              console.error('[submit-generation] History save error:', historyError);
+            } else {
+              console.log(`[submit-generation] Image saved to history: ${fileName}`);
+            }
+          }
+        } catch (uploadErr) {
+          console.error('[submit-generation] Upload exception:', uploadErr);
+        }
+      }
+
       // Update job with result
       await supabaseAdmin
         .from('generation_jobs')
@@ -192,19 +241,6 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-  } catch (error) {
-    console.error('Error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  }
-});
-        status: 'pending',
-        message: 'Generation job created. Poll /functions/v1/check-generation?job_id=... for status.'
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
   } catch (error) {
     console.error('Error:', error);
     return new Response(
