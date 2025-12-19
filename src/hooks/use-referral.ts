@@ -3,15 +3,16 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 
 export interface ReferralStats {
-  totalReferrals: number;
-  completedReferrals: number;
-  totalSignupBonus: number;
-  totalCommission: number;
+  total_referrals: number;
+  verified_referrals: number;
+  signup_bonus_total: number;
+  commission_total: number;
+  referrals: ReferredUser[];
 }
 
 export interface ReferredUser {
-  id: string;
-  email: string;
+  referred_id: string;
+  referred_email: string;
   created_at: string;
   completed_at: string | null;
   signup_bonus_awarded: number;
@@ -20,13 +21,7 @@ export interface ReferredUser {
 export function useReferral() {
   const { user, profile } = useAuth();
   const [referralCode, setReferralCode] = useState<string | null>(null);
-  const [stats, setStats] = useState<ReferralStats>({
-    totalReferrals: 0,
-    completedReferrals: 0,
-    totalSignupBonus: 0,
-    totalCommission: 0,
-  });
-  const [referredUsers, setReferredUsers] = useState<ReferredUser[]>([]);
+  const [stats, setStats] = useState<ReferralStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch referral code from profile
@@ -60,6 +55,7 @@ export function useReferral() {
         totalSignupBonus: 0,
         totalCommission: 0,
       });
+      return;null);
       return;
     }
 
@@ -74,9 +70,9 @@ export function useReferral() {
           signup_bonus_awarded,
           completed_at,
           referred_id,
+          created_at,
           profiles!referrals_referred_id_fkey (
-            email,
-            created_at
+            email
           )
         `)
         .eq('referrer_id', user.id)
@@ -90,7 +86,7 @@ export function useReferral() {
 
       // Get commissions for this user's referrals
       const referralIds = referrals?.map(r => r.id) || [];
-      let totalCommission = 0;
+      let commission_total = 0;
 
       if (referralIds.length > 0) {
         const { data: commissions, error: commissionsError } = await supabase
@@ -99,38 +95,31 @@ export function useReferral() {
           .in('referral_id', referralIds);
 
         if (!commissionsError && commissions) {
-          totalCommission = commissions.reduce((sum, c) => sum + c.commission_credits, 0);
+          commission_total = commissions.reduce((sum, c) => sum + c.commission_credits, 0);
         }
       }
 
       // Calculate stats
-      const totalReferrals = referrals?.length || 0;
-      const completedReferrals = referrals?.filter(r => r.completed_at !== null).length || 0;
-      const totalSignupBonus = referrals?.reduce((sum, r) => sum + r.signup_bonus_awarded, 0) || 0;
-
-      setStats({
-        totalReferrals,
-        completedReferrals,
-        totalSignupBonus,
-        totalCommission,
-      });
+      const total_referrals = referrals?.length || 0;
+      const verified_referrals = referrals?.filter(r => r.completed_at !== null).length || 0;
+      const signup_bonus_total = referrals?.reduce((sum, r) => sum + r.signup_bonus_awarded, 0) || 0;
 
       // Map referred users
-      const users: ReferredUser[] = referrals?.map(r => ({
-        id: r.referred_id,
-        email: (r.profiles as any)?.email || 'Unknown',
-        created_at: (r.profiles as any)?.created_at || '',
+      const referralsList: ReferredUser[] = referrals?.map(r => ({
+        referred_id: r.referred_id,
+        referred_email: (r.profiles as any)?.email || 'Unknown',
+        created_at: r.created_at,
         completed_at: r.completed_at,
         signup_bonus_awarded: r.signup_bonus_awarded,
       })) || [];
 
-      setReferredUsers(users);
-    } catch (error) {
-      console.error('Error fetching referral stats:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user]);
+      setStats({
+        total_referrals,
+        verified_referrals,
+        signup_bonus_total,
+        commission_total,
+        referrals: referralsList,
+      }
 
   useEffect(() => {
     fetchStats();
@@ -172,4 +161,3 @@ export function useReferral() {
     copyReferralCode,
     refreshStats: fetchStats,
   };
-}

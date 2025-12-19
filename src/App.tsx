@@ -18,6 +18,7 @@ import StylePage from "./pages/StylePage";
 import MascotPage from "./pages/MascotPage";
 import FoodPage from "./pages/FoodPage";
 import HistoryPage from "./pages/HistoryPage";
+import ReferralPage from "./pages/ReferralPage";
 import NotFound from "./pages/NotFound";
 
 // Admin Pages
@@ -70,6 +71,9 @@ const App = () => (
             } />
             <Route path="/dashboard/history" element={
               <RequireAuth><HistoryPage /></RequireAuth>
+            } />
+            <Route path="/dashboard/referral" element={
+              <RequireAuth><ReferralPage /></RequireAuth>
             } />
             
             {/* Admin Routes */}

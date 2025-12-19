@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Zap, ImagePlus, Megaphone, Palette, Cat, Camera, Home, Menu, X, History, LogOut, Shield, Gift } from "lucide-react";
+import { Zap, ImagePlus, Megaphone, Palette, Cat, Camera, Home, Menu, X, History, LogOut, Shield, Gift, Users } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import CreditDisplay from "@/components/CreditDisplay";
@@ -14,6 +14,7 @@ const navItems = [
   { path: "/dashboard/mascot", label: "Buat Maskot", icon: Cat },
   { path: "/dashboard/food", label: "Food Lens", icon: Camera },
   { path: "/dashboard/history", label: "Riwayat", icon: History },
+  { path: "/dashboard/referral", label: "Referral", icon: Users, badge: "🎁" },
 ];
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -96,6 +97,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                       border-[2px] border-foreground
                       font-bold uppercase text-sm
                       transition-all duration-150
+                      relative
                       ${isActive(item.path, item.exact)
                         ? "bg-genz-lime shadow-brutal"
                         : "bg-background hover:bg-genz-cyan/30 hover:shadow-brutal hover:-translate-y-0.5 hover:animate-wiggle"
@@ -103,7 +105,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                     `}
                   >
                     <item.icon className="w-5 h-5 flex-shrink-0" />
-                    <span>{item.label}</span>
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge && (
+                      <span className="text-base">{item.badge}</span>
+                    )}
                   </Link>
                 </li>
               ))}

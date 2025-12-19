@@ -59,7 +59,7 @@ export function ReferralCard() {
     );
   }
 
-  const totalCredits = stats.totalSignupBonus + stats.totalCommission;
+  const totalCredits = (stats?.signup_bonus_total || 0) + (stats?.commission_total || 0);
 
   return (
     <div className="bg-white border-4 border-black rounded-xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
@@ -122,28 +122,28 @@ export function ReferralCard() {
               <Users className="w-4 h-4" />
               <span className="text-xs font-bold uppercase font-mono">Total Referral</span>
             </div>
-            <p className="text-2xl font-display">{stats.totalReferrals}</p>
+            <p className="text-2xl font-display">{stats?.total_referrals || 0}</p>
           </div>
           <div className="bg-genz-cyan/30 border-3 border-black p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
               <Check className="w-4 h-4" />
               <span className="text-xs font-bold uppercase font-mono">Verified</span>
             </div>
-            <p className="text-2xl font-display">{stats.completedReferrals}</p>
+            <p className="text-2xl font-display">{stats?.verified_referrals || 0}</p>
           </div>
           <div className="bg-genz-pink/30 border-3 border-black p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
               <Gift className="w-4 h-4" />
               <span className="text-xs font-bold uppercase font-mono">Bonus Signup</span>
             </div>
-            <p className="text-2xl font-display">{stats.totalSignupBonus}</p>
+            <p className="text-2xl font-display">{stats?.signup_bonus_total || 0}</p>
           </div>
           <div className="bg-genz-purple/30 border-3 border-black p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="w-4 h-4" />
               <span className="text-xs font-bold uppercase font-mono">Komisi</span>
             </div>
-            <p className="text-2xl font-display">{stats.totalCommission}</p>
+            <p className="text-2xl font-display">{stats?.commission_total || 0}</p>
           </div>
         </div>
 
