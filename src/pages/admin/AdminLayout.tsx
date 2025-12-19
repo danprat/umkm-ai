@@ -10,11 +10,13 @@ import {
   ArrowLeft,
   LogOut,
   Shield,
+  Image as ImageIcon,
 } from 'lucide-react';
 
 const navItems = [
   { to: '/admin', icon: BarChart3, label: 'Dashboard', end: true },
   { to: '/admin/users', icon: Users, label: 'Users' },
+  { to: '/admin/gallery', icon: ImageIcon, label: 'Galeri User' },
   { to: '/admin/transactions', icon: CreditCard, label: 'Transactions' },
   { to: '/admin/coupons', icon: Ticket, label: 'Coupons' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
