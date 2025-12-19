@@ -148,6 +148,47 @@ serve(async (req) => {
       const result = await response.json();
       console.log(`[submit-generation] Job ${job.id} completed successfully`);
 
+      // Extract image from result
+      const imageUrl = result.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+      
+      if (imageUrl) {
+        try {
+          // Upload to Supabase Storage
+          const imageData = imageUrl.split(',')[1]; // Remove data:image/...;base64, prefix
+          const buffer = Uint8Array.from(atob(imageData), c => c.charCodeAt(0));
+          const fileName = `${user.id}/${Date.now()}.png`;
+          
+          const { error: uploadError } = await supabaseAdmin.storage
+            .from('generated-images')
+            .upload(fileName, buffer, {
+              contentType: 'image/png',
+              upsert: false
+            });
+
+          if (uploadError) {
+            console.error('[submit-generation] Upload error:', uploadError);
+          } else {
+            // Save to generation_history (store only the path, not full URL)
+            const { error: historyError } = await supabaseAdmin
+              .from('generation_history')
+              .insert({
+                user_id: user.id,
+                prompt: prompt.substring(0, 500),
+                image_path: fileName,
+                page_type: 'generate'
+              });
+
+            if (historyError) {
+              console.error('[submit-generation] History save error:', historyError);
+            } else {
+              console.log(`[submit-generation] Image saved to history: ${fileName}`);
+            }
+          }
+        } catch (uploadErr) {
+          console.error('[submit-generation] Upload exception:', uploadErr);
+        }
+      }
+
       // Update job with result
       await supabaseAdmin
         .from('generation_jobs')
