@@ -1,5 +1,6 @@
 // Edge Function: check-and-deduct-credit
-// Validates user can generate and deducts 1 credit
+// Validates user can generate and deducts 1 credit atomically
+// FIXED: Uses atomic SQL function to prevent race conditions
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -41,44 +42,6 @@ serve(async (req) => {
       );
     }
 
-    // Fetch user profile
-    const { data: profile, error: profileError } = await supabaseAdmin
-      .from('profiles')
-      .select('credits, email_verified, last_generate_at')
-      .eq('id', user.id)
-      .single();
-
-    if (profileError || !profile) {
-      return new Response(
-        JSON.stringify({ error: 'Profile not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Check if email is verified
-    if (!profile.email_verified) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Email not verified',
-          code: 'EMAIL_NOT_VERIFIED',
-          message: 'Please verify your email to get free credits'
-        }),
-        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Check if user has credits
-    if (profile.credits <= 0) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Insufficient credits',
-          code: 'INSUFFICIENT_CREDITS',
-          message: 'You have no credits left. Please purchase more credits.'
-        }),
-        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     // Get rate limit from settings
     const { data: rateLimitSetting } = await supabaseAdmin
       .from('settings')
@@ -88,39 +51,61 @@ serve(async (req) => {
 
     const rateLimitSeconds = parseInt(rateLimitSetting?.value as string, 10) || 60;
 
-    // Check rate limit (1 generate per minute)
-    if (profile.last_generate_at) {
-      const lastGenerate = new Date(profile.last_generate_at);
-      const now = new Date();
-      const diffSeconds = (now.getTime() - lastGenerate.getTime()) / 1000;
+    // ATOMIC CREDIT DEDUCTION: Use SQL function to check and deduct in one operation
+    // This prevents race conditions from read-then-write pattern
+    const { data: result, error: deductError } = await supabaseAdmin.rpc('deduct_credit_atomic', {
+      p_user_id: user.id,
+      p_rate_limit_seconds: rateLimitSeconds
+    });
 
-      if (diffSeconds < rateLimitSeconds) {
-        const waitSeconds = Math.ceil(rateLimitSeconds - diffSeconds);
+    if (deductError) {
+      console.error('Error in atomic deduction:', deductError);
+      
+      // Parse specific error codes from the RPC function
+      if (deductError.message.includes('EMAIL_NOT_VERIFIED')) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Email not verified',
+            code: 'EMAIL_NOT_VERIFIED',
+            message: 'Please verify your email to get free credits'
+          }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      if (deductError.message.includes('INSUFFICIENT_CREDITS')) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Insufficient credits',
+            code: 'INSUFFICIENT_CREDITS',
+            message: 'You have no credits left. Please purchase more credits.'
+          }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      if (deductError.message.includes('RATE_LIMITED')) {
+        // Extract wait seconds from error message
+        const match = deductError.message.match(/RATE_LIMITED:(\d+)/);
+        const waitSeconds = match ? parseInt(match[1]) : rateLimitSeconds;
         return new Response(
           JSON.stringify({ 
             error: 'Rate limited',
             code: 'RATE_LIMITED',
             message: `Please wait ${waitSeconds} seconds before generating again`,
-            wait_seconds: waitSeconds,
-            retry_at: new Date(lastGenerate.getTime() + rateLimitSeconds * 1000).toISOString()
+            wait_seconds: waitSeconds
           }),
           { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
+      
+      return new Response(
+        JSON.stringify({ error: 'Failed to deduct credit' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    // Deduct 1 credit and update last_generate_at
-    const newCredits = profile.credits - 1;
-    const { error: updateError } = await supabaseAdmin
-      .from('profiles')
-      .update({
-        credits: newCredits,
-        last_generate_at: new Date().toISOString(),
-      })
-      .eq('id', user.id);
-
-    if (updateError) {
-      console.error('Error deducting credit:', updateError);
+    if (!result || result.length === 0) {
       return new Response(
         JSON.stringify({ error: 'Failed to deduct credit' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -130,7 +115,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: true,
-        credits_remaining: newCredits,
+        credits_remaining: result[0].new_credits,
         message: 'Credit deducted successfully'
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

@@ -25,7 +25,6 @@ export default function GeneratePage() {
     isChecking, 
     rateLimitedUntil, 
     checkAndDeductCredit, 
-    refundCredit, 
     clearRateLimit 
   } = useCredits({ pageType: 'generate' });
   
@@ -92,8 +91,7 @@ export default function GeneratePage() {
       setError(errorMessage);
       toast.error(errorMessage);
       
-      // Refund credit on failure
-      await refundCredit();
+      // Credit refund handled automatically by server
     } finally {
       setIsLoading(false);
     }

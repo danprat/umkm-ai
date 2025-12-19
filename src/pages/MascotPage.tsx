@@ -43,7 +43,7 @@ const mascotTypes = [
 
 export default function MascotPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'mascot' });
+  const { checkAndDeductCredit, clearRateLimit } = useCredits({ pageType: 'mascot' });
   
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -140,12 +140,7 @@ export default function MascotPage() {
       setError(errorMessage);
       toast.error(errorMessage);
       
-      // Refund credit on failure
-      const refundResult = await refundCredit();
-      if (refundResult.success && profile) {
-        updateCredits(profile.credits); // Restore credit
-        toast.info("Kredit dikembalikan karena gagal generate");
-      }
+      // Credit refund handled automatically by server
     } finally {
       setIsLoading(false);
     }

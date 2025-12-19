@@ -113,6 +113,20 @@ serve(async (req) => {
         const errorText = await response.text();
         console.error(`[submit-generation] API error: ${response.status}`, errorText);
         
+        // SERVER-SIDE REFUND: Automatically refund credit when API fails
+        try {
+          const { error: refundError } = await supabaseAdmin.rpc('refund_credit_atomic', {
+            p_user_id: user.id
+          });
+          if (refundError) {
+            console.error(`[submit-generation] Failed to refund credit for user ${user.id}:`, refundError);
+          } else {
+            console.log(`[submit-generation] Refunded 1 credit to user ${user.id} due to API error`);
+          }
+        } catch (refundErr) {
+          console.error(`[submit-generation] Refund exception:`, refundErr);
+        }
+        
         await supabaseAdmin
           .from('generation_jobs')
           .update({ 
@@ -153,6 +167,21 @@ serve(async (req) => {
       );
     } catch (apiError) {
       console.error(`[submit-generation] Processing error:`, apiError);
+      
+      // SERVER-SIDE REFUND: Automatically refund credit when generation fails
+      // This ensures credit is refunded even if user reloads page
+      try {
+        const { error: refundError } = await supabaseAdmin.rpc('refund_credit_atomic', {
+          p_user_id: user.id
+        });
+        if (refundError) {
+          console.error(`[submit-generation] Failed to refund credit for user ${user.id}:`, refundError);
+        } else {
+          console.log(`[submit-generation] Refunded 1 credit to user ${user.id} due to generation failure`);
+        }
+      } catch (refundErr) {
+        console.error(`[submit-generation] Refund exception:`, refundErr);
+      }
       
       await supabaseAdmin
         .from('generation_jobs')

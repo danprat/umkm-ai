@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 export default function StylePage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'style' });
+  const { checkAndDeductCredit, clearRateLimit } = useCredits({ pageType: 'style' });
   
   const [originalImage, setOriginalImage] = useState("");
   const [styleImage, setStyleImage] = useState("");
@@ -73,12 +73,7 @@ export default function StylePage() {
       setError(errorMessage);
       toast.error(errorMessage);
       
-      // Refund credit on failure
-      const refundResult = await refundCredit();
-      if (refundResult.success && profile) {
-        updateCredits(profile.credits); // Restore credit
-        toast.info("Kredit dikembalikan karena gagal generate");
-      }
+      // Credit refund handled automatically by server
     } finally {
       setIsLoading(false);
     }
