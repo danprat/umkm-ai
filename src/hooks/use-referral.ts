@@ -113,7 +113,13 @@ export function useReferral() {
         signup_bonus_total,
         commission_total,
         referrals: referralsList,
-      }
+      });
+    } catch (error) {
+      console.error('Error fetching referral stats:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchStats();
