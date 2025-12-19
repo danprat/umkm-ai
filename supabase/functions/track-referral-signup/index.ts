@@ -82,7 +82,7 @@ serve(async (req) => {
     // Find the referrer by their referral code
     const { data: referrer, error: referrerError } = await supabaseAdmin
       .from('profiles')
-      .select('id, referral_code')
+      .select('id, referral_code, credits')
       .eq('referral_code', referral_code.toUpperCase())
       .single();
 
@@ -116,13 +116,49 @@ serve(async (req) => {
       );
     }
 
-    // Create referral record (pending - will be completed when email is verified)
+    // Check if email is already verified (SSO login like Google)
+    const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(user.id);
+    const isEmailVerified = authUser?.user?.email_confirmed_at != null;
+
+    let bonusAwarded = 0;
+    let completedAt = null;
+
+    // If email is already verified (SSO), award bonus immediately
+    if (isEmailVerified) {
+      // Get signup bonus from settings
+      const { data: bonusSetting } = await supabaseAdmin
+        .from('settings')
+        .select('value')
+        .eq('key', 'referral_signup_bonus')
+        .single();
+
+      bonusAwarded = parseInt(bonusSetting?.value as string, 10) || 10;
+
+      // Award bonus to referrer
+      const newCredits = referrer.credits + bonusAwarded;
+      const { error: referrerUpdateError } = await supabaseAdmin
+        .from('profiles')
+        .update({ credits: newCredits })
+        .eq('id', referrer.id);
+
+      if (referrerUpdateError) {
+        console.error('Error updating referrer credits:', referrerUpdateError);
+        // Continue anyway - we'll mark as awarded
+      } else {
+        console.log(`Awarded ${bonusAwarded} signup bonus to referrer ${referrer.id}`);
+      }
+
+      completedAt = new Date().toISOString();
+    }
+
+    // Create referral record
     const { error: referralError } = await supabaseAdmin
       .from('referrals')
       .insert({
         referrer_id: referrer.id,
         referred_id: user.id,
-        signup_bonus_awarded: 0, // Will be updated when email is verified
+        signup_bonus_awarded: bonusAwarded,
+        completed_at: completedAt,
       });
 
     if (referralError) {
@@ -130,13 +166,15 @@ serve(async (req) => {
       // Don't fail - the referred_by link is already set
     }
 
-    console.log(`User ${user.id} linked to referrer ${referrer.id} with code ${referral_code}`);
+    console.log(`User ${user.id} linked to referrer ${referrer.id} with code ${referral_code}. Email verified: ${isEmailVerified}, bonus: ${bonusAwarded}`);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Referral linked successfully',
         referrer_id: referrer.id,
+        bonus_awarded: bonusAwarded,
+        email_verified: isEmailVerified,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
