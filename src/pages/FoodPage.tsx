@@ -92,7 +92,7 @@ const ornaments = [
 
 export default function FoodPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'food' });
+  const { checkAndDeductCredit, clearRateLimit } = useCredits({ pageType: 'food' });
   
   const [foodImage, setFoodImage] = useState("");
   const [mode, setMode] = useState<"easy" | "advanced">("easy");
@@ -130,10 +130,7 @@ export default function FoodPage() {
       return;
     }
 
-    // Update local credits
-    if (profile) {
-      updateCredits(profile.credits - 1);
-    }
+    // Credit already deducted by backend
 
     setIsLoading(true);
     setError(undefined);
@@ -174,12 +171,7 @@ export default function FoodPage() {
       setError(errorMessage);
       toast.error(errorMessage);
       
-      // Refund credit on failure
-      const refundResult = await refundCredit();
-      if (refundResult.success && profile) {
-        updateCredits(profile.credits); // Restore credit
-        toast.info("Kredit dibalikin, jangan sedih!");
-      }
+      // Credit refund handled automatically by server
     } finally {
       setIsLoading(false);
     }

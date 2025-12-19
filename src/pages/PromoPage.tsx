@@ -84,7 +84,7 @@ const colorSchemes = [
 
 export default function PromoPage() {
   const { profile, updateCredits } = useAuth();
-  const { checkAndDeductCredit, refundCredit, clearRateLimit } = useCredits({ pageType: 'promo' });
+  const { checkAndDeductCredit, clearRateLimit } = useCredits({ pageType: 'promo' });
   
   const [selectedTemplate, setSelectedTemplate] = useState(promoTemplates[0]);
   const [productName, setProductName] = useState("");
@@ -116,10 +116,7 @@ export default function PromoPage() {
       return;
     }
 
-    // Update local credits
-    if (profile) {
-      updateCredits(profile.credits - 1);
-    }
+    // Credit already deducted by backend
 
     setIsLoading(true);
     setError(undefined);
@@ -167,12 +164,7 @@ export default function PromoPage() {
       setError(errorMessage);
       toast.error(errorMessage);
       
-      // Refund credit on failure
-      const refundResult = await refundCredit();
-      if (refundResult.success && profile) {
-        updateCredits(profile.credits); // Restore credit
-        toast.info("Tenang, kredit udah dibalikin kok");
-      }
+      // Credit refund handled automatically by server
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,6 @@
 // Edge Function: refund-credit
 // Refunds 1 credit when generation fails
+// FIXED: Uses atomic SQL function to prevent race conditions
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -41,41 +42,33 @@ serve(async (req) => {
       );
     }
 
-    // Fetch current credits
-    const { data: profile, error: profileError } = await supabaseAdmin
-      .from('profiles')
-      .select('credits')
-      .eq('id', user.id)
-      .single();
+    // ATOMIC CREDIT REFUND: Use SQL function to refund in one operation
+    // This prevents race conditions from read-then-write pattern
+    const { data: result, error: refundError } = await supabaseAdmin.rpc('refund_credit_atomic', {
+      p_user_id: user.id
+    });
 
-    if (profileError || !profile) {
-      return new Response(
-        JSON.stringify({ error: 'Profile not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Refund 1 credit
-    const newCredits = profile.credits + 1;
-    const { error: updateError } = await supabaseAdmin
-      .from('profiles')
-      .update({ credits: newCredits })
-      .eq('id', user.id);
-
-    if (updateError) {
-      console.error('Error refunding credit:', updateError);
+    if (refundError) {
+      console.error('Error refunding credit:', refundError);
       return new Response(
         JSON.stringify({ error: 'Failed to refund credit' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log(`Refunded 1 credit to user ${user.id}. New balance: ${newCredits}`);
+    if (!result || result.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to refund credit' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`Refunded 1 credit to user ${user.id}. New balance: ${result[0].new_credits}`);
 
     return new Response(
       JSON.stringify({ 
         success: true,
-        credits_remaining: newCredits,
+        credits_remaining: result[0].new_credits,
         message: 'Credit refunded successfully'
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
