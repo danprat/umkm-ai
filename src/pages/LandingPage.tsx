@@ -1,20 +1,40 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Zap, Sparkles, Heart, Flame, MousePointer2, Rocket, DollarSign, MessageCircle, Coffee, Glasses } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useAuth } from "@/contexts/AuthContext";
 
-// Capture referral code from URL on landing page
+// Capture referral code from URL on landing page - save to cookie for OAuth persistence
 function useReferralCapture() {
   const [searchParams] = useSearchParams();
   
   useEffect(() => {
     const refCode = searchParams.get('ref');
     if (refCode) {
-      localStorage.setItem('referral_code', refCode.toUpperCase());
-      console.log('Referral code captured from landing:', refCode);
+      const upperCode = refCode.toUpperCase();
+      // Save to cookie with 1 hour expiry - cookies persist through OAuth redirects
+      document.cookie = `referral_code=${upperCode}; path=/; max-age=3600; SameSite=Lax`;
+      localStorage.setItem('referral_code', upperCode);
+      sessionStorage.setItem('referral_code', upperCode);
+      console.log('Referral code captured from landing and saved to cookie:', upperCode);
     }
   }, [searchParams]);
+}
+
+// Handle OAuth callback that lands on root URL (when Supabase redirect URL is not configured)
+// Supabase OAuth redirects to root with hash fragment containing access_token
+function useOAuthHashHandler() {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const hash = window.location.hash;
+    // Check if this is an OAuth callback with access_token in hash
+    if (hash && hash.includes('access_token=')) {
+      console.log('OAuth hash detected on landing page, redirecting to auth callback');
+      // Redirect to auth callback page with the hash fragment
+      navigate('/auth/callback' + hash, { replace: true });
+    }
+  }, [navigate]);
 }
 
 const features = [
@@ -100,6 +120,9 @@ const testimonials = [
 
 export default function LandingPage() {
   const { user } = useAuth();
+  
+  // Handle OAuth callback that lands on root URL
+  useOAuthHashHandler();
   
   // Capture referral code from URL
   useReferralCapture();

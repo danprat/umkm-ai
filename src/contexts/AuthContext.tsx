@@ -137,10 +137,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Sign in with Google
   const signInWithGoogle = async () => {
+    // Get referral code from storage to include in redirect URL
+    const refCode = localStorage.getItem('referral_code') || sessionStorage.getItem('referral_code');
+    let redirectUrl = `${window.location.origin}/auth/callback`;
+    
+    // Append referral code to redirect URL so it persists through OAuth flow
+    if (refCode) {
+      redirectUrl += `?ref=${encodeURIComponent(refCode)}`;
+      console.log('Including referral code in OAuth redirect:', refCode);
+    }
+    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: redirectUrl,
       },
     });
 

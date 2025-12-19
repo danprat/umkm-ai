@@ -8,12 +8,16 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Capture referral code from URL and store in localStorage
+  // Capture referral code from URL and store in cookie (persists through OAuth redirect)
   useEffect(() => {
     const refCode = searchParams.get('ref');
     if (refCode) {
-      localStorage.setItem('referral_code', refCode.toUpperCase());
-      console.log('Referral code captured:', refCode);
+      const upperCode = refCode.toUpperCase();
+      // Save to cookie with 1 hour expiry - cookies persist through OAuth redirects
+      document.cookie = `referral_code=${upperCode}; path=/; max-age=3600; SameSite=Lax`;
+      localStorage.setItem('referral_code', upperCode);
+      sessionStorage.setItem('referral_code', upperCode);
+      console.log('Referral code captured and saved to cookie:', upperCode);
     }
   }, [searchParams]);
 

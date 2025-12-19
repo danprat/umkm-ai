@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { Loader2 } from 'lucide-react';
@@ -7,27 +7,60 @@ import { Loader2 } from 'lucide-react';
 export default function AuthCallbackPage() {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const referralProcessed = useRef(false);
   const [processingReferral, setProcessingReferral] = useState(false);
+  const [referralChecked, setReferralChecked] = useState(false);
+
+  // Helper function to get cookie value
+  const getCookie = (name: string): string | null => {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  };
+
+  // Helper function to delete cookie
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  };
 
   // Process referral code after successful signup
   useEffect(() => {
     const processReferral = async () => {
-      if (!user || referralProcessed.current) return;
+      if (!user || referralProcessed.current) {
+        setReferralChecked(true);
+        return;
+      }
       
-      const refCode = localStorage.getItem('referral_code');
-      if (!refCode) return;
+      // Priority: Cookie (most reliable through OAuth) > URL > localStorage > sessionStorage
+      const cookieRefCode = getCookie('referral_code');
+      const urlRefCode = searchParams.get('ref');
+      const storageRefCode = localStorage.getItem('referral_code') || sessionStorage.getItem('referral_code');
+      const refCode = cookieRefCode || urlRefCode || storageRefCode;
+      
+      console.log('Referral code sources - Cookie:', cookieRefCode, 'URL:', urlRefCode, 'Storage:', storageRefCode);
+      
+      if (!refCode) {
+        console.log('No referral code found in any source');
+        setReferralChecked(true);
+        return;
+      }
 
+      console.log('Processing referral code:', refCode, 'for user:', user.id);
+      
       referralProcessed.current = true;
       setProcessingReferral(true);
       
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session?.access_token) {
+          console.error('No session token available');
           setProcessingReferral(false);
+          setReferralChecked(true);
           return;
         }
 
+        console.log('Calling track-referral-signup with code:', refCode);
+        
         const response = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-referral-signup`,
           {
@@ -43,23 +76,29 @@ export default function AuthCallbackPage() {
         const result = await response.json();
         console.log('Referral tracking result:', result);
 
-        // Clear the referral code from localStorage after processing
-        localStorage.removeItem('referral_code');
+        if (result.success || result.already_referred) {
+          // Clear the referral code from all storage after processing
+          deleteCookie('referral_code');
+          localStorage.removeItem('referral_code');
+          sessionStorage.removeItem('referral_code');
+          console.log('Referral processed successfully, cleared from all storage');
+        }
       } catch (error) {
         console.error('Error processing referral:', error);
       } finally {
         setProcessingReferral(false);
+        setReferralChecked(true);
       }
     };
 
     if (user && !isLoading) {
       processReferral();
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, searchParams]);
 
   useEffect(() => {
-    // Wait for referral processing to complete before redirecting
-    if (!isLoading && !processingReferral) {
+    // Wait for referral check AND processing to complete before redirecting
+    if (!isLoading && referralChecked && !processingReferral) {
       if (user) {
         // Successfully logged in, redirect to dashboard
         navigate('/dashboard', { replace: true });
