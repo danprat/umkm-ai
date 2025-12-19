@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -8,6 +8,7 @@ export default function AuthCallbackPage() {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
   const referralProcessed = useRef(false);
+  const [processingReferral, setProcessingReferral] = useState(false);
 
   // Process referral code after successful signup
   useEffect(() => {
@@ -18,10 +19,14 @@ export default function AuthCallbackPage() {
       if (!refCode) return;
 
       referralProcessed.current = true;
+      setProcessingReferral(true);
       
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.access_token) return;
+        if (!session?.access_token) {
+          setProcessingReferral(false);
+          return;
+        }
 
         const response = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-referral-signup`,
@@ -42,6 +47,8 @@ export default function AuthCallbackPage() {
         localStorage.removeItem('referral_code');
       } catch (error) {
         console.error('Error processing referral:', error);
+      } finally {
+        setProcessingReferral(false);
       }
     };
 
@@ -51,7 +58,8 @@ export default function AuthCallbackPage() {
   }, [user, isLoading]);
 
   useEffect(() => {
-    if (!isLoading) {
+    // Wait for referral processing to complete before redirecting
+    if (!isLoading && !processingReferral) {
       if (user) {
         // Successfully logged in, redirect to dashboard
         navigate('/dashboard', { replace: true });
@@ -60,7 +68,7 @@ export default function AuthCallbackPage() {
         navigate('/login', { replace: true });
       }
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading, processingReferral, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background">
