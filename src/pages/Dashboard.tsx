@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Zap, CreditCard, History, TrendingUp, Star, Sparkles } from "lucide-react";
+import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Zap, CreditCard, History, Star, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -215,24 +215,6 @@ export default function Dashboard() {
                 </Link>
               </CardContent>
             </Card>
-
-            {/* Quick Stats Mini Cards */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="border-none bg-blue-50/50 hover:bg-blue-50 transition-colors">
-                <CardContent className="p-4 flex flex-col gap-1">
-                  <TrendingUp className="w-5 h-5 text-blue-600 mb-2" />
-                  <span className="text-2xl font-bold text-gray-900">12</span>
-                  <span className="text-xs text-blue-600 font-medium">Projects Created</span>
-                </CardContent>
-              </Card>
-              <Card className="border-none bg-pink-50/50 hover:bg-pink-50 transition-colors">
-                <CardContent className="p-4 flex flex-col gap-1">
-                  <ImagePlus className="w-5 h-5 text-pink-600 mb-2" />
-                  <span className="text-2xl font-bold text-gray-900">85</span>
-                  <span className="text-xs text-pink-600 font-medium">Images Generated</span>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </div>
       </div>
