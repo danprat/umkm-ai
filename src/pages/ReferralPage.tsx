@@ -11,7 +11,7 @@ import {
   LinkSquare02Icon,
   InstagramIcon, 
   WhatsappIcon, 
-  Facebook02Icon, 
+  Facebook01Icon, 
   Mail01Icon,
   BubbleChatIcon,
   Wallet01Icon
@@ -76,7 +76,7 @@ Selamat mencoba!`,
   },
   {
     title: 'Template Facebook Post',
-    icon: Facebook02Icon,
+    icon: Facebook01Icon,
     color: 'text-blue-700',
     text: `Tingkatkan Kualitas Foto Produk Anda dengan AI
 
