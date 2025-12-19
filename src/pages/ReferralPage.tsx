@@ -471,9 +471,9 @@ export default function ReferralPage() {
                   <span className="text-5xl font-bold tracking-tight">{isLoading ? '...' : totalEarned}</span>
                   <span className="text-lg font-medium text-indigo-200">Credits</span>
                 </div>
-                <Button className="w-full mt-6 bg-white/20 hover:bg-white/30 text-white border-none backdrop-blur-sm">
-                  Cairkan / Gunakan Credit
-                </Button>
+                <p className="text-sm text-indigo-200/80 mt-4">
+                  Kredit otomatis masuk ke saldo Anda
+                </p>
               </CardContent>
             </Card>
 
