@@ -154,10 +154,10 @@ export function useReferral() {
   return {
     referralCode,
     stats,
-    referredUsers,
     isLoading,
     getReferralLink,
     copyReferralLink,
     copyReferralCode,
     refreshStats: fetchStats,
   };
+}

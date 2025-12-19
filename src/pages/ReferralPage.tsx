@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Copy, Check, Share2, Users, Coins, Gift, TrendingUp, Sparkles, ExternalLink } from 'lucide-react';
 import { useReferral } from '@/hooks/use-referral';
 import { toast } from 'sonner';
-import DashboardLayout from '@/components/DashboardLayout';
+import { DashboardLayout } from '@/components/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
