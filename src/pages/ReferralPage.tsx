@@ -14,7 +14,8 @@ import {
   Facebook, 
   Mail,
   MessageSquare,
-  Wallet
+  Wallet,
+  Zap
 } from 'lucide-react';
 import { useReferral } from '@/hooks/use-referral';
 import { toast } from 'sonner';
@@ -30,91 +31,84 @@ const promotionTemplates = [
     title: 'Template Instagram Story',
     icon: Instagram,
     color: 'text-pink-600',
-    text: `Ingin foto produk UMKM Anda terlihat lebih profesional?
+    text: `Foto produk masih burik? Plis deh, hari gini masih manual?
 
-Gunakan UMKM AI untuk mengubah foto produk biasa menjadi luar biasa dalam hitungan detik. Teknologi AI kami membantu meningkatkan kualitas visual produk Anda secara instan.
+Pake UMKM AI dong! Foto produk auto glowing dalam detik. Bikin jualan makin aesthetic tanpa ribet.
 
-Daftar sekarang menggunakan kode referral saya untuk mendapatkan bonus kredit:
+Pake kode gue biar dapet bonus credit:
 [KODE_REFERRAL]
 
-Atau klik tautan berikut:
+Cekidot langsung:
 [LINK_REFERRAL]
 
-#UMKMAI #FotoProduk #BisnisOnline #UMKMIndonesia`,
+#UMKMAI #FotoProduk #Aesthetic #BisnisOnline #Cuan`,
   },
   {
     title: 'Template WhatsApp Grup',
     icon: MessageCircle,
     color: 'text-green-600',
-    text: `Halo rekan-rekan UMKM,
+    text: `Guys, nemu tools gokil nih buat foto produk!
 
-Saya ingin berbagi alat yang sangat berguna untuk meningkatkan penjualan online. UMKM AI adalah platform yang dapat mengubah foto produk Anda menjadi materi pemasaran profesional secara otomatis.
+Namanya UMKM AI. Hasilnya kayak studio pro, padahal cuma modal HP + AI. Gak perlu skill edit dewa.
 
-Fitur ini sangat membantu untuk membuat katalog, postingan media sosial, dan materi promosi lainnya.
-
-Silakan coba gratis dengan kode referral:
+Cobain deh, mumpung ada bonus pake kode gue:
 *[KODE_REFERRAL]*
 
-Atau akses langsung melalui:
+Gas langsung ke sini:
 [LINK_REFERRAL]
 
-Semoga bermanfaat untuk kemajuan bisnis kita bersama.`,
+Semoga laris manis tanjung kimpul!`,
   },
   {
     title: 'Template Personal Chat',
     icon: MessageSquare,
     color: 'text-blue-600',
-    text: `Halo, saya menemukan platform yang sangat bagus untuk kebutuhan foto produk bisnis Anda.
+    text: `Woy, liat deh app ini. Bisa bikin foto produk lo jadi next level banget!
 
-UMKM AI memungkinkan Anda membuat foto produk berkualitas studio hanya dengan menggunakan kamera HP dan bantuan AI. Hasilnya sangat cocok untuk marketplace dan media sosial.
+Gak perlu sewa fotografer mahal, UMKM AI solusinya. Hasilnya kece parah buat sosmed.
 
-Anda bisa mencobanya secara gratis. Gunakan kode referral ini untuk mendapatkan tambahan kredit: [KODE_REFERRAL]
+Pake kode gue ya biar dapet credit gratis: [KODE_REFERRAL]
 
-Tautan pendaftaran: [LINK_REFERRAL]
+Link: [LINK_REFERRAL]
 
-Selamat mencoba!`,
+Cobain skrg, ntar nyesel loh!`,
   },
   {
     title: 'Template Facebook Post',
     icon: Facebook,
     color: 'text-blue-700',
-    text: `Tingkatkan Kualitas Foto Produk Anda dengan AI
+    text: `Foto Produk Kece Badai Tanpa Bikin Kantong Bolong!
 
-Visual produk yang menarik adalah kunci sukses penjualan online. UMKM AI hadir untuk membantu pelaku usaha membuat foto produk profesional tanpa biaya mahal.
+Kenapa harus ribet kalo ada UMKM AI?
+- Hasil instan
+- Kualitas HD
+- Hemat duit
+- Auto aesthetic
 
-Mengapa menggunakan UMKM AI?
-- Proses cepat dan otomatis
-- Hasil berkualitas tinggi
-- Tersedia berbagai pilihan gaya dan latar belakang
-- Hemat biaya produksi
-
-Daftarkan bisnis Anda sekarang dan dapatkan bonus kredit pengguna baru:
-Kode Referral: [KODE_REFERRAL]
+Buruan daftar pake link sakti ini biar dapet bonus:
+Kode: [KODE_REFERRAL]
 Link: [LINK_REFERRAL]
 
-#UMKMAI #SolusiUMKM #DigitalMarketing #FotoProduk`,
+#UMKMAI #FotoProdukKece #CuanOnline #UMKMNaikKelas`,
   },
   {
     title: 'Template Email/DM',
     icon: Mail,
     color: 'text-purple-600',
-    text: `Subject: Rekomendasi Alat Foto Produk Profesional untuk Bisnis Anda
+    text: `Subject: Rahasia Foto Produk Laris Manis!
 
-Yth. Pelaku Usaha,
+Hai Bestie!
 
-Dalam dunia bisnis online, kualitas foto produk sangat mempengaruhi keputusan pembeli. Saya ingin merekomendasikan UMKM AI, sebuah platform inovatif yang membantu Anda membuat foto produk kelas profesional dengan mudah.
+Mau foto produkmu dilirik banyak orang? Kualitas visual itu koentji!
 
-Dengan UMKM AI, Anda dapat:
-1. Mengubah latar belakang produk secara otomatis
-2. Meningkatkan resolusi dan pencahayaan
-3. Menghasilkan variasi foto untuk berbagai kebutuhan pemasaran
+Cobain UMKM AI deh. Bisa ubah background otomatis, lighting oke, resolusi tinggi. Praktis banget buat yang mager edit manual.
 
-Dapatkan akses prioritas dan bonus kredit dengan mendaftar melalui tautan ini:
+Dapet bonus credit kalo daftar lewat sini:
 [LINK_REFERRAL]
 
-Atau masukkan kode referral: [KODE_REFERRAL]
+Atau pake kode: [KODE_REFERRAL]
 
-Tingkatkan penjualan Anda dengan visual produk yang lebih baik.`,
+Yuk upgrade bisnismu sekarang!`,
   },
 ];
 
@@ -133,9 +127,7 @@ export default function ReferralPage() {
     const success = await copyReferralCode();
     if (success) {
       setCopied('code');
-      toast.success('Kode referral dicopy!', { 
-        description: 'Sekarang tinggal share ke teman-teman kamu!'
-      });
+      toast.success('Kode referral dicopy!');
       setTimeout(() => setCopied(null), 2000);
     }
   };
@@ -144,9 +136,7 @@ export default function ReferralPage() {
     const success = await copyReferralLink();
     if (success) {
       setCopied('link');
-      toast.success('Link referral dicopy!', {
-        description: 'Langsung share ke media sosial kamu!'
-      });
+      toast.success('Link referral dicopy!');
       setTimeout(() => setCopied(null), 2000);
     }
   };
@@ -158,9 +148,7 @@ export default function ReferralPage() {
     
     navigator.clipboard.writeText(text);
     setCopied(`template-${index}`);
-    toast.success('Template dicopy!', {
-      description: 'Tinggal paste dan kirim ke teman-teman!'
-    });
+    toast.success('Template dicopy!');
     setTimeout(() => setCopied(null), 2000);
   };
 
@@ -186,163 +174,87 @@ export default function ReferralPage() {
   return (
     <DashboardLayout>
       <div className="container mx-auto p-4 md:p-8 space-y-8 max-w-7xl">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-blue-500/10 p-8 rounded-3xl border border-white/20 backdrop-blur-sm text-center md:text-left">
-          <div className="space-y-2 max-w-2xl">
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center md:justify-start gap-3">
-              Program Referral <Star className="w-8 h-8 text-yellow-500 fill-yellow-500 animate-pulse" />
-            </h1>
-            <p className="text-gray-600 text-lg">
-              Undang rekan bisnis Anda untuk menggunakan UMKM AI. Dapatkan bonus kredit untuk setiap pendaftaran baru dan komisi dari setiap pembelian yang mereka lakukan.
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md">
-              <Gift className="w-12 h-12 text-purple-600" />
+        {/* Header - Neo Brutalism Style */}
+        <div className="bg-genz-cyan border-4 border-black p-6 md:p-8 rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div className="space-y-4 max-w-2xl w-full">
+              <Badge className="bg-black text-white border-none px-4 py-1 text-xs md:text-sm font-bold uppercase tracking-wider mx-auto md:mx-0 w-fit block">
+                Referral Zone
+              </Badge>
+              <h1 className="text-4xl md:text-6xl font-black text-black uppercase leading-none tracking-tighter">
+                Cuan Bareng<br />Bestie!
+              </h1>
+              <p className="text-black font-bold text-base md:text-xl border-l-0 md:border-l-4 border-black pl-0 md:pl-4 pt-2 md:pt-0">
+                Ajak temen lo join UMKM AI! Lo dapet credit gratis, mereka dapet tools kece buat foto produk. Win-win solution kan?
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-white border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-3 hover:rotate-0 transition-transform">
+                <Gift className="w-12 h-12 md:w-16 md:h-16 text-black" />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="rounded-3xl border-purple-100 bg-white hover:shadow-xl hover:shadow-purple-100/50 transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Referral</CardTitle>
-              <div className="p-2 bg-purple-50 rounded-xl">
-                <Users className="h-5 w-5 text-purple-600" />
+        {/* Stats Cards - Grid Layout */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+          {[
+            { title: "Bestie Joined", value: stats?.total_referrals || 0, icon: Users, color: "bg-genz-pink" },
+            { title: "Verified Users", value: stats?.verified_referrals || 0, icon: Check, color: "bg-genz-lime" },
+            { title: "Cuan Signup", value: stats?.signup_bonus_total || 0, icon: Gift, color: "bg-genz-purple", textColor: "text-white" },
+            { title: "Passive Income", value: stats?.commission_total || 0, icon: TrendingUp, color: "bg-genz-coral" }
+          ].map((stat, idx) => (
+            <div key={idx} className={`${stat.color} border-2 md:border-4 border-black p-4 md:p-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] md:hover:translate-x-[2px] md:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] md:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all`}>
+              <div className="flex items-center justify-between mb-2 md:mb-4">
+                <h3 className={`font-bold uppercase tracking-wide text-[10px] md:text-sm ${stat.textColor || 'text-black'}`}>{stat.title}</h3>
+                <stat.icon className={`w-4 h-4 md:w-6 md:h-6 ${stat.textColor || 'text-black'}`} />
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">
-                {isLoading ? '...' : stats?.total_referrals || 0}
+              <div className={`text-2xl md:text-4xl font-black ${stat.textColor || 'text-black'}`}>
+                {isLoading ? '...' : stat.value}
               </div>
-              <p className="text-xs text-purple-600 font-medium mt-1">
-                Teman yang daftar
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-3xl border-green-100 bg-white hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Verified</CardTitle>
-              <div className="p-2 bg-green-50 rounded-xl">
-                <Check className="h-5 w-5 text-green-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">
-                {isLoading ? '...' : stats?.verified_referrals || 0}
-              </div>
-              <p className="text-xs text-green-600 font-medium mt-1">
-                Sudah verifikasi
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-3xl border-blue-100 bg-white hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Bonus Signup</CardTitle>
-              <div className="p-2 bg-blue-50 rounded-xl">
-                <Gift className="h-5 w-5 text-blue-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">
-                {isLoading ? '...' : stats?.signup_bonus_total || 0}
-              </div>
-              <p className="text-xs text-blue-600 font-medium mt-1">
-                Credit dari signup
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-3xl border-yellow-100 bg-white hover:shadow-xl hover:shadow-yellow-100/50 transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Komisi</CardTitle>
-              <div className="p-2 bg-yellow-50 rounded-xl">
-                <TrendingUp className="h-5 w-5 text-yellow-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">
-                {isLoading ? '...' : stats?.commission_total || 0}
-              </div>
-              <p className="text-xs text-yellow-600 font-medium mt-1">
-                Credit dari pembelian
-              </p>
-            </CardContent>
-          </Card>
+            </div>
+          ))}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             {/* Referral Code Section */}
-            <Card className="rounded-3xl border-gray-100 shadow-lg shadow-gray-200/40">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <Star className="h-6 w-6 text-purple-600 fill-purple-100" />
-                  Kode & Link Referral Kamu
-                </CardTitle>
-                <CardDescription>
-                  Share kode atau link ini ke teman-teman untuk dapetin bonus!
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+            <div className="bg-white border-4 border-black p-4 md:p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <div className="flex items-center gap-3 mb-6">
+                <Star className="h-6 w-6 md:h-8 md:w-8 text-black fill-yellow-400" />
+                <h2 className="text-xl md:text-2xl font-black uppercase">Link Sakti Lo</h2>
+              </div>
+              
+              <div className="space-y-6">
                 {/* Referral Code */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Kode Referral</label>
-                  <div className="flex gap-3">
-                    <div className="flex-1 relative group">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Gift className="h-5 w-5 text-gray-400 group-hover:text-purple-500 transition-colors" />
-                      </div>
-                      <input
-                        type="text"
-                        value={referralCode || ''}
-                        readOnly
-                        className="w-full pl-12 pr-12 py-4 border-2 border-gray-100 rounded-2xl bg-gray-50/50 font-mono text-xl font-bold text-gray-900 tracking-wider focus:ring-4 focus:ring-purple-100 focus:border-purple-200 transition-all outline-none"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
-                        {copied === 'code' ? (
-                          <Check className="h-5 w-5 text-green-500" />
-                        ) : (
-                          <Copy className="h-5 w-5 text-gray-400" />
-                        )}
-                      </div>
+                  <label className="text-sm font-bold uppercase tracking-wider">Kode Referral</label>
+                  <div className="flex flex-col md:flex-row gap-2 md:gap-0">
+                    <div className="flex-1 border-4 border-black md:border-r-0 bg-gray-50 px-4 py-3 md:px-6 md:py-4 font-mono text-lg md:text-xl font-bold tracking-widest text-center">
+                      {referralCode || '...'}
                     </div>
                     <Button 
                       onClick={handleCopyCode} 
-                      size="lg" 
-                      className="h-auto rounded-2xl px-8 bg-gray-900 hover:bg-gray-800 transition-all hover:scale-105"
+                      className="h-12 md:h-auto rounded-none border-4 border-black px-8 bg-black text-white hover:bg-genz-lime hover:text-black font-bold uppercase tracking-wide transition-all w-full md:w-auto"
                     >
-                      Copy
+                      {copied === 'code' ? <Check className="h-5 w-5" /> : 'Copy'}
                     </Button>
                   </div>
                 </div>
 
-                <Separator className="bg-gray-100" />
-
                 {/* Referral Link */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Link Referral</label>
-                  <div className="flex flex-col md:flex-row gap-3">
-                    <div className="flex-1 relative group">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                      </div>
-                      <input
-                        type="text"
-                        value={getReferralLink()}
-                        readOnly
-                        className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-600 focus:ring-2 focus:ring-blue-100 focus:border-blue-200 transition-all outline-none truncate"
-                      />
+                  <label className="text-sm font-bold uppercase tracking-wider">Link Referral</label>
+                  <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+                    <div className="flex-1 border-4 border-black bg-white px-4 py-3 font-mono text-xs md:text-sm truncate">
+                      {getReferralLink()}
                     </div>
-                    <div className="flex gap-2">
-                      <Button onClick={handleCopyLink} variant="outline" className="flex-1 md:flex-none rounded-xl border-gray-200 hover:bg-gray-50 hover:text-blue-600">
+                    <div className="flex gap-3">
+                      <Button onClick={handleCopyLink} variant="outline" className="flex-1 md:flex-none rounded-none border-4 border-black hover:bg-black hover:text-white font-bold uppercase h-12 md:h-10 text-xs md:text-sm">
                         {copied === 'link' ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                         Copy
                       </Button>
-                      <Button onClick={handleShare} className="flex-1 md:flex-none rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-indigo-200 border-none">
+                      <Button onClick={handleShare} className="flex-1 md:flex-none rounded-none border-4 border-black bg-genz-purple text-white hover:bg-genz-purple/90 hover:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold uppercase h-12 md:h-10 text-xs md:text-sm">
                         <Share2 className="h-4 w-4 mr-2" />
                         Share
                       </Button>
@@ -351,160 +263,149 @@ export default function ReferralPage() {
                 </div>
 
                 {/* Info Box */}
-                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-100 rounded-2xl p-5">
-                  <h4 className="font-semibold text-purple-900 mb-3 flex items-center gap-2">
-                    <Star className="w-4 h-4 text-purple-600 fill-purple-600" />
-                    Cara Kerja
+                <div className="bg-genz-blue/20 border-4 border-black p-4 md:p-6 mt-8">
+                  <h4 className="font-black uppercase text-base md:text-lg mb-4 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-black fill-black" />
+                    Caranya Gampang Banget
                   </h4>
-                  <ul className="space-y-3 text-sm text-purple-800">
-                    <li className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-purple-600 font-bold flex items-center justify-center text-xs shadow-sm">1</span>
-                      <span>Teman daftar pakai kode/link referral kamu</span>
+                  <ul className="space-y-4 font-medium text-sm md:text-base">
+                    <li className="flex items-start gap-4">
+                      <div className="w-6 h-6 md:w-8 md:h-8 bg-black text-white flex items-center justify-center font-bold text-xs md:text-sm border-2 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] shrink-0">1</div>
+                      <p className="pt-0.5 md:pt-1">Teman daftar pakai link lo</p>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-purple-600 font-bold flex items-center justify-center text-xs shadow-sm">2</span>
-                      <span>Kamu dapet <strong className="text-purple-700">10 credit bonus</strong> setelah mereka verifikasi email</span>
+                    <li className="flex items-start gap-4">
+                      <div className="w-6 h-6 md:w-8 md:h-8 bg-black text-white flex items-center justify-center font-bold text-xs md:text-sm border-2 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] shrink-0">2</div>
+                      <p className="pt-0.5 md:pt-1">Lo dapet <span className="bg-genz-lime px-1 border border-black text-[10px] md:text-xs font-bold inline-block">10 CREDIT GRATIS</span> (auto masuk!) setelah verifikasi</p>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-purple-600 font-bold flex items-center justify-center text-xs shadow-sm">3</span>
-                      <span>Dapat <strong className="text-purple-700">komisi 10%</strong> dari setiap pembelian credit mereka selamanya!</span>
+                    <li className="flex items-start gap-4">
+                      <div className="w-6 h-6 md:w-8 md:h-8 bg-black text-white flex items-center justify-center font-bold text-xs md:text-sm border-2 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] shrink-0">3</div>
+                      <p className="pt-0.5 md:pt-1">Dapet <span className="bg-genz-lime px-1 border border-black text-[10px] md:text-xs font-bold inline-block">KOMISI 10%</span> tiap mereka beli credit. Selamanya!</p>
                     </li>
                   </ul>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Promotion Templates */}
-            <Card className="rounded-3xl border-gray-100 shadow-lg shadow-gray-200/40">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <Share2 className="h-6 w-6 text-pink-500" />
-                  Template Promosi Siap Pakai
-                </CardTitle>
-                <CardDescription>
-                  Tinggal copy-paste dan share! Kode & link referral otomatis terisi.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="0" className="w-full">
-                  <TabsList className="grid w-full grid-cols-5 p-1 bg-gray-100/50 rounded-xl mb-6">
-                    {promotionTemplates.map((template, index) => (
-                      <TabsTrigger 
-                        key={index} 
-                        value={String(index)} 
-                        className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all"
-                      >
-                        <template.icon className={`w-5 h-5 ${template.color}`} />
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                  
+            <div className="bg-white border-4 border-black p-4 md:p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <MessageCircle className="h-6 w-6 md:h-8 md:w-8 text-black fill-genz-pink" />
+                  <h2 className="text-xl md:text-2xl font-black uppercase">Template Siap Pakai</h2>
+                </div>
+                <p className="text-xs md:text-sm font-bold text-gray-500 md:ml-auto">Tinggal copy-paste dan share!</p>
+              </div>
+              
+              <Tabs defaultValue="0" className="w-full">
+                <TabsList className="flex w-full flex-wrap gap-2 bg-transparent h-auto p-0 mb-6">
                   {promotionTemplates.map((template, index) => (
-                    <TabsContent key={index} value={String(index)} className="space-y-4 focus-visible:ring-0">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                          <template.icon className={`w-6 h-6 ${template.color}`} />
-                          {template.title}
-                        </h3>
+                    <TabsTrigger 
+                      key={index} 
+                      value={String(index)} 
+                      className="flex-1 md:flex-none rounded-none border-2 border-black data-[state=active]:bg-black data-[state=active]:text-white bg-white hover:bg-gray-100 transition-all font-bold uppercase text-[10px] md:text-xs px-2 py-2 md:px-4 md:py-2 min-w-[40px] md:min-w-fit"
+                    >
+                      <span className="md:hidden"><template.icon className="w-4 h-4" /></span>
+                      <span className="hidden md:inline">{template.title.replace('Template ', '')}</span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                
+                {promotionTemplates.map((template, index) => (
+                  <TabsContent key={index} value={String(index)} className="space-y-4 focus-visible:ring-0 mt-0">
+                    <div className="bg-gray-50 border-4 border-black p-4 md:p-6 relative">
+                      <div className="absolute top-4 right-4">
                         <Button
                           onClick={() => handleCopyTemplate(template.text, index)}
-                          variant="secondary"
-                          className="gap-2 bg-gray-100 hover:bg-gray-200 text-gray-900 border-none"
+                          size="sm"
+                          className="rounded-none border-2 border-black bg-white text-black hover:bg-black hover:text-white font-bold uppercase text-[10px] md:text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-8 px-2 md:px-4"
                         >
                           {copied === `template-${index}` ? (
                             <>
-                              <Check className="h-4 w-4 text-green-600" />
-                              Copied!
+                              <Check className="h-3 w-3 mr-1 md:mr-2" />
+                              <span className="hidden md:inline">Copied!</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="h-4 w-4" />
-                              Copy Template
+                              <Copy className="h-3 w-3 mr-1 md:mr-2" />
+                              <span className="hidden md:inline">Copy</span>
                             </>
                           )}
                         </Button>
                       </div>
-                      
-                      <div className="relative group">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-gray-100 to-gray-50 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                        <pre className="relative bg-white border border-gray-100 rounded-xl p-6 text-sm text-gray-600 whitespace-pre-wrap overflow-x-auto font-sans leading-relaxed shadow-sm">
-                          {template.text
-                            .replace(/\[KODE_REFERRAL\]/g, referralCode || '...')
-                            .replace(/\[LINK_REFERRAL\]/g, getReferralLink())}
-                        </pre>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 border border-blue-100 rounded-lg p-3">
-                        <span className="font-bold bg-blue-100 px-1.5 py-0.5 rounded text-[10px]">TIP</span>
-                        <span>
-                          Kamu bisa edit template ini sesuai gaya kamu sendiri. Yang penting kode referral dan link-nya tetap ada ya!
-                        </span>
-                      </div>
-                    </TabsContent>
-                  ))}
-                </Tabs>
-              </CardContent>
-            </Card>
+                      <h3 className="font-bold text-sm md:text-lg mb-4 flex items-center gap-2 uppercase pr-16 md:pr-0">
+                        <template.icon className={`w-4 h-4 md:w-5 md:h-5`} />
+                        {template.title}
+                      </h3>
+                      <pre className="font-mono text-xs md:text-sm whitespace-pre-wrap leading-relaxed bg-white border-2 border-black p-3 md:p-4 overflow-x-auto">
+                        {template.text
+                          .replace(/\[KODE_REFERRAL\]/g, referralCode || '...')
+                          .replace(/\[LINK_REFERRAL\]/g, getReferralLink())}
+                      </pre>
+                    </div>
+                    
+                    <div className="bg-genz-lime/30 border-2 border-black p-3 text-[10px] md:text-xs font-bold flex gap-2 items-start md:items-center">
+                      <span className="bg-black text-white px-2 py-0.5 text-[8px] md:text-[10px] uppercase shrink-0 mt-0.5 md:mt-0">TIP</span>
+                      Bebas edit sesuka hati! Yang penting kode referral & link jangan sampe ilang ya!
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </div>
           </div>
 
           <div className="space-y-6">
             {/* Total Earned Card */}
-            <Card className="rounded-3xl bg-gradient-to-br from-violet-600 to-indigo-700 text-white border-none shadow-xl shadow-indigo-500/30 overflow-hidden relative">
-              <div className="absolute top-0 right-0 p-24 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-              <div className="absolute bottom-0 left-0 p-16 bg-black/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
-              
-              <CardHeader className="relative">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2 text-indigo-100">
-                      <Wallet className="h-5 w-5" />
-                      Total Pendapatan
-                    </CardTitle>
-                    <CardDescription className="text-indigo-200/80 mt-1">
-                      Akumulasi bonus & komisi
-                    </CardDescription>
-                  </div>
+            <div className="bg-black text-white border-4 border-black p-6 md:p-8 shadow-[4px_4px_0px_0px_rgba(100,100,100,0.5)] md:shadow-[8px_8px_0px_0px_rgba(100,100,100,0.5)]">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-lg md:text-xl font-black uppercase text-genz-lime flex items-center gap-2">
+                    <Wallet className="h-5 w-5 md:h-6 md:w-6" />
+                    Total Cuan Lo
+                  </h2>
+                  <p className="text-gray-400 text-xs md:text-sm font-mono mt-1">
+                    Hasil dari sebar link sakti
+                  </p>
                 </div>
-              </CardHeader>
-              <CardContent className="relative pt-0">
-                <div className="flex items-baseline gap-2 mt-2">
-                  <span className="text-5xl font-bold tracking-tight">{isLoading ? '...' : totalEarned}</span>
-                  <span className="text-lg font-medium text-indigo-200">Credits</span>
-                </div>
-                <p className="text-sm text-indigo-200/80 mt-4">
-                  Kredit otomatis masuk ke saldo Anda
-                </p>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="border-t-2 border-gray-800 my-4"></div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl md:text-6xl font-black tracking-tighter">{isLoading ? '...' : totalEarned}</span>
+                <span className="text-lg md:text-xl font-bold text-genz-lime">CR</span>
+              </div>
+              <p className="text-[10px] md:text-xs text-gray-400 mt-4 font-mono bg-gray-900 p-2 inline-block">
+                Credit langsung masuk wallet!
+              </p>
+            </div>
 
             {/* Referral List */}
-            {stats && stats.referrals && stats.referrals.length > 0 ? (
-              <Card className="rounded-3xl border-gray-100 shadow-lg shadow-gray-200/40 h-fit">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Users className="h-5 w-5 text-gray-500" />
-                    Daftar Referral
-                  </CardTitle>
-                  <CardDescription>
-                    Teman yang sudah bergabung
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
+            <div className="bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] h-fit">
+              <div className="p-4 md:p-6 border-b-4 border-black bg-genz-pink">
+                <h2 className="text-lg md:text-xl font-black uppercase flex items-center gap-2 text-white text-stroke-1 stroke-black">
+                  <Users className="h-5 w-5 md:h-6 md:w-6 text-black" />
+                  Bestie List
+                </h2>
+                <p className="text-black font-bold text-xs md:text-sm mt-1">
+                  Mereka yang udah join squad lo
+                </p>
+              </div>
+              
+              <div className="p-4 md:p-6">
+                {stats && stats.referrals && stats.referrals.length > 0 ? (
+                  <div className="space-y-3 md:space-y-4">
                     {stats.referrals.map((referral) => (
                       <div
                         key={referral.referred_id}
-                        className="flex items-center justify-between p-3 border border-gray-100 rounded-2xl hover:bg-gray-50 transition-colors"
+                        className="flex items-center justify-between p-3 border-2 border-black bg-gray-50 hover:bg-white transition-colors"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 font-bold border border-white shadow-sm">
+                          <div className="h-8 w-8 md:h-10 md:w-10 bg-black text-white flex items-center justify-center font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] text-xs md:text-base">
                             {referral.referred_email?.charAt(0).toUpperCase() || 'U'}
                           </div>
-                          <div>
-                            <p className="font-semibold text-sm text-gray-900 truncate max-w-[120px]">
+                          <div className="overflow-hidden">
+                            <p className="font-bold text-xs md:text-sm text-black truncate max-w-[100px] md:max-w-[120px]">
                               {referral.referred_email?.split('@')[0]}
                             </p>
-                            <p className="text-[10px] text-gray-500">
+                            <p className="text-[10px] font-mono text-gray-500">
                               {new Date(referral.created_at).toLocaleDateString('id-ID', {
                                 day: 'numeric',
                                 month: 'short'
@@ -514,41 +415,36 @@ export default function ReferralPage() {
                         </div>
                         <div className="flex flex-col items-end gap-1">
                           {referral.completed_at ? (
-                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px] px-2 py-0.5 h-5">
-                              <Check className="h-3 w-3 mr-1" />
+                            <span className="bg-genz-lime text-black border border-black text-[8px] md:text-[10px] px-1.5 md:px-2 py-0.5 font-bold uppercase">
                               Verified
-                            </Badge>
+                            </span>
                           ) : (
-                            <Badge variant="outline" className="text-gray-500 border-gray-200 text-[10px] px-2 py-0.5 h-5">
+                            <span className="bg-gray-200 text-gray-500 border border-black text-[8px] md:text-[10px] px-1.5 md:px-2 py-0.5 font-bold uppercase">
                               Pending
-                            </Badge>
+                            </span>
                           )}
                           {referral.signup_bonus_awarded > 0 && (
-                            <span className="text-[10px] font-medium text-purple-600">
-                              +{referral.signup_bonus_awarded} cr
+                            <span className="text-[8px] md:text-[10px] font-black text-genz-purple">
+                              +{referral.signup_bonus_awarded} CR
                             </span>
                           )}
                         </div>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="rounded-3xl border-dashed border-2 border-gray-200 bg-gray-50/50">
-                <CardContent className="flex flex-col items-center justify-center p-8 text-center space-y-4">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                    <Users className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Belum ada referral</h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Mulai undang teman kamu dan dapatkan bonus credit!
+                ) : (
+                  <div className="text-center py-6 md:py-8 border-2 border-dashed border-black bg-gray-50">
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-white border-2 border-black rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                      <Users className="w-6 h-6 md:w-8 md:h-8 text-gray-400" />
+                    </div>
+                    <h3 className="font-black uppercase text-base md:text-lg">Masih sepi nih...</h3>
+                    <p className="text-xs md:text-sm font-medium text-gray-500 mt-1 max-w-[200px] mx-auto">
+                      Ayo ajak bestie lo join biar rame!
                     </p>
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

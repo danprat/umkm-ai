@@ -70,8 +70,8 @@ export function ReferralCard() {
             <Gift className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-display text-xl uppercase">Program Referral</h3>
-            <p className="text-sm font-bold font-mono">Ajak teman, dapat kredit!</p>
+            <h3 className="font-display text-xl uppercase">Squad Cuan</h3>
+            <p className="text-sm font-bold font-mono">Invite bestie, auto rich!</p>
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@ export function ReferralCard() {
       <div className="p-6">
         {/* Referral Code */}
         <div className="mb-6">
-          <label className="block text-sm font-bold uppercase mb-2 font-mono">Kode Referral Kamu</label>
+          <label className="block text-sm font-bold uppercase mb-2 font-mono">Kode Sakti Lo</label>
           <div className="flex gap-2">
             <div className="flex-1 bg-gray-100 border-3 border-black px-4 py-3 rounded-lg font-mono text-xl font-bold tracking-wider text-center">
               {referralCode || '--------'}
@@ -95,7 +95,7 @@ export function ReferralCard() {
 
         {/* Share Link */}
         <div className="mb-6">
-          <label className="block text-sm font-bold uppercase mb-2 font-mono">Link Referral</label>
+          <label className="block text-sm font-bold uppercase mb-2 font-mono">Link Cuan</label>
           <div className="flex gap-2">
             <div className="flex-1 bg-gray-100 border-3 border-black px-4 py-3 rounded-lg font-mono text-sm truncate">
               {getReferralLink() || 'Loading...'}
@@ -120,7 +120,7 @@ export function ReferralCard() {
           <div className="bg-genz-lime/30 border-3 border-black p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
               <Users className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase font-mono">Total Referral</span>
+              <span className="text-xs font-bold uppercase font-mono">Squad</span>
             </div>
             <p className="text-2xl font-display">{stats?.total_referrals || 0}</p>
           </div>
@@ -134,14 +134,14 @@ export function ReferralCard() {
           <div className="bg-genz-pink/30 border-3 border-black p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
               <Gift className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase font-mono">Bonus Signup</span>
+              <span className="text-xs font-bold uppercase font-mono">Cuan Signup</span>
             </div>
             <p className="text-2xl font-display">{stats?.signup_bonus_total || 0}</p>
           </div>
           <div className="bg-genz-purple/30 border-3 border-black p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase font-mono">Komisi</span>
+              <span className="text-xs font-bold uppercase font-mono">Passive Cuan</span>
             </div>
             <p className="text-2xl font-display">{stats?.commission_total || 0}</p>
           </div>
@@ -152,7 +152,7 @@ export function ReferralCard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Coins className="w-5 h-5" />
-              <span className="font-bold uppercase font-mono">Total Kredit dari Referral</span>
+              <span className="font-bold uppercase font-mono">Total Tabungan Cuan</span>
             </div>
             <span className="text-2xl font-display text-genz-lime">{totalCredits}</span>
           </div>
@@ -160,8 +160,8 @@ export function ReferralCard() {
 
         {/* Info */}
         <div className="mt-4 text-sm text-gray-600 font-mono">
-          <p className="mb-1">💰 <strong>Bonus signup:</strong> Dapat kredit saat temanmu daftar & verifikasi email</p>
-          <p>📈 <strong>Komisi:</strong> Dapat 10% kredit setiap temanmu beli paket</p>
+          <p className="mb-1"><strong>Bonus signup:</strong> Dapet credit pas bestie lo verif email</p>
+          <p><strong>Komisi:</strong> 10% dari tiap bestie lo topup. Selamanya!</p>
         </div>
       </div>
     </div>
