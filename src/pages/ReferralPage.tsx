@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { 
-  Copy01Icon, 
-  Tick02Icon, 
-  Share01Icon, 
-  UserGroupIcon, 
-  Money03Icon, 
-  GiftIcon, 
-  TradeUpIcon, 
-  StarIcon, 
-  LinkSquare02Icon,
-  InstagramIcon, 
-  WhatsappIcon, 
-  Facebook01Icon, 
-  Mail01Icon,
-  BubbleChatIcon,
-  Wallet01Icon
-} from '@hugeicons/react';
+  Copy, 
+  Check, 
+  Share2, 
+  Users, 
+  Coins, 
+  Gift, 
+  TrendingUp, 
+  Star, 
+  ExternalLink,
+  Instagram, 
+  MessageCircle, 
+  Facebook, 
+  Mail,
+  MessageSquare,
+  Wallet
+} from 'lucide-react';
 import { useReferral } from '@/hooks/use-referral';
 import { toast } from 'sonner';
 import { DashboardLayout } from '@/components/DashboardLayout';
@@ -28,7 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 const promotionTemplates = [
   {
     title: 'Template Instagram Story',
-    icon: InstagramIcon,
+    icon: Instagram,
     color: 'text-pink-600',
     text: `Ingin foto produk UMKM Anda terlihat lebih profesional?
 
@@ -44,7 +44,7 @@ Atau klik tautan berikut:
   },
   {
     title: 'Template WhatsApp Grup',
-    icon: WhatsappIcon,
+    icon: MessageCircle,
     color: 'text-green-600',
     text: `Halo rekan-rekan UMKM,
 
@@ -62,7 +62,7 @@ Semoga bermanfaat untuk kemajuan bisnis kita bersama.`,
   },
   {
     title: 'Template Personal Chat',
-    icon: BubbleChatIcon,
+    icon: MessageSquare,
     color: 'text-blue-600',
     text: `Halo, saya menemukan platform yang sangat bagus untuk kebutuhan foto produk bisnis Anda.
 
@@ -76,7 +76,7 @@ Selamat mencoba!`,
   },
   {
     title: 'Template Facebook Post',
-    icon: Facebook01Icon,
+    icon: Facebook,
     color: 'text-blue-700',
     text: `Tingkatkan Kualitas Foto Produk Anda dengan AI
 
@@ -96,7 +96,7 @@ Link: [LINK_REFERRAL]
   },
   {
     title: 'Template Email/DM',
-    icon: Mail01Icon,
+    icon: Mail,
     color: 'text-purple-600',
     text: `Subject: Rekomendasi Alat Foto Produk Profesional untuk Bisnis Anda
 
@@ -190,7 +190,7 @@ export default function ReferralPage() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-blue-500/10 p-8 rounded-3xl border border-white/20 backdrop-blur-sm text-center md:text-left">
           <div className="space-y-2 max-w-2xl">
             <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center md:justify-start gap-3">
-              Program Referral <StarIcon className="w-8 h-8 text-yellow-500 fill-yellow-500 animate-pulse" variant="solid" />
+              Program Referral <Star className="w-8 h-8 text-yellow-500 fill-yellow-500 animate-pulse" />
             </h1>
             <p className="text-gray-600 text-lg">
               Undang rekan bisnis Anda untuk menggunakan UMKM AI. Dapatkan bonus kredit untuk setiap pendaftaran baru dan komisi dari setiap pembelian yang mereka lakukan.
@@ -198,7 +198,7 @@ export default function ReferralPage() {
           </div>
           <div className="hidden md:block">
             <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md">
-              <GiftIcon className="w-12 h-12 text-purple-600" />
+              <Gift className="w-12 h-12 text-purple-600" />
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@ export default function ReferralPage() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Total Referral</CardTitle>
               <div className="p-2 bg-purple-50 rounded-xl">
-                <UserGroupIcon className="h-5 w-5 text-purple-600" />
+                <Users className="h-5 w-5 text-purple-600" />
               </div>
             </CardHeader>
             <CardContent>
@@ -226,7 +226,7 @@ export default function ReferralPage() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Verified</CardTitle>
               <div className="p-2 bg-green-50 rounded-xl">
-                <Tick02Icon className="h-5 w-5 text-green-600" />
+                <Check className="h-5 w-5 text-green-600" />
               </div>
             </CardHeader>
             <CardContent>
@@ -243,7 +243,7 @@ export default function ReferralPage() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Bonus Signup</CardTitle>
               <div className="p-2 bg-blue-50 rounded-xl">
-                <GiftIcon className="h-5 w-5 text-blue-600" />
+                <Gift className="h-5 w-5 text-blue-600" />
               </div>
             </CardHeader>
             <CardContent>
@@ -260,7 +260,7 @@ export default function ReferralPage() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Komisi</CardTitle>
               <div className="p-2 bg-yellow-50 rounded-xl">
-                <TradeUpIcon className="h-5 w-5 text-yellow-600" />
+                <TrendingUp className="h-5 w-5 text-yellow-600" />
               </div>
             </CardHeader>
             <CardContent>
@@ -280,7 +280,7 @@ export default function ReferralPage() {
             <Card className="rounded-3xl border-gray-100 shadow-lg shadow-gray-200/40">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl">
-                  <StarIcon className="h-6 w-6 text-purple-600 fill-purple-100" />
+                  <Star className="h-6 w-6 text-purple-600 fill-purple-100" />
                   Kode & Link Referral Kamu
                 </CardTitle>
                 <CardDescription>
@@ -294,7 +294,7 @@ export default function ReferralPage() {
                   <div className="flex gap-3">
                     <div className="flex-1 relative group">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <GiftIcon className="h-5 w-5 text-gray-400 group-hover:text-purple-500 transition-colors" />
+                        <Gift className="h-5 w-5 text-gray-400 group-hover:text-purple-500 transition-colors" />
                       </div>
                       <input
                         type="text"
@@ -304,9 +304,9 @@ export default function ReferralPage() {
                       />
                       <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
                         {copied === 'code' ? (
-                          <Tick02Icon className="h-5 w-5 text-green-500" />
+                          <Check className="h-5 w-5 text-green-500" />
                         ) : (
-                          <Copy01Icon className="h-5 w-5 text-gray-400" />
+                          <Copy className="h-5 w-5 text-gray-400" />
                         )}
                       </div>
                     </div>
@@ -328,7 +328,7 @@ export default function ReferralPage() {
                   <div className="flex flex-col md:flex-row gap-3">
                     <div className="flex-1 relative group">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <LinkSquare02Icon className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                        <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
                       </div>
                       <input
                         type="text"
@@ -339,11 +339,11 @@ export default function ReferralPage() {
                     </div>
                     <div className="flex gap-2">
                       <Button onClick={handleCopyLink} variant="outline" className="flex-1 md:flex-none rounded-xl border-gray-200 hover:bg-gray-50 hover:text-blue-600">
-                        {copied === 'link' ? <Tick02Icon className="h-4 w-4 mr-2" /> : <Copy01Icon className="h-4 w-4 mr-2" />}
+                        {copied === 'link' ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                         Copy
                       </Button>
                       <Button onClick={handleShare} className="flex-1 md:flex-none rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-indigo-200 border-none">
-                        <Share01Icon className="h-4 w-4 mr-2" />
+                        <Share2 className="h-4 w-4 mr-2" />
                         Share
                       </Button>
                     </div>
@@ -353,7 +353,7 @@ export default function ReferralPage() {
                 {/* Info Box */}
                 <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-100 rounded-2xl p-5">
                   <h4 className="font-semibold text-purple-900 mb-3 flex items-center gap-2">
-                    <StarIcon className="w-4 h-4 text-purple-600 fill-purple-600" />
+                    <Star className="w-4 h-4 text-purple-600 fill-purple-600" />
                     Cara Kerja
                   </h4>
                   <ul className="space-y-3 text-sm text-purple-800">
@@ -378,7 +378,7 @@ export default function ReferralPage() {
             <Card className="rounded-3xl border-gray-100 shadow-lg shadow-gray-200/40">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl">
-                  <Share01Icon className="h-6 w-6 text-pink-500" />
+                  <Share2 className="h-6 w-6 text-pink-500" />
                   Template Promosi Siap Pakai
                 </CardTitle>
                 <CardDescription>
@@ -413,12 +413,12 @@ export default function ReferralPage() {
                         >
                           {copied === `template-${index}` ? (
                             <>
-                              <Tick02Icon className="h-4 w-4 text-green-600" />
+                              <Check className="h-4 w-4 text-green-600" />
                               Copied!
                             </>
                           ) : (
                             <>
-                              <Copy01Icon className="h-4 w-4" />
+                              <Copy className="h-4 w-4" />
                               Copy Template
                             </>
                           )}
@@ -457,7 +457,7 @@ export default function ReferralPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2 text-indigo-100">
-                      <Wallet01Icon className="h-5 w-5" />
+                      <Wallet className="h-5 w-5" />
                       Total Pendapatan
                     </CardTitle>
                     <CardDescription className="text-indigo-200/80 mt-1">
@@ -482,7 +482,7 @@ export default function ReferralPage() {
               <Card className="rounded-3xl border-gray-100 shadow-lg shadow-gray-200/40 h-fit">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <UserGroupIcon className="h-5 w-5 text-gray-500" />
+                    <Users className="h-5 w-5 text-gray-500" />
                     Daftar Referral
                   </CardTitle>
                   <CardDescription>
@@ -515,7 +515,7 @@ export default function ReferralPage() {
                         <div className="flex flex-col items-end gap-1">
                           {referral.completed_at ? (
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px] px-2 py-0.5 h-5">
-                              <Tick02Icon className="h-3 w-3 mr-1" />
+                              <Check className="h-3 w-3 mr-1" />
                               Verified
                             </Badge>
                           ) : (
@@ -538,7 +538,7 @@ export default function ReferralPage() {
               <Card className="rounded-3xl border-dashed border-2 border-gray-200 bg-gray-50/50">
                 <CardContent className="flex flex-col items-center justify-center p-8 text-center space-y-4">
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                    <UserGroupIcon className="w-8 h-8 text-gray-400" />
+                    <Users className="w-8 h-8 text-gray-400" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Belum ada referral</h3>
