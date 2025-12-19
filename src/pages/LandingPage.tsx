@@ -1,7 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Zap, Sparkles, Heart, Flame, MousePointer2, Rocket, DollarSign, MessageCircle, Coffee, Glasses } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useAuth } from "@/contexts/AuthContext";
+
+// Capture referral code from URL on landing page
+function useReferralCapture() {
+  const [searchParams] = useSearchParams();
+  
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      localStorage.setItem('referral_code', refCode.toUpperCase());
+      console.log('Referral code captured from landing:', refCode);
+    }
+  }, [searchParams]);
+}
 
 const features = [
   {
@@ -86,6 +100,9 @@ const testimonials = [
 
 export default function LandingPage() {
   const { user } = useAuth();
+  
+  // Capture referral code from URL
+  useReferralCapture();
   
   return (
     <div className="min-h-screen bg-[#f3f3f3] font-mono selection:bg-genz-pink selection:text-white overflow-x-hidden">

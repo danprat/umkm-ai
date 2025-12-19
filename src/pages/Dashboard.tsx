@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { ReferralCard } from "@/components/ReferralCard";
 import { ImagePlus, Megaphone, Palette, Cat, Camera, ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -65,7 +66,7 @@ export default function Dashboard() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-12 bg-white min-h-[calc(100vh-200px)]">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
@@ -98,6 +99,15 @@ export default function Dashboard() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Referral Section */}
+      <section className="py-12 bg-[#f3f3f3] border-t-4 border-black">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <ReferralCard />
           </div>
         </div>
       </section>

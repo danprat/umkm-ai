@@ -27,6 +27,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminGallery from "./pages/admin/AdminGallery";
 import AdminTransactions from "./pages/admin/AdminTransactions";
 import AdminCoupons from "./pages/admin/AdminCoupons";
+import AdminReferrals from "./pages/admin/AdminReferrals";
 import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
@@ -78,6 +79,7 @@ const App = () => (
               <Route path="gallery" element={<AdminGallery />} />
               <Route path="transactions" element={<AdminTransactions />} />
               <Route path="coupons" element={<AdminCoupons />} />
+              <Route path="referrals" element={<AdminReferrals />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             

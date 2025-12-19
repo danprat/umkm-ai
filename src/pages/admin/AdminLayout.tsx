@@ -11,6 +11,7 @@ import {
   LogOut,
   Shield,
   Image as ImageIcon,
+  Gift,
 } from 'lucide-react';
 
 const navItems = [
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/admin/gallery', icon: ImageIcon, label: 'Galeri User' },
   { to: '/admin/transactions', icon: CreditCard, label: 'Transactions' },
   { to: '/admin/coupons', icon: Ticket, label: 'Coupons' },
+  { to: '/admin/referrals', icon: Gift, label: 'Referrals' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 

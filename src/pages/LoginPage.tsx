@@ -1,11 +1,21 @@
 import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Zap, Image, Palette, Sparkles, ArrowLeft, Heart, Flame } from 'lucide-react';
 
 export default function LoginPage() {
   const { user, isLoading, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Capture referral code from URL and store in localStorage
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      localStorage.setItem('referral_code', refCode.toUpperCase());
+      console.log('Referral code captured:', refCode);
+    }
+  }, [searchParams]);
 
   // Redirect if already logged in
   useEffect(() => {

@@ -23,7 +23,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Loader2, Pencil, Trash2, Settings as SettingsIcon, Mail, Clock, CreditCard, Save } from 'lucide-react';
+import { Plus, Loader2, Pencil, Trash2, Settings as SettingsIcon, Mail, Clock, CreditCard, Save, Gift, Percent } from 'lucide-react';
 
 export default function AdminSettings() {
   const { toast } = useToast();
@@ -33,6 +33,8 @@ export default function AdminSettings() {
   // Settings
   const [freeCredits, setFreeCredits] = useState(10);
   const [rateLimitSeconds, setRateLimitSeconds] = useState(60);
+  const [referralSignupBonus, setReferralSignupBonus] = useState(10);
+  const [referralCommissionPercent, setReferralCommissionPercent] = useState(10);
 
   // Packages
   const [packages, setPackages] = useState<CreditPackage[]>([]);
@@ -54,9 +56,13 @@ export default function AdminSettings() {
       if (settings) {
         const freeCreditsVal = settings.find(s => s.key === 'free_credits');
         const rateLimitVal = settings.find(s => s.key === 'rate_limit_seconds');
+        const referralBonusVal = settings.find(s => s.key === 'referral_signup_bonus');
+        const referralCommissionVal = settings.find(s => s.key === 'referral_commission_percent');
         
         if (freeCreditsVal) setFreeCredits(parseInt(freeCreditsVal.value as string, 10));
         if (rateLimitVal) setRateLimitSeconds(parseInt(rateLimitVal.value as string, 10));
+        if (referralBonusVal) setReferralSignupBonus(parseInt(referralBonusVal.value as string, 10));
+        if (referralCommissionVal) setReferralCommissionPercent(parseInt(referralCommissionVal.value as string, 10));
       }
 
       // Fetch packages
@@ -89,6 +95,16 @@ export default function AdminSettings() {
       await supabase
         .from('settings')
         .upsert({ key: 'rate_limit_seconds', value: rateLimitSeconds.toString() });
+
+      // Update referral_signup_bonus
+      await supabase
+        .from('settings')
+        .upsert({ key: 'referral_signup_bonus', value: referralSignupBonus.toString() });
+
+      // Update referral_commission_percent
+      await supabase
+        .from('settings')
+        .upsert({ key: 'referral_commission_percent', value: referralCommissionPercent.toString() });
 
       toast({
         title: 'Success',
@@ -277,6 +293,60 @@ export default function AdminSettings() {
           >
             {isSaving ? <Loader2 className="w-5 h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-5 h-5 mr-2" />}
             Simpan Pengaturan
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Referral Settings */}
+      <Card className="border-4 border-black shadow-brutal-lg bg-white">
+        <CardHeader className="border-b-4 border-black bg-genz-pink/20">
+          <CardTitle className="text-2xl font-display uppercase">Pengaturan Referral</CardTitle>
+          <CardDescription className="text-base font-bold">
+            Atur bonus dan komisi untuk program referral
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label className="font-bold uppercase">Bonus Signup Referral</Label>
+              <Input
+                type="number"
+                value={referralSignupBonus}
+                onChange={(e) => setReferralSignupBonus(parseInt(e.target.value) || 0)}
+                min="0"
+                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
+              />
+              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Gift className="w-4 h-4" /> Kredit yang dikasih ke referrer saat temannya daftar & verifikasi
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label className="font-bold uppercase">Komisi Pembelian (%)</Label>
+              <Input
+                type="number"
+                value={referralCommissionPercent}
+                onChange={(e) => setReferralCommissionPercent(parseInt(e.target.value) || 0)}
+                min="0"
+                max="100"
+                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
+              />
+              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Percent className="w-4 h-4" /> Persentase kredit yang dikasih ke referrer dari pembelian teman
+              </p>
+            </div>
+          </div>
+          <div className="bg-genz-pink/10 border-2 border-black/20 p-4 rounded-lg">
+            <p className="text-sm font-bold">
+              📌 <strong>Contoh:</strong> Jika komisi 10% dan teman beli 100 kredit, referrer dapat {Math.floor(100 * referralCommissionPercent / 100)} kredit bonus.
+            </p>
+          </div>
+          <Button 
+            onClick={handleSaveSettings} 
+            disabled={isSaving}
+            className="bg-genz-pink text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg"
+          >
+            {isSaving ? <Loader2 className="w-5 h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-5 h-5 mr-2" />}
+            Simpan Pengaturan Referral
           </Button>
         </CardContent>
       </Card>

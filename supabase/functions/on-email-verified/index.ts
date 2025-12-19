@@ -1,5 +1,5 @@
 // Edge Function: on-email-verified
-// Triggered when user confirms their email, grants free credits
+// Triggered when user confirms their email, grants free credits and referral bonus
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -31,27 +31,28 @@ serve(async (req) => {
       );
     }
 
-    // Get the free credits amount from settings
-    const { data: settingData, error: settingError } = await supabaseAdmin
+    // Get settings (free credits and referral bonus)
+    const { data: settings, error: settingsError } = await supabaseAdmin
       .from('settings')
-      .select('value')
-      .eq('key', 'free_credits')
-      .single();
+      .select('key, value')
+      .in('key', ['free_credits', 'referral_signup_bonus']);
 
-    if (settingError) {
-      console.error('Error fetching free_credits setting:', settingError);
+    if (settingsError) {
+      console.error('Error fetching settings:', settingsError);
       return new Response(
-        JSON.stringify({ error: 'Failed to get free credits setting' }),
+        JSON.stringify({ error: 'Failed to get settings' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const freeCredits = parseInt(settingData.value as string, 10) || 10;
+    const settingsMap = Object.fromEntries(settings.map(s => [s.key, s.value]));
+    const freeCredits = parseInt(settingsMap.free_credits as string, 10) || 10;
+    const referralSignupBonus = parseInt(settingsMap.referral_signup_bonus as string, 10) || 10;
 
-    // Check if user already has credits granted
+    // Check if user already has credits granted and get referrer info
     const { data: profile, error: profileError } = await supabaseAdmin
       .from('profiles')
-      .select('credits_granted, email_verified')
+      .select('credits_granted, email_verified, referred_by')
       .eq('id', user_id)
       .single();
 
@@ -91,11 +92,55 @@ serve(async (req) => {
 
     console.log(`Granted ${freeCredits} credits to user ${user_id}`);
 
+    // Award referral bonus if user was referred
+    let referralBonusAwarded = 0;
+    if (profile.referred_by) {
+      // Get referrer's current credits
+      const { data: referrer, error: referrerError } = await supabaseAdmin
+        .from('profiles')
+        .select('credits')
+        .eq('id', profile.referred_by)
+        .single();
+
+      if (!referrerError && referrer) {
+        // Add bonus credits to referrer
+        const newReferrerCredits = referrer.credits + referralSignupBonus;
+        const { error: referrerUpdateError } = await supabaseAdmin
+          .from('profiles')
+          .update({ credits: newReferrerCredits })
+          .eq('id', profile.referred_by);
+
+        if (!referrerUpdateError) {
+          referralBonusAwarded = referralSignupBonus;
+          console.log(`Awarded ${referralSignupBonus} referral bonus to referrer ${profile.referred_by}`);
+
+          // Update referral record with completed status and bonus awarded
+          const { error: referralUpdateError } = await supabaseAdmin
+            .from('referrals')
+            .update({
+              signup_bonus_awarded: referralSignupBonus,
+              completed_at: new Date().toISOString(),
+            })
+            .eq('referrer_id', profile.referred_by)
+            .eq('referred_id', user_id);
+
+          if (referralUpdateError) {
+            console.error('Error updating referral record:', referralUpdateError);
+          }
+        } else {
+          console.error('Error updating referrer credits:', referrerUpdateError);
+        }
+      } else {
+        console.error('Error fetching referrer:', referrerError);
+      }
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: `Granted ${freeCredits} free credits`,
-        credits: freeCredits 
+        credits: freeCredits,
+        referral_bonus_awarded: referralBonusAwarded,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

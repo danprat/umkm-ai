@@ -147,7 +147,7 @@ serve(async (req) => {
     // Get user's current credits
     const { data: profile, error: profileError } = await supabaseAdmin
       .from('profiles')
-      .select('credits')
+      .select('credits, referred_by')
       .eq('id', transaction.user_id)
       .single();
 
@@ -189,6 +189,68 @@ serve(async (req) => {
       // Don't return error since credits were already added
     }
 
+    // Handle referral commission if user was referred
+    let commissionAwarded = 0;
+    if (profile.referred_by) {
+      // Get commission percentage from settings
+      const { data: commissionSetting } = await supabaseAdmin
+        .from('settings')
+        .select('value')
+        .eq('key', 'referral_commission_percent')
+        .single();
+
+      const commissionPercent = parseInt(commissionSetting?.value as string, 10) || 10;
+      const commissionCredits = Math.floor(transaction.credits * commissionPercent / 100);
+
+      if (commissionCredits > 0) {
+        // Get referrer's current credits
+        const { data: referrer } = await supabaseAdmin
+          .from('profiles')
+          .select('credits')
+          .eq('id', profile.referred_by)
+          .single();
+
+        if (referrer) {
+          // Add commission to referrer
+          const newReferrerCredits = referrer.credits + commissionCredits;
+          const { error: referrerUpdateError } = await supabaseAdmin
+            .from('profiles')
+            .update({ credits: newReferrerCredits })
+            .eq('id', profile.referred_by);
+
+          if (!referrerUpdateError) {
+            commissionAwarded = commissionCredits;
+            console.log(`Awarded ${commissionCredits} commission credits to referrer ${profile.referred_by}`);
+
+            // Get the referral record
+            const { data: referral } = await supabaseAdmin
+              .from('referrals')
+              .select('id')
+              .eq('referrer_id', profile.referred_by)
+              .eq('referred_id', transaction.user_id)
+              .single();
+
+            if (referral) {
+              // Log the commission
+              const { error: commissionLogError } = await supabaseAdmin
+                .from('referral_commissions')
+                .insert({
+                  referral_id: referral.id,
+                  transaction_id: transaction.id,
+                  commission_credits: commissionCredits,
+                });
+
+              if (commissionLogError) {
+                console.error('Error logging commission:', commissionLogError);
+              }
+            }
+          } else {
+            console.error('Error updating referrer credits:', referrerUpdateError);
+          }
+        }
+      }
+    }
+
     console.log(`Payment completed: ${order_id} - Added ${transaction.credits} credits to user ${transaction.user_id}`);
 
     return new Response(
@@ -196,6 +258,7 @@ serve(async (req) => {
         success: true,
         message: 'Payment processed successfully',
         credits_added: transaction.credits,
+        commission_awarded: commissionAwarded,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
