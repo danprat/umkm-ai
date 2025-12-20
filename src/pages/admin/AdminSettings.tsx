@@ -241,124 +241,124 @@ export default function AdminSettings() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-4xl font-display uppercase font-bold bg-genz-blue inline-block px-4 py-2 border-4 border-black shadow-brutal transform -rotate-1 text-white">Settings</h1>
-        <p className="text-lg font-bold mt-3 flex items-center gap-2">
-          Atur konfigurasi aplikasi dan paket kredit <SettingsIcon className="w-5 h-5" />
+        <h1 className="text-2xl md:text-4xl font-display uppercase font-bold bg-genz-blue inline-block px-3 md:px-4 py-1.5 md:py-2 border-2 md:border-4 border-black shadow-brutal transform -rotate-1 text-white">Settings</h1>
+        <p className="text-sm md:text-lg font-bold mt-2 md:mt-3 flex items-center gap-2">
+          Atur konfigurasi aplikasi <SettingsIcon className="w-4 h-4 md:w-5 md:h-5" />
         </p>
       </div>
 
       {/* General Settings */}
-      <Card className="border-4 border-black shadow-brutal-lg bg-white">
-        <CardHeader className="border-b-4 border-black bg-genz-blue/20">
-          <CardTitle className="text-2xl font-display uppercase">Pengaturan Umum</CardTitle>
-          <CardDescription className="text-base font-bold">
+      <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-white rounded-lg">
+        <CardHeader className="border-b-2 md:border-b-4 border-black bg-genz-blue/20 p-3 md:p-6">
+          <CardTitle className="text-lg md:text-2xl font-display uppercase">Pengaturan Umum</CardTitle>
+          <CardDescription className="text-xs md:text-base font-bold">
             Atur nilai default buat user baru
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-2">
-              <Label className="font-bold uppercase">Kredit Gratis Buat User Baru</Label>
+              <Label className="font-bold uppercase text-xs md:text-base">Kredit Gratis User Baru</Label>
               <Input
                 type="number"
                 value={freeCredits}
                 onChange={(e) => setFreeCredits(parseInt(e.target.value) || 0)}
                 min="0"
-                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
+                className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-base md:text-lg"
               />
-              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
-                <Mail className="w-4 h-4" /> Kredit yang dikasih ke user setelah verifikasi email
+              <p className="text-xs md:text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Mail className="w-3 h-3 md:w-4 md:h-4" /> Setelah verifikasi email
               </p>
             </div>
             <div className="space-y-2">
-              <Label className="font-bold uppercase">Rate Limit (detik)</Label>
+              <Label className="font-bold uppercase text-xs md:text-base">Rate Limit (detik)</Label>
               <Input
                 type="number"
                 value={rateLimitSeconds}
                 onChange={(e) => setRateLimitSeconds(parseInt(e.target.value) || 60)}
                 min="1"
-                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
+                className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-base md:text-lg"
               />
-              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
-                <Clock className="w-4 h-4" /> Jeda waktu minimum antara generate
+              <p className="text-xs md:text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Clock className="w-3 h-3 md:w-4 md:h-4" /> Jeda antar generate
               </p>
             </div>
           </div>
           <Button 
             onClick={handleSaveSettings} 
             disabled={isSaving}
-            className="bg-genz-lime text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg"
+            className="bg-genz-lime text-black border-2 md:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-display uppercase text-sm md:text-lg w-full sm:w-auto"
           >
-            {isSaving ? <Loader2 className="w-5 h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-5 h-5 mr-2" />}
-            Simpan Pengaturan
+            {isSaving ? <Loader2 className="w-4 h-4 md:w-5 md:h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-4 h-4 md:w-5 md:h-5 mr-2" />}
+            Simpan
           </Button>
         </CardContent>
       </Card>
 
       {/* Referral Settings */}
-      <Card className="border-4 border-black shadow-brutal-lg bg-white">
-        <CardHeader className="border-b-4 border-black bg-genz-pink/20">
-          <CardTitle className="text-2xl font-display uppercase">Pengaturan Referral</CardTitle>
-          <CardDescription className="text-base font-bold">
-            Atur bonus dan komisi untuk program referral
+      <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-white rounded-lg">
+        <CardHeader className="border-b-2 md:border-b-4 border-black bg-genz-pink/20 p-3 md:p-6">
+          <CardTitle className="text-lg md:text-2xl font-display uppercase">Pengaturan Referral</CardTitle>
+          <CardDescription className="text-xs md:text-base font-bold">
+            Atur bonus dan komisi program referral
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <CardContent className="space-y-4 md:space-y-6 p-3 md:p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-2">
-              <Label className="font-bold uppercase">Bonus Signup Referral</Label>
+              <Label className="font-bold uppercase text-xs md:text-base">Bonus Signup Referral</Label>
               <Input
                 type="number"
                 value={referralSignupBonus}
                 onChange={(e) => setReferralSignupBonus(parseInt(e.target.value) || 0)}
                 min="0"
-                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
+                className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-base md:text-lg"
               />
-              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
-                <Gift className="w-4 h-4" /> Kredit yang dikasih ke referrer saat temannya daftar & verifikasi
+              <p className="text-xs md:text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Gift className="w-3 h-3 md:w-4 md:h-4" /> Kredit untuk referrer
               </p>
             </div>
             <div className="space-y-2">
-              <Label className="font-bold uppercase">Komisi Pembelian (%)</Label>
+              <Label className="font-bold uppercase text-xs md:text-base">Komisi Pembelian (%)</Label>
               <Input
                 type="number"
                 value={referralCommissionPercent}
                 onChange={(e) => setReferralCommissionPercent(parseInt(e.target.value) || 0)}
                 min="0"
                 max="100"
-                className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-lg"
+                className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-base md:text-lg"
               />
-              <p className="text-sm font-bold text-gray-600 flex items-center gap-1">
-                <Percent className="w-4 h-4" /> Persentase kredit yang dikasih ke referrer dari pembelian teman
+              <p className="text-xs md:text-sm font-bold text-gray-600 flex items-center gap-1">
+                <Percent className="w-3 h-3 md:w-4 md:h-4" /> Dari pembelian teman
               </p>
             </div>
           </div>
-          <div className="bg-genz-pink/10 border-2 border-black/20 p-4 rounded-lg">
-            <p className="text-sm font-bold">
-              📌 <strong>Contoh:</strong> Jika komisi 10% dan teman beli 100 kredit, referrer dapat {Math.floor(100 * referralCommissionPercent / 100)} kredit bonus.
+          <div className="bg-genz-pink/10 border-2 border-black/20 p-3 md:p-4 rounded-lg">
+            <p className="text-xs md:text-sm font-bold">
+              📌 Contoh: Komisi {referralCommissionPercent}% → teman beli 100 kredit, referrer dapat {Math.floor(100 * referralCommissionPercent / 100)} kredit.
             </p>
           </div>
           <Button 
             onClick={handleSaveSettings} 
             disabled={isSaving}
-            className="bg-genz-pink text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg"
+            className="bg-genz-pink text-black border-2 md:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-display uppercase text-sm md:text-lg w-full sm:w-auto"
           >
-            {isSaving ? <Loader2 className="w-5 h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-5 h-5 mr-2" />}
-            Simpan Pengaturan Referral
+            {isSaving ? <Loader2 className="w-4 h-4 md:w-5 md:h-5 mr-2 animate-spin stroke-[3px]" /> : <Save className="w-4 h-4 md:w-5 md:h-5 mr-2" />}
+            Simpan Referral
           </Button>
         </CardContent>
       </Card>
 
       {/* Credit Packages */}
-      <Card className="border-4 border-black shadow-brutal-lg bg-white">
-        <CardHeader className="border-b-4 border-black bg-genz-purple/20">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+      <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-white rounded-lg">
+        <CardHeader className="border-b-2 md:border-b-4 border-black bg-genz-purple/20 p-3 md:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 md:gap-4">
             <div>
-              <CardTitle className="text-2xl font-display uppercase">Paket Kredit</CardTitle>
-              <CardDescription className="text-base font-bold flex items-center gap-2">
-                <CreditCard className="w-4 h-4" /> Atur paket kredit yang bisa dibeli user
+              <CardTitle className="text-lg md:text-2xl font-display uppercase">Paket Kredit</CardTitle>
+              <CardDescription className="text-xs md:text-base font-bold flex items-center gap-1 md:gap-2">
+                <CreditCard className="w-3 h-3 md:w-4 md:h-4" /> Paket kredit untuk user
               </CardDescription>
             </div>
             <Dialog open={showPackageDialog} onOpenChange={(open) => {
@@ -369,66 +369,66 @@ export default function AdminSettings() {
               }
             }}>
               <DialogTrigger asChild>
-                <Button className="bg-genz-purple text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 font-display uppercase text-lg">
-                  <Plus className="w-5 h-5 mr-2 stroke-[3px]" />
-                  Tambah Paket
+                <Button className="bg-genz-purple text-white border-2 md:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-display uppercase text-sm md:text-lg w-full sm:w-auto">
+                  <Plus className="w-4 h-4 md:w-5 md:h-5 mr-1 md:mr-2 stroke-[3px]" />
+                  Tambah
                 </Button>
               </DialogTrigger>
-              <DialogContent className="border-4 border-black shadow-brutal-lg">
+              <DialogContent className="border-2 md:border-4 border-black shadow-brutal-lg max-w-[95vw] sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-display uppercase flex items-center gap-2">
-                    {editingPackage ? <><Pencil className="w-5 h-5" /> Edit Paket</> : <><Plus className="w-5 h-5" /> Bikin Paket</>}
+                  <DialogTitle className="text-xl md:text-2xl font-display uppercase flex items-center gap-2">
+                    {editingPackage ? <><Pencil className="w-4 h-4 md:w-5 md:h-5" /> Edit Paket</> : <><Plus className="w-4 h-4 md:w-5 md:h-5" /> Bikin Paket</>}
                   </DialogTitle>
-                  <DialogDescription className="text-base font-bold">
-                    {editingPackage ? 'Update detail paket kredit' : 'Tambahin paket kredit baru'}
+                  <DialogDescription className="text-sm md:text-base font-bold">
+                    {editingPackage ? 'Update detail paket' : 'Tambahin paket baru'}
                   </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4 py-4">
+                <div className="space-y-3 md:space-y-4 py-3 md:py-4">
                   <div className="space-y-2">
-                    <Label className="font-bold uppercase">Nama Paket</Label>
+                    <Label className="font-bold uppercase text-sm">Nama Paket</Label>
                     <Input
                       value={packageForm.name}
                       onChange={(e) => setPackageForm({ ...packageForm, name: e.target.value })}
-                      placeholder="Contoh: Starter, Pro, Enterprise"
-                      className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
+                      placeholder="Contoh: Starter, Pro"
+                      className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     <div className="space-y-2">
-                      <Label className="font-bold uppercase">Jumlah Kredit</Label>
+                      <Label className="font-bold uppercase text-sm">Jumlah Kredit</Label>
                       <Input
                         type="number"
                         value={packageForm.credits}
                         onChange={(e) => setPackageForm({ ...packageForm, credits: parseInt(e.target.value) || 0 })}
                         min="1"
-                        className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
+                        className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="font-bold uppercase">Harga (IDR)</Label>
+                      <Label className="font-bold uppercase text-sm">Harga (IDR)</Label>
                       <Input
                         type="number"
                         value={packageForm.price}
                         onChange={(e) => setPackageForm({ ...packageForm, price: parseInt(e.target.value) || 0 })}
                         min="1000"
                         step="1000"
-                        className="border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
+                        className="border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold"
                       />
                     </div>
                   </div>
                 </div>
-                <DialogFooter className="gap-2">
+                <DialogFooter className="gap-2 flex-col sm:flex-row">
                   <Button 
                     variant="outline" 
                     onClick={() => setShowPackageDialog(false)}
-                    className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold"
+                    className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold w-full sm:w-auto"
                   >
                     Batal
                   </Button>
                   <Button 
                     onClick={handleSavePackage} 
                     disabled={isSaving}
-                    className="bg-genz-purple text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold"
+                    className="bg-genz-purple text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold w-full sm:w-auto"
                   >
                     {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : (editingPackage ? <Pencil className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />)}
                     {editingPackage ? 'Update' : 'Bikin'}
@@ -438,52 +438,48 @@ export default function AdminSettings() {
             </Dialog>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
-          <div className="border-4 border-black rounded-lg overflow-hidden">
-            <Table>
+        <CardContent className="p-3 md:p-6">
+          <div className="border-2 md:border-4 border-black rounded-lg overflow-x-auto">
+            <Table className="min-w-[550px]">
               <TableHeader>
                 <TableRow className="bg-black hover:bg-black">
-                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Nama</TableHead>
-                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kredit</TableHead>
-                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Harga</TableHead>
-                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Harga/Kredit</TableHead>
-                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Aktif</TableHead>
-                  <TableHead className="text-white font-display uppercase text-right">Aksi</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Nama</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Kredit</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Harga</TableHead>
+                  <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Aktif</TableHead>
+                  <TableHead className="text-white font-display uppercase text-right text-[10px] md:text-sm whitespace-nowrap">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {packages.map((pkg) => (
                   <TableRow key={pkg.id} className="border-b-2 border-black/10 hover:bg-genz-blue/10">
-                    <TableCell className="font-bold">{pkg.name}</TableCell>
+                    <TableCell className="font-bold text-xs md:text-sm">{pkg.name}</TableCell>
                     <TableCell>
-                      <span className="px-2 py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold">{pkg.credits}</span>
+                      <span className="px-1.5 md:px-2 py-0.5 md:py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold text-xs md:text-sm">{pkg.credits}</span>
                     </TableCell>
-                    <TableCell className="font-bold text-green-700">{formatCurrency(pkg.price)}</TableCell>
-                    <TableCell className="font-bold text-gray-600">
-                      {formatCurrency(Math.round(pkg.price / pkg.credits))}
-                    </TableCell>
+                    <TableCell className="font-bold text-green-700 text-xs md:text-sm whitespace-nowrap">{formatCurrency(pkg.price)}</TableCell>
                     <TableCell>
                       <Switch
                         checked={pkg.is_active}
                         onCheckedChange={() => handleTogglePackage(pkg)}
-                        className="data-[state=checked]:bg-genz-lime"
+                        className="data-[state=checked]:bg-genz-lime scale-90 md:scale-100"
                       />
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1 md:gap-2">
                         <Button
                           size="sm"
-                          className="bg-genz-cyan text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 font-bold"
+                          className="bg-genz-cyan text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold h-7 w-7 md:h-9 md:w-auto md:px-3 p-0"
                           onClick={() => openEditDialog(pkg)}
                         >
-                          <Pencil className="w-4 h-4 stroke-[3px]" />
+                          <Pencil className="w-3 h-3 md:w-4 md:h-4 stroke-[3px]" />
                         </Button>
                         <Button
                           size="sm"
-                          className="bg-red-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 font-bold"
+                          className="bg-red-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold h-7 w-7 md:h-9 md:w-auto md:px-3 p-0"
                           onClick={() => handleDeletePackage(pkg)}
                         >
-                          <Trash2 className="w-4 h-4 stroke-[3px]" />
+                          <Trash2 className="w-3 h-3 md:w-4 md:h-4 stroke-[3px]" />
                         </Button>
                       </div>
                     </TableCell>

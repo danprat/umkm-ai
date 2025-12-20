@@ -98,113 +98,113 @@ export default function AdminTransactions() {
     .reduce((sum, t) => sum + t.credits, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-4xl font-display uppercase font-bold bg-genz-purple inline-block px-4 py-2 border-4 border-black shadow-brutal transform -rotate-1 text-white">Transaksi</h1>
-        <p className="text-lg font-bold mt-3 flex items-center gap-2">
-          Pantau semua pembayaran yang masuk <DollarSign className="w-5 h-5" />
+        <h1 className="text-2xl md:text-4xl font-display uppercase font-bold bg-genz-purple inline-block px-3 md:px-4 py-1.5 md:py-2 border-2 md:border-4 border-black shadow-brutal transform -rotate-1 text-white">Transaksi</h1>
+        <p className="text-sm md:text-lg font-bold mt-2 md:mt-3 flex items-center gap-2">
+          Pantau semua pembayaran <DollarSign className="w-4 h-4 md:w-5 md:h-5" />
         </p>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-4 border-black shadow-brutal-lg bg-green-100">
-          <CardHeader className="pb-2 border-b-4 border-black">
-            <CardTitle className="text-sm font-display uppercase tracking-wide flex items-center gap-2">
-              <DollarSign className="w-4 h-4" /> Total Revenue
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+        <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-green-100 rounded-lg">
+          <CardHeader className="pb-1 md:pb-2 border-b-2 md:border-b-4 border-black p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-display uppercase tracking-wide flex items-center gap-1 md:gap-2">
+              <DollarSign className="w-3 h-3 md:w-4 md:h-4" /> Total Revenue
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4">
-            <div className="text-3xl font-display font-bold text-green-700">
+          <CardContent className="pt-2 md:pt-4 p-3 md:p-6">
+            <div className="text-lg md:text-3xl font-display font-bold text-green-700 truncate">
               {formatCurrency(totalRevenue)}
             </div>
           </CardContent>
         </Card>
-        <Card className="border-4 border-black shadow-brutal-lg bg-genz-cyan">
-          <CardHeader className="pb-2 border-b-4 border-black">
-            <CardTitle className="text-sm font-display uppercase tracking-wide flex items-center gap-2">
-              <Ticket className="w-4 h-4" /> Kredit Terjual
+        <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-genz-cyan rounded-lg">
+          <CardHeader className="pb-1 md:pb-2 border-b-2 md:border-b-4 border-black p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-display uppercase tracking-wide flex items-center gap-1 md:gap-2">
+              <Ticket className="w-3 h-3 md:w-4 md:h-4" /> Kredit Terjual
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4">
-            <div className="text-3xl font-display font-bold">{totalCredits.toLocaleString()}</div>
+          <CardContent className="pt-2 md:pt-4 p-3 md:p-6">
+            <div className="text-lg md:text-3xl font-display font-bold">{totalCredits.toLocaleString()}</div>
           </CardContent>
         </Card>
-        <Card className="border-4 border-black shadow-brutal-lg bg-genz-lime">
-          <CardHeader className="pb-2 border-b-4 border-black">
-            <CardTitle className="text-sm font-display uppercase tracking-wide flex items-center gap-2">
-              <CheckCircle className="w-4 h-4" /> Transaksi Selesai
+        <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-genz-lime rounded-lg">
+          <CardHeader className="pb-1 md:pb-2 border-b-2 md:border-b-4 border-black p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-display uppercase tracking-wide flex items-center gap-1 md:gap-2">
+              <CheckCircle className="w-3 h-3 md:w-4 md:h-4" /> Selesai
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4">
-            <div className="text-3xl font-display font-bold">
+          <CardContent className="pt-2 md:pt-4 p-3 md:p-6">
+            <div className="text-lg md:text-3xl font-display font-bold">
               {transactions.filter(t => t.status === 'completed').length}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-4 border-black shadow-brutal-lg bg-white">
-        <CardHeader className="border-b-4 border-black bg-genz-pink/20">
-          <div className="flex items-center justify-between gap-4">
-            <CardTitle className="text-2xl font-display uppercase">Semua Transaksi</CardTitle>
+      <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-white rounded-lg">
+        <CardHeader className="border-b-2 md:border-b-4 border-black bg-genz-pink/20 p-3 md:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 md:gap-4">
+            <CardTitle className="text-lg md:text-2xl font-display uppercase">Semua Transaksi</CardTitle>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-48 border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold">
+              <SelectTrigger className="w-full sm:w-40 md:w-48 border-2 md:border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-bold text-sm">
                 <SelectValue placeholder="Filter status" />
               </SelectTrigger>
-              <SelectContent className="border-4 border-black">
-                <SelectItem value="all" className="font-bold">Semua Status</SelectItem>
-                <SelectItem value="completed" className="font-bold flex items-center gap-1">Lunas</SelectItem>
-                <SelectItem value="pending" className="font-bold flex items-center gap-1">Pending</SelectItem>
-                <SelectItem value="cancelled" className="font-bold flex items-center gap-1">Batal</SelectItem>
-                <SelectItem value="expired" className="font-bold flex items-center gap-1">Expired</SelectItem>
+              <SelectContent className="border-2 md:border-4 border-black">
+                <SelectItem value="all" className="font-bold">Semua</SelectItem>
+                <SelectItem value="completed" className="font-bold">Lunas</SelectItem>
+                <SelectItem value="pending" className="font-bold">Pending</SelectItem>
+                <SelectItem value="cancelled" className="font-bold">Batal</SelectItem>
+                <SelectItem value="expired" className="font-bold">Expired</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-3 md:p-6">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-8 h-8 animate-spin stroke-[3px]" />
+              <Loader2 className="w-6 h-6 md:w-8 md:h-8 animate-spin stroke-[3px]" />
             </div>
           ) : transactions.length === 0 ? (
-            <div className="text-center py-12 px-4 border-4 border-dashed border-black/20 rounded-lg">
-              <p className="text-xl font-bold">Belum ada transaksi</p>
+            <div className="text-center py-8 md:py-12 px-4 border-2 md:border-4 border-dashed border-black/20 rounded-lg">
+              <p className="text-base md:text-xl font-bold">Belum ada transaksi</p>
             </div>
           ) : (
-            <div className="border-4 border-black rounded-lg overflow-hidden">
-              <Table>
+            <div className="border-2 md:border-4 border-black rounded-lg overflow-x-auto">
+              <Table className="min-w-[800px]">
                 <TableHeader>
                   <TableRow className="bg-black hover:bg-black">
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Order ID</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">User</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Jumlah</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Kredit</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Metode</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Status</TableHead>
-                    <TableHead className="text-white font-display uppercase">Tanggal</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Order ID</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">User</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Jumlah</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Kredit</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Metode</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Status</TableHead>
+                    <TableHead className="text-white font-display uppercase text-[10px] md:text-sm whitespace-nowrap">Tanggal</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {transactions.map((tx) => (
                     <TableRow key={tx.id} className="border-b-2 border-black/10 hover:bg-genz-purple/10">
-                      <TableCell className="font-mono text-sm font-bold">
+                      <TableCell className="font-mono text-[10px] md:text-sm font-bold">
                         {tx.order_id}
                       </TableCell>
-                      <TableCell className="text-sm font-bold">
+                      <TableCell className="text-[10px] md:text-sm font-bold max-w-[120px] truncate">
                         {tx.profiles?.email || '-'}
                       </TableCell>
-                      <TableCell className="font-bold text-green-700">
+                      <TableCell className="font-bold text-green-700 text-xs md:text-sm whitespace-nowrap">
                         {formatCurrency(tx.amount)}
                       </TableCell>
                       <TableCell>
-                        <span className="px-2 py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold">{tx.credits}</span>
+                        <span className="px-1.5 md:px-2 py-0.5 md:py-1 bg-genz-cyan/50 border-2 border-black/20 rounded font-mono font-bold text-xs md:text-sm">{tx.credits}</span>
                       </TableCell>
-                      <TableCell className="uppercase text-xs font-bold">
+                      <TableCell className="uppercase text-[10px] md:text-xs font-bold">
                         {tx.payment_method || '-'}
                       </TableCell>
                       <TableCell>{getStatusBadge(tx.status)}</TableCell>
-                      <TableCell className="text-sm font-bold">
+                      <TableCell className="text-[10px] md:text-sm font-bold whitespace-nowrap">
                         {formatDate(tx.created_at)}
                       </TableCell>
                     </TableRow>

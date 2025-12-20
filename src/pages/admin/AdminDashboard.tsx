@@ -123,33 +123,33 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="border-4 border-black p-8 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-genz-lime rounded-full blur-3xl opacity-50"></div>
-        <h1 className="text-4xl font-display uppercase animate-slide-up relative z-10 flex items-center gap-3">
-          <Wrench className="w-8 h-8" /> Admin Dashboard
+    <div className="space-y-4 md:space-y-8">
+      <div className="border-2 md:border-4 border-black p-4 md:p-8 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden rounded-lg">
+        <div className="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-genz-lime rounded-full blur-3xl opacity-50"></div>
+        <h1 className="text-2xl md:text-4xl font-display uppercase animate-slide-up relative z-10 flex items-center gap-2 md:gap-3">
+          <Wrench className="w-6 h-6 md:w-8 md:h-8" /> Admin Dashboard
         </h1>
-        <p className="text-gray-600 font-bold mt-2 font-mono relative z-10 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" /> Overview of your UMKM AI platform
+        <p className="text-gray-600 font-bold mt-1 md:mt-2 font-mono relative z-10 flex items-center gap-2 text-sm md:text-base">
+          <BarChart3 className="w-4 h-4 md:w-5 md:h-5" /> Overview platform UMKM AI
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
         {statCards.map((card, index) => (
-          <div key={card.title} className="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all group" style={{ animationDelay: `${index * 0.1}s` }}>
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <div className="text-xs font-bold uppercase text-gray-500 mb-1 tracking-widest">
+          <div key={card.title} className="border-2 md:border-4 border-black bg-white p-3 md:p-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] md:hover:-translate-y-1 transition-all group rounded-lg" style={{ animationDelay: `${index * 0.1}s` }}>
+            <div className="flex items-start justify-between gap-2 mb-2 md:mb-4">
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] md:text-xs font-bold uppercase text-gray-500 mb-0.5 md:mb-1 tracking-wider truncate">
                   {card.title}
                 </div>
                 {isLoading ? (
-                  <div className="h-8 w-24 bg-gray-200 animate-pulse rounded" />
+                  <div className="h-6 md:h-8 w-16 md:w-24 bg-gray-200 animate-pulse rounded" />
                 ) : (
-                  <div className="text-3xl font-display uppercase tracking-tight">{card.value}</div>
+                  <div className="text-lg md:text-3xl font-display uppercase tracking-tight truncate">{card.value}</div>
                 )}
               </div>
-              <div className={`p-3 border-4 border-black ${card.bg} group-hover:rotate-12 transition-transform shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-lg`}>
-                <card.icon className={`w-6 h-6 ${card.color}`} />
+              <div className={`p-1.5 md:p-3 border-2 md:border-4 border-black ${card.bg} md:group-hover:rotate-12 transition-transform shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-lg shrink-0`}>
+                <card.icon className={`w-4 h-4 md:w-6 md:h-6 ${card.color}`} />
               </div>
             </div>
           </div>
@@ -157,36 +157,36 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions / Summary */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="border-4 border-black bg-genz-cyan p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-            <h3 className="text-2xl font-display uppercase mb-4 flex items-center gap-2">
-                <span className="bg-white px-2 border-2 border-black text-sm py-1 rounded">NEW</span>
-                <Zap className="w-5 h-5" /> Quick Actions
+      <div className="grid md:grid-cols-2 gap-3 md:gap-6">
+        <div className="border-2 md:border-4 border-black bg-genz-cyan p-4 md:p-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-lg">
+            <h3 className="text-lg md:text-2xl font-display uppercase mb-2 md:mb-4 flex items-center gap-2 flex-wrap">
+                <span className="bg-white px-2 border-2 border-black text-[10px] md:text-sm py-0.5 md:py-1 rounded">NEW</span>
+                <div className="flex items-center gap-1"><Zap className="w-4 h-4 md:w-5 md:h-5" /> Quick Actions</div>
             </h3>
-            <p className="text-black font-medium mb-4">
-                Manage your platform efficiently. Check user reports, validate transactions, or update system settings.
+            <p className="text-black font-medium mb-3 md:mb-4 text-sm md:text-base">
+                Kelola platform dengan efisien. Cek user, validasi transaksi, atau update pengaturan.
             </p>
-            <button className="bg-black text-white px-4 py-2 font-bold uppercase text-sm hover:bg-white hover:text-black border-2 border-transparent hover:border-black transition-colors">
-                View All Actions
+            <button className="bg-black text-white px-3 md:px-4 py-2 font-bold uppercase text-xs md:text-sm border-2 border-transparent active:bg-white active:text-black md:hover:bg-white md:hover:text-black transition-colors rounded w-full md:w-auto">
+                Lihat Semua
             </button>
         </div>
 
-        <div className="border-4 border-black bg-genz-pink p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-            <h3 className="text-2xl font-display uppercase mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5" /> System Status
+        <div className="border-2 md:border-4 border-black bg-genz-pink p-4 md:p-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-lg">
+            <h3 className="text-lg md:text-2xl font-display uppercase mb-2 md:mb-4 flex items-center gap-2">
+              <Activity className="w-4 h-4 md:w-5 md:h-5" /> System Status
             </h3>
-            <div className="space-y-2 font-mono text-sm font-bold">
-                <div className="flex justify-between border-b-2 border-black pb-1">
+            <div className="space-y-2 font-mono text-xs md:text-sm font-bold">
+                <div className="flex justify-between border-b-2 border-black pb-1 gap-2">
                     <span>Database</span>
-                    <span className="bg-green-400 px-2 border border-black text-xs flex items-center">OPERATIONAL</span>
+                    <span className="bg-green-400 px-2 border border-black text-[10px] md:text-xs flex items-center rounded shrink-0">OK</span>
                 </div>
-                <div className="flex justify-between border-b-2 border-black pb-1">
+                <div className="flex justify-between border-b-2 border-black pb-1 gap-2">
                     <span>Storage</span>
-                    <span className="bg-green-400 px-2 border border-black text-xs flex items-center">OPERATIONAL</span>
+                    <span className="bg-green-400 px-2 border border-black text-[10px] md:text-xs flex items-center rounded shrink-0">OK</span>
                 </div>
-                <div className="flex justify-between border-b-2 border-black pb-1">
+                <div className="flex justify-between border-b-2 border-black pb-1 gap-2">
                     <span>AI Engine</span>
-                    <span className="bg-green-400 px-2 border border-black text-xs flex items-center">OPERATIONAL</span>
+                    <span className="bg-green-400 px-2 border border-black text-[10px] md:text-xs flex items-center rounded shrink-0">OK</span>
                 </div>
             </div>
         </div>

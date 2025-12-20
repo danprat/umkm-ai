@@ -204,43 +204,43 @@ export default function AdminReferrals() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-4xl font-display uppercase font-bold bg-genz-pink inline-block px-4 py-2 border-4 border-black shadow-brutal transform -rotate-1 text-black">
+        <h1 className="text-2xl md:text-4xl font-display uppercase font-bold bg-genz-pink inline-block px-3 md:px-4 py-1.5 md:py-2 border-2 md:border-4 border-black shadow-brutal transform -rotate-1 text-black">
           Referrals
         </h1>
-        <p className="text-lg font-bold mt-3 flex items-center gap-2">
-          Kelola dan pantau program referral <Gift className="w-5 h-5" />
+        <p className="text-sm md:text-lg font-bold mt-2 md:mt-3 flex items-center gap-2">
+          Kelola program referral <Gift className="w-4 h-4 md:w-5 md:h-5" />
         </p>
       </div>
 
       {/* Current Settings Info */}
-      <div className="flex flex-wrap gap-4">
-        <div className="bg-genz-lime/30 border-3 border-black px-4 py-2 rounded-lg flex items-center gap-2">
-          <Gift className="w-5 h-5" />
-          <span className="font-bold">Signup Bonus: {currentSettings.signupBonus} credits</span>
+      <div className="flex flex-wrap gap-2 md:gap-4">
+        <div className="bg-genz-lime/30 border-2 md:border-3 border-black px-3 md:px-4 py-1.5 md:py-2 rounded-lg flex items-center gap-2">
+          <Gift className="w-4 h-4 md:w-5 md:h-5" />
+          <span className="font-bold text-xs md:text-base">Signup: {currentSettings.signupBonus} credits</span>
         </div>
-        <div className="bg-genz-purple/30 border-3 border-black px-4 py-2 rounded-lg flex items-center gap-2">
-          <Percent className="w-5 h-5" />
-          <span className="font-bold">Commission: {currentSettings.commissionPercent}%</span>
+        <div className="bg-genz-purple/30 border-2 md:border-3 border-black px-3 md:px-4 py-1.5 md:py-2 rounded-lg flex items-center gap-2">
+          <Percent className="w-4 h-4 md:w-5 md:h-5" />
+          <span className="font-bold text-xs md:text-base">Komisi: {currentSettings.commissionPercent}%</span>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
         {statCards.map((card) => (
-          <Card key={card.title} className="border-4 border-black shadow-brutal bg-white">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className={`${card.bg} p-2 border-2 border-black rounded-lg`}>
-                  <card.icon className="w-5 h-5" />
+          <Card key={card.title} className="border-2 md:border-4 border-black shadow-brutal bg-white rounded-lg">
+            <CardContent className="p-2 md:p-4">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className={`${card.bg} p-1.5 md:p-2 border-2 border-black rounded-lg shrink-0`}>
+                  <card.icon className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
-                <div>
-                  <p className="text-xs font-bold uppercase text-gray-500">{card.title}</p>
+                <div className="min-w-0">
+                  <p className="text-[9px] md:text-xs font-bold uppercase text-gray-500 truncate">{card.title}</p>
                   {isLoading ? (
-                    <div className="h-6 w-16 bg-gray-200 animate-pulse rounded" />
+                    <div className="h-5 md:h-6 w-12 md:w-16 bg-gray-200 animate-pulse rounded" />
                   ) : (
-                    <p className="text-xl font-display">{card.value}</p>
+                    <p className="text-sm md:text-xl font-display truncate">{card.value}</p>
                   )}
                 </div>
               </div>
@@ -250,72 +250,72 @@ export default function AdminReferrals() {
       </div>
 
       {/* Referrals Table */}
-      <Card className="border-4 border-black shadow-brutal-lg bg-white">
-        <CardHeader className="border-b-4 border-black bg-genz-pink/20">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+      <Card className="border-2 md:border-4 border-black shadow-brutal-lg bg-white rounded-lg">
+        <CardHeader className="border-b-2 md:border-b-4 border-black bg-genz-pink/20 p-3 md:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 md:gap-4">
             <div>
-              <CardTitle className="text-2xl font-display uppercase">Daftar Referral</CardTitle>
-              <CardDescription className="text-base font-bold">
-                Semua referral yang terdaftar di sistem
+              <CardTitle className="text-lg md:text-2xl font-display uppercase">Daftar Referral</CardTitle>
+              <CardDescription className="text-xs md:text-base font-bold">
+                Semua referral di sistem
               </CardDescription>
             </div>
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <Input
                 placeholder="Cari email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-3 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] w-64"
+                className="pl-9 md:pl-10 border-2 md:border-3 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] w-full sm:w-56 md:w-64 text-sm"
               />
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-3 md:p-6">
           {isLoading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin" />
+            <div className="flex items-center justify-center py-12 md:py-16">
+              <Loader2 className="w-6 h-6 md:w-8 md:h-8 animate-spin" />
             </div>
           ) : filteredReferrals.length === 0 ? (
-            <div className="text-center py-16">
-              <Gift className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-              <p className="text-gray-500 font-bold">Belum ada referral</p>
+            <div className="text-center py-12 md:py-16">
+              <Gift className="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 md:mb-4" />
+              <p className="text-gray-500 font-bold text-sm md:text-base">Belum ada referral</p>
             </div>
           ) : (
-            <div className="border-4 border-black rounded-lg overflow-hidden">
-              <Table>
+            <div className="border-2 md:border-4 border-black rounded-lg overflow-x-auto">
+              <Table className="min-w-[600px]">
                 <TableHeader>
                   <TableRow className="bg-black hover:bg-black">
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Referrer</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Referred</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Bonus</TableHead>
-                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20">Status</TableHead>
-                    <TableHead className="text-white font-display uppercase">Tanggal</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Referrer</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Referred</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Bonus</TableHead>
+                    <TableHead className="text-white font-display uppercase border-r-2 border-white/20 text-[10px] md:text-sm whitespace-nowrap">Status</TableHead>
+                    <TableHead className="text-white font-display uppercase text-[10px] md:text-sm whitespace-nowrap">Tanggal</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredReferrals.map((referral) => (
                     <TableRow key={referral.id} className="border-b-2 border-black/10 hover:bg-genz-pink/10">
-                      <TableCell className="font-mono text-sm">{referral.referrer_email}</TableCell>
-                      <TableCell className="font-mono text-sm">{referral.referred_email}</TableCell>
+                      <TableCell className="font-mono text-[10px] md:text-sm max-w-[100px] md:max-w-none truncate">{referral.referrer_email}</TableCell>
+                      <TableCell className="font-mono text-[10px] md:text-sm max-w-[100px] md:max-w-none truncate">{referral.referred_email}</TableCell>
                       <TableCell>
-                        <span className="px-2 py-1 bg-genz-lime/50 border-2 border-black/20 rounded font-mono font-bold">
-                          {referral.signup_bonus_awarded} credits
+                        <span className="px-1.5 md:px-2 py-0.5 md:py-1 bg-genz-lime/50 border-2 border-black/20 rounded font-mono font-bold text-[10px] md:text-sm whitespace-nowrap">
+                          {referral.signup_bonus_awarded} cr
                         </span>
                       </TableCell>
                       <TableCell>
                         {referral.completed_at ? (
-                          <Badge className="bg-green-500 text-white border-2 border-black">
-                            <CheckCircle2 className="w-3 h-3 mr-1" />
-                            Verified
+                          <Badge className="bg-green-500 text-white border-2 border-black text-[9px] md:text-xs">
+                            <CheckCircle2 className="w-2.5 h-2.5 md:w-3 md:h-3 mr-0.5 md:mr-1" />
+                            OK
                           </Badge>
                         ) : (
-                          <Badge className="bg-yellow-500 text-black border-2 border-black">
-                            <Clock className="w-3 h-3 mr-1" />
-                            Pending
+                          <Badge className="bg-yellow-500 text-black border-2 border-black text-[9px] md:text-xs">
+                            <Clock className="w-2.5 h-2.5 md:w-3 md:h-3 mr-0.5 md:mr-1" />
+                            Wait
                           </Badge>
                         )}
                       </TableCell>
-                      <TableCell className="font-mono text-sm text-gray-600">
+                      <TableCell className="font-mono text-[10px] md:text-sm text-gray-600 whitespace-nowrap">
                         {formatDate(referral.created_at)}
                       </TableCell>
                     </TableRow>
