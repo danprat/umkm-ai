@@ -22,8 +22,12 @@ import {
   Search, 
   CheckCircle2, 
   Clock,
-  Percent
+  Percent,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
+
+const ITEMS_PER_PAGE = 10;
 
 interface ReferralData {
   id: string;
@@ -56,6 +60,7 @@ export default function AdminReferrals() {
     totalCommissionAwarded: 0,
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [currentSettings, setCurrentSettings] = useState({
     signupBonus: 10,
     commissionPercent: 10,
@@ -159,6 +164,16 @@ export default function AdminReferrals() {
     r.referrer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     r.referred_email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const totalPages = Math.ceil(filteredReferrals.length / ITEMS_PER_PAGE);
+  const paginatedReferrals = filteredReferrals.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('id-ID', {
@@ -293,7 +308,7 @@ export default function AdminReferrals() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredReferrals.map((referral) => (
+                  {paginatedReferrals.map((referral) => (
                     <TableRow key={referral.id} className="border-b-2 border-black/10 hover:bg-genz-pink/10">
                       <TableCell className="font-mono text-[10px] md:text-sm max-w-[100px] md:max-w-none truncate">{referral.referrer_email}</TableCell>
                       <TableCell className="font-mono text-[10px] md:text-sm max-w-[100px] md:max-w-none truncate">{referral.referred_email}</TableCell>
@@ -322,6 +337,36 @@ export default function AdminReferrals() {
                   ))}
                 </TableBody>
               </Table>
+            </div>
+          )}
+          
+          {/* Pagination */}
+          {!isLoading && totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t-2 border-black/10">
+              <p className="text-xs md:text-sm font-bold text-gray-600">
+                Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredReferrals.length)} of {filteredReferrals.length}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold h-8 px-2 disabled:opacity-50"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <span className="px-3 py-1 bg-genz-pink border-2 border-black font-bold text-sm">
+                  {currentPage} / {totalPages}
+                </span>
+                <Button
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold h-8 px-2 disabled:opacity-50"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>

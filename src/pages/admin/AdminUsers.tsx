@@ -21,7 +21,9 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Search, Plus, Minus, Loader2, CheckCircle, XCircle, Target, Mail } from 'lucide-react';
+import { Search, Plus, Minus, Loader2, CheckCircle, XCircle, Target, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const ITEMS_PER_PAGE = 10;
 
 export default function AdminUsers() {
   const { toast } = useToast();
@@ -32,22 +34,29 @@ export default function AdminUsers() {
   const [creditAmount, setCreditAmount] = useState('');
   const [creditAction, setCreditAction] = useState<'add' | 'deduct'>('add');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   const fetchUsers = async () => {
     try {
+      setIsLoading(true);
+      const from = (currentPage - 1) * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
+
       let query = supabase
         .from('profiles')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('created_at', { ascending: false });
 
       if (searchQuery) {
         query = query.ilike('email', `%${searchQuery}%`);
       }
 
-      const { data, error } = await query.limit(100);
+      const { data, error, count } = await query.range(from, to);
 
       if (error) throw error;
       setUsers(data || []);
+      setTotalCount(count || 0);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
@@ -61,8 +70,14 @@ export default function AdminUsers() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    setCurrentPage(1);
   }, [searchQuery]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [searchQuery, currentPage]);
+
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   const handleUpdateCredits = async () => {
     if (!selectedUser || !creditAmount) return;
@@ -203,6 +218,36 @@ export default function AdminUsers() {
                   ))}
                 </TableBody>
               </Table>
+            </div>
+          )}
+          
+          {/* Pagination */}
+          {!isLoading && totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t-2 border-black/10">
+              <p className="text-xs md:text-sm font-bold text-gray-600">
+                Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, totalCount)} of {totalCount}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold h-8 px-2 disabled:opacity-50"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <span className="px-3 py-1 bg-genz-cyan border-2 border-black font-bold text-sm">
+                  {currentPage} / {totalPages}
+                </span>
+                <Button
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold h-8 px-2 disabled:opacity-50"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>
