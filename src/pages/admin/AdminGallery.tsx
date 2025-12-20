@@ -299,7 +299,7 @@ export default function AdminGallery() {
 
       {/* Image Modal */}
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-4xl border-4 border-black">
+        <DialogContent className="max-w-5xl border-4 border-black max-h-[90vh] flex flex-col overflow-hidden">
           {selectedImage && (
             <>
               <DialogHeader>
@@ -308,13 +308,13 @@ export default function AdminGallery() {
                 </DialogTitle>
               </DialogHeader>
 
-              <div className="space-y-4">
-                {/* Full Image */}
-                <div className="bg-gray-100 border-2 border-black rounded-lg overflow-hidden">
+              <div className="space-y-4 overflow-y-auto flex-1">
+                {/* Full Image - Responsive with max-width and max-height */}
+                <div className="bg-gray-100 border-2 border-black rounded-lg overflow-hidden flex items-center justify-center min-h-[300px]">
                   <img
                     src={getStorageUrl(selectedImage.image_path)}
                     alt={selectedImage.prompt}
-                    className="w-full h-auto"
+                    className="w-full h-auto max-w-full max-h-[60vh] object-contain"
                   />
                 </div>
 
