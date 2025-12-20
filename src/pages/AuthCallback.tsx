@@ -25,8 +25,18 @@ export default function AuthCallbackPage() {
 
   // Process referral code after successful signup
   useEffect(() => {
+    // Don't do anything while still loading
+    if (isLoading) return;
+    
     const processReferral = async () => {
-      if (!user || referralProcessed.current) {
+      // If no user after loading complete, mark as checked
+      if (!user) {
+        setReferralChecked(true);
+        return;
+      }
+      
+      // If already processed, just mark as checked
+      if (referralProcessed.current) {
         setReferralChecked(true);
         return;
       }
@@ -91,13 +101,11 @@ export default function AuthCallbackPage() {
       }
     };
 
-    if (user && !isLoading) {
-      processReferral();
-    }
+    processReferral();
   }, [user, isLoading, searchParams]);
 
   useEffect(() => {
-    // Wait for referral check AND processing to complete before redirecting
+    // Wait for auth loading to complete AND referral check to complete
     if (!isLoading && referralChecked && !processingReferral) {
       if (user) {
         // Successfully logged in, redirect to dashboard
@@ -107,7 +115,7 @@ export default function AuthCallbackPage() {
         navigate('/login', { replace: true });
       }
     }
-  }, [user, isLoading, processingReferral, navigate]);
+  }, [user, isLoading, referralChecked, processingReferral, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background">
