@@ -10,13 +10,13 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const API_URL = 'https://cliproxy.monika.id/v1/chat/completions';
+const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict';
 
 serve(async (req) => {
-  // Get API key from environment (set via: supabase secrets set CLIPROXY_API_KEY=your_key)
-  const API_KEY = Deno.env.get('CLIPROXY_API_KEY');
+  // Get API key from environment (set via: supabase secrets set GEMINI_API_KEY=your_key)
+  const API_KEY = Deno.env.get('GEMINI_API_KEY');
   if (!API_KEY) {
-    console.error('CLIPROXY_API_KEY not set in environment');
+    console.error('GEMINI_API_KEY not set in environment');
     return new Response(
       JSON.stringify({ error: 'Server configuration error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -101,11 +101,17 @@ serve(async (req) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`,
+          'x-goog-api-key': API_KEY,
         },
         body: JSON.stringify({
-          model: model || 'gemini-3-pro-image-preview',
-          messages,
+          instances: [
+            {
+              prompt: prompt
+            }
+          ],
+          parameters: {
+            sampleCount: 1
+          }
         }),
       });
 
@@ -148,14 +154,14 @@ serve(async (req) => {
       const result = await response.json();
       console.log(`[submit-generation] Job ${job.id} completed successfully`);
 
-      // Extract image from result
-      const imageUrl = result.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+      // Extract image from Imagen 4.0 response (base64 encoded)
+      const predictions = result.predictions || [];
+      const imageBase64 = predictions[0]?.bytesBase64Encoded;
       
-      if (imageUrl) {
+      if (imageBase64) {
         try {
           // Upload to Supabase Storage
-          const imageData = imageUrl.split(',')[1]; // Remove data:image/...;base64, prefix
-          const buffer = Uint8Array.from(atob(imageData), c => c.charCodeAt(0));
+          const buffer = Uint8Array.from(atob(imageBase64), c => c.charCodeAt(0));
           const fileName = `${user.id}/${Date.now()}.png`;
           
           const { error: uploadError } = await supabaseAdmin.storage
