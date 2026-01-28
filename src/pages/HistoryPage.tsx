@@ -159,18 +159,21 @@ export default function HistoryPage() {
     });
   };
 
-  const handleDownload = async (item: GenerationHistory) => {
+  const handleDownload = (item: GenerationHistory) => {
     try {
       const url = getStorageUrl(item.image_path);
-      const response = await fetch(url);
-      const blob = await response.blob();
+      if (!url) {
+        console.error('Download error: Empty URL');
+        return;
+      }
       
+      // Direct download link - works for both Telegraph and Supabase Storage
+      // Avoids CORS issues by letting browser handle the download
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
+      link.href = url;
       link.download = `umkm-ai-${item.page_type}-${Date.now()}.png`;
+      link.target = '_blank'; // Open in new tab as fallback
       link.click();
-      
-      URL.revokeObjectURL(link.href);
     } catch (error) {
       console.error('Download error:', error);
     }
