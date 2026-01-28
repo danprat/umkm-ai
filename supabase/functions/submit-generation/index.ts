@@ -1,5 +1,6 @@
 // Edge Function: submit-generation
 // Creates a generation job and starts processing
+// Uses Telegraph Image API for storage (simple, free, no auth required)
 // IMPORTANT: Set timeout to 300s in Supabase Dashboard
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
@@ -13,8 +14,9 @@ const corsHeaders = {
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict';
 
 serve(async (req) => {
-  // Get API key from environment (set via: supabase secrets set GEMINI_API_KEY=your_key)
+  // Get API keys from environment
   const API_KEY = Deno.env.get('GEMINI_API_KEY');
+  
   if (!API_KEY) {
     console.error('GEMINI_API_KEY not set in environment');
     return new Response(
@@ -22,6 +24,7 @@ serve(async (req) => {
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -158,49 +161,88 @@ serve(async (req) => {
       const predictions = result.predictions || [];
       const imageBase64 = predictions[0]?.bytesBase64Encoded;
       
+      let publicImageUrl = '';
+      
       if (imageBase64) {
         try {
-          // Upload to Supabase Storage
-          const buffer = Uint8Array.from(atob(imageBase64), c => c.charCodeAt(0));
-          const fileName = `${user.id}/${Date.now()}.png`;
+          // Upload to Telegraph Image API
+          console.log('[submit-generation] Starting Telegraph Image upload...');
           
-          const { error: uploadError } = await supabaseAdmin.storage
-            .from('generated-images')
-            .upload(fileName, buffer, {
-              contentType: 'image/png',
-              upsert: false
+          // Convert base64 to buffer then to Blob
+          const buffer = Uint8Array.from(atob(imageBase64), c => c.charCodeAt(0));
+          const blob = new Blob([buffer], { type: 'image/png' });
+          
+          // Create FormData for upload
+          const formData = new FormData();
+          formData.append('file', blob, `${user.id}-${Date.now()}.png`);
+          
+          // Upload to Telegraph Image API
+          const uploadResponse = await fetch('https://telegraph-image-6l6.pages.dev/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!uploadResponse.ok) {
+            const errorText = await uploadResponse.text();
+            console.error('[submit-generation] Telegraph upload error:', errorText);
+            throw new Error(`Telegraph upload failed: ${uploadResponse.status}`);
+          }
+          
+          const uploadResult = await uploadResponse.json();
+          
+          if (!uploadResult[0]?.src) {
+            console.error('[submit-generation] Telegraph upload response invalid:', uploadResult);
+            throw new Error('Telegraph upload returned no src');
+          }
+          
+          // Construct full URL
+          publicImageUrl = `https://telegraph-image-6l6.pages.dev${uploadResult[0].src}`;
+          console.log(`[submit-generation] Image uploaded to Telegraph: ${publicImageUrl}`);
+          
+          // Save to generation_history (store full URL for easy access)
+          const { error: historyError } = await supabaseAdmin
+            .from('generation_history')
+            .insert({
+              user_id: user.id,
+              prompt: prompt.substring(0, 500),
+              image_path: publicImageUrl,  // Store full URL
+              page_type: 'generate'
             });
 
-          if (uploadError) {
-            console.error('[submit-generation] Upload error:', uploadError);
+          if (historyError) {
+            console.error('[submit-generation] History save error:', historyError);
           } else {
-            // Save to generation_history (store only the path, not full URL)
-            const { error: historyError } = await supabaseAdmin
-              .from('generation_history')
-              .insert({
-                user_id: user.id,
-                prompt: prompt.substring(0, 500),
-                image_path: fileName,
-                page_type: 'generate'
-              });
-
-            if (historyError) {
-              console.error('[submit-generation] History save error:', historyError);
-            } else {
-              console.log(`[submit-generation] Image saved to history: ${fileName}`);
-            }
+            console.log(`[submit-generation] Image saved to history`);
           }
         } catch (uploadErr) {
           console.error('[submit-generation] Upload exception:', uploadErr);
+          // Fallback: continue without image URL
         }
       }
 
-      // Update job with result
+      // Transform Imagen response to OpenAI-style format for frontend compatibility
+      const transformedResult = {
+        id: job.id,
+        choices: [{
+          message: {
+            role: 'assistant',
+            content: 'Image generated successfully',
+            images: [{
+              type: 'image_url',
+              image_url: {
+                url: publicImageUrl
+              }
+            }]
+          }
+        }]
+      };
+
+      // Update job with transformed result
       await supabaseAdmin
         .from('generation_jobs')
         .update({ 
           status: 'completed', 
-          result: result 
+          result: transformedResult 
         })
         .eq('id', job.id);
 
@@ -208,7 +250,7 @@ serve(async (req) => {
         JSON.stringify({ 
           job_id: job.id,
           status: 'completed',
-          result: result
+          result: transformedResult
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );

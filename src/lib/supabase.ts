@@ -86,8 +86,55 @@ export interface Setting {
 }
 
 // Helper function to get public URL for storage
+// Supports dual storage: Telegraph Image API URLs (new) and Supabase paths (legacy)
 export function getStorageUrl(path: string): string {
-  return `${supabaseUrl}/storage/v1/object/public/generated-images/${path}`;
+  // Trim whitespace and check if empty
+  const trimmedPath = path?.trim();
+  if (!trimmedPath) {
+    console.warn('[getStorageUrl] Empty path provided');
+    return '';
+  }
+  
+  // If path is already a full URL (Telegraph Image or any HTTP URL), return as-is
+  if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
+    return trimmedPath;
+  }
+  
+  // Otherwise, treat as legacy Supabase Storage path
+  return `${supabaseUrl}/storage/v1/object/public/generated-images/${trimmedPath}`;
+}
+
+// Self-test on module load (only in development)
+if (import.meta.env.DEV) {
+  const testCases = [
+    {
+      input: 'https://telegraph-image-6l6.pages.dev/file/test.png',
+      expected: 'https://telegraph-image-6l6.pages.dev/file/test.png',
+      desc: 'Telegraph URL should return as-is'
+    },
+    {
+      input: 'user-id/image.png',
+      expected: `${supabaseUrl}/storage/v1/object/public/generated-images/user-id/image.png`,
+      desc: 'Legacy path should add Supabase prefix'
+    },
+    {
+      input: '  https://telegraph-image-6l6.pages.dev/file/test.png  ',
+      expected: 'https://telegraph-image-6l6.pages.dev/file/test.png',
+      desc: 'Telegraph URL with whitespace should trim and return as-is'
+    }
+  ];
+  
+  testCases.forEach(({ input, expected, desc }) => {
+    const result = getStorageUrl(input);
+    if (result !== expected) {
+      console.error(`[getStorageUrl TEST FAILED] ${desc}`);
+      console.error('  Input:', JSON.stringify(input));
+      console.error('  Expected:', expected);
+      console.error('  Got:', result);
+    } else {
+      console.log(`[getStorageUrl TEST PASSED] ${desc}`);
+    }
+  });
 }
 
 // Helper function to upload image to storage

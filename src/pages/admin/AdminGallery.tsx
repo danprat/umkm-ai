@@ -107,12 +107,19 @@ export default function AdminGallery() {
     if (!confirm(`Hapus gambar dari ${item.user_email}?`)) return;
 
     try {
-      // Delete from storage
-      const { error: storageError } = await supabase.storage
-        .from('generated-images')
-        .remove([item.image_path]);
+      // Only delete from Supabase Storage if it's a legacy path (not a full URL)
+      if (!item.image_path.startsWith('http://') && !item.image_path.startsWith('https://')) {
+        const { error: storageError } = await supabase.storage
+          .from('generated-images')
+          .remove([item.image_path]);
 
-      if (storageError) throw storageError;
+        if (storageError) {
+          console.error('Storage deletion error:', storageError);
+          // Don't throw, continue to delete from database
+        }
+      } else {
+        console.log('[AdminGallery] Skipping storage deletion for external URL:', item.image_path);
+      }
 
       // Delete from database
       const { error: dbError } = await supabase
